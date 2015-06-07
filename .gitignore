@@ -29,3 +29,6 @@
 
 *.pro
 *.user
+*.jpg
+*.obj
+*.mtl
