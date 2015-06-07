@@ -28,14 +28,15 @@ void Kugel::loadShader()
     QOpenGLShaderProgram* standardShaderProg = new QOpenGLShaderProgram();
     QOpenGLShader vertShader(QOpenGLShader::Vertex);
     vertShader.compileSourceFile(":/shader/v330.vert");
-    //qDebug() << shaderProgram.log();
+    qDebug() << standardShaderProg->log();
     standardShaderProg->addShader(&vertShader);
-    //qDebug() << shaderProgram.log();
+    qDebug() << standardShaderProg->log();
     QOpenGLShader fragShader(QOpenGLShader::Fragment);
     fragShader.compileSourceFile(":/shader/frag330.frag");
-    //qDebug() << shaderProgram.log();
+    qDebug() << standardShaderProg->log();
     standardShaderProg->addShader(&fragShader);
     standardShaderProg->link();
+    qDebug() << standardShaderProg->log();
 
     // Sonnenshader
     this->shaderProgram = standardShaderProg;

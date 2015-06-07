@@ -9,6 +9,9 @@ INPUT(
 ./debug\gamescene.o
 ./debug\kugel.o
 ./debug\tisch.o
+./debug\qrc_models.o
+./debug\qrc_shader.o
+./debug\qrc_textures.o
 ./debug\moc_mainwindow.o
 ./debug\moc_myglwidget.o
 );

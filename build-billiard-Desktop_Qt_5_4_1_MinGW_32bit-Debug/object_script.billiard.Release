@@ -9,6 +9,9 @@ INPUT(
 ./release\gamescene.o
 ./release\kugel.o
 ./release\tisch.o
+./release\qrc_models.o
+./release\qrc_shader.o
+./release\qrc_textures.o
 ./release\moc_mainwindow.o
 ./release\moc_myglwidget.o
 );

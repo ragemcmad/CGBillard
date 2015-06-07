@@ -1,5 +1,6 @@
 #include "gamescene.h"
 #include "gameobject.h"
+#include "path.h"
 #include <vector>
 
 GameScene::GameScene()
@@ -17,13 +18,15 @@ GameScene::~GameScene()
 void GameScene::initScene()
 {
     Tisch* tisch = new Tisch();
-    tisch->loadModel(QString("C:/Users/thoma_000/Documents/QT/qtp2/models/bodenHigh.obj"));
+    QString p = path::getPath();
+    tisch->loadModel(p.append(QString("models/bodenHigh.obj")));
     tisch->loadTexture(QString(":/textures/plattehigh.png"));
     tisch->loadShader();
     tisch->worldMatrix.scale(0.5,1,0.5);
 
     Kugel* kugel1 = new Kugel(0);
-    kugel1->loadModel(QString("C:/Users/thoma_000/Documents/QT/qtp2/models/sphere_high.obj"));
+    p = path::getPath();
+    kugel1->loadModel(p.append(QString("models/sphere_high.obj")));
 
     for(int i = 0; i< 21;i++)
     {
