@@ -2,10 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
-}
+#include "ui_mainwindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,8 +12,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private:
-    Ui::MainWindow *ui;
-};
+private slots:
 
+
+private:
+    Ui::CGPraktikum2 *ui;
+};
 #endif // MAINWINDOW_H

@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shader/frag130.frag</file>
+        <file>shader/frag330.frag</file>
+        <file>shader/v130.vert</file>
+        <file>shader/v330.vert</file>
+        <file>shader/sunshader.frag</file>
+        <file>shader/normtest.frag</file>
+        <file>shader/normtest.vert</file>
+        <file>shader/sunshader.vert</file>
+    </qresource>
+</RCC>

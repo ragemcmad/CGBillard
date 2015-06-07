@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>textures/earthmap1k.jpg</file>
+        <file>textures/jupitermap.jpg</file>
+        <file>textures/mars_1k_color.jpg</file>
+        <file>textures/mercurymap.jpg</file>
+        <file>textures/neptunemap.jpg</file>
+        <file>textures/plutomap1k.jpg</file>
+        <file>textures/saturnmap.jpg</file>
+        <file>textures/saturnringcolor.jpg</file>
+        <file>textures/saturnringpattern.gif</file>
+        <file>textures/sunmap.jpg</file>
+        <file>textures/uranusmap.jpg</file>
+        <file>textures/uranusringcolour.jpg</file>
+        <file>textures/uranusringtrans.gif</file>
+        <file>textures/venusmap.jpg</file>
+        <file>textures/deimosbump.jpg</file>
+        <file>textures/moonmap1k.jpg</file>
+        <file>textures/phobosbump.jpg</file>
+        <file>textures/wave.jpg</file>
+    </qresource>
+</RCC>

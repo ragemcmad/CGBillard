@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>models/bodenHigh.mtl</file>
+        <file>models/bodenHigh.obj</file>
+        <file>models/bunny.obj</file>
+        <file>models/bunny_low.obj</file>
+        <file>models/sphere_high.obj</file>
+        <file>models/sphere_low.obj</file>
+    </qresource>
+</RCC>
