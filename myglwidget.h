@@ -17,7 +17,7 @@ private:
     int counter;
     //void loadModels();
     //SonnensystemObjekt* sso;
-    myCam* cam;
+    Game* theGame;
     //float rotationZ;
     //float distanceX, distanceY, distanceZ;
     //QOpenGLShaderProgram shaderProgram;

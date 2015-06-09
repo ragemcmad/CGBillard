@@ -1,6 +1,7 @@
 #ifndef THEGAME
 #define THEGAME
 #include "GameScene.h"
+#include "cam.h"
 class Game {
 public:
 	
@@ -10,7 +11,16 @@ public:
 	bool watch; // false = watch | true = play;
 	bool finish = false;
 	
-	GameScene myScene;
+	bool p1HasTeam = false;
+	bool p2HasTeam = false;
+	bool p1HasFull; // true = p1 full | false = p1 half
+	bool p2HasFull;
+	
+	GameScene* myScene;
+	myCam* cam;
+	
+	GameObject* blackBall;
+	GameObject* whiteBall;
 	
     Game(GameScene gameScene);
 	void gameStep();

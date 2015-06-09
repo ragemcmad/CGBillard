@@ -111,4 +111,11 @@ void GameScene::renderScene(myCam* cam)
 
     }
 }
+bool GameScene::hasActives(){
+	for (int i=0; i<this->primaryObjects->size();i++)
+		if (this->primaryObject->at(i)->isActive) return true;
+	for (int i=0; i<this->secondaryObjects->size();i++)
+		if (this->secondaryObject->at(i)->isActive) return true;
+	return false;
+}
 

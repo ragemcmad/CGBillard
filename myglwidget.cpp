@@ -10,8 +10,6 @@
 MyGLWidget::MyGLWidget(QWidget *parent) : QGLWidget(parent)
 {
     this->isPressed = false;
-    //this->sso = new SonnensystemObjekt();
-    this->cam = new myCam();
     this->timer = new QTimer(parent);
     QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(update()));
     timer->start(25);
@@ -153,6 +151,5 @@ void MyGLWidget::initializeGL()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     this->counter = 0;
     //sso->buildSystem();
-    this->scene.initScene();
-    this->cam->aktivatePlaymode(QVector3D(this->scene.secondaryObjects->at(0)->worldMatrix.column(3).x(),this->scene.secondaryObjects->at(0)->worldMatrix.column(3).y(),this->scene.secondaryObjects->at(0)->worldMatrix.column(3).z()));
+    this->theGame = new Game();
 }
