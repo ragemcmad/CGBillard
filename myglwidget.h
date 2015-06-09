@@ -4,7 +4,6 @@
 #include <QGLWidget>
 #include <qtimer.h>
 #include <QOpenGLBuffer>
-#include "sonnensystemobjekt.h"
 #include "cam.h"
 #include "gamescene.h"
 

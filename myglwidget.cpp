@@ -35,12 +35,12 @@ void MyGLWidget::update()
 
 void MyGLWidget::wheelEvent(QWheelEvent *event)
 {
-    if (event->delta()>0){
-        this->cam->zoomIn();
-    } else {
-        this->cam->zoomOut();
-    }
-    qDebug() << "scroll " <<event->delta();
+//    if (event->delta()>0){
+//        this->cam->zoomIn();
+//    } else {
+//        this->cam->zoomOut();
+//    }
+//    qDebug() << "scroll " <<event->delta();
 }
 
 void MyGLWidget::mousePressEvent(QMouseEvent *e){
@@ -96,8 +96,8 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
 //        this->cam->moveRight();
 //    else if(event->key()== 49)
 //        this->cam->moveFront();
-    else if(event->key()== 57)
-        this->cam->moveBack();
+    //else if(event->key()== 57)
+        //this->cam->moveBack();
 
     else
         QGLWidget::keyPressEvent(event);
@@ -154,4 +154,5 @@ void MyGLWidget::initializeGL()
     this->counter = 0;
     //sso->buildSystem();
     this->scene.initScene();
+    this->cam->aktivatePlaymode(QVector3D(this->scene.secondaryObjects->at(0)->worldMatrix.column(3).x(),this->scene.secondaryObjects->at(0)->worldMatrix.column(3).y(),this->scene.secondaryObjects->at(0)->worldMatrix.column(3).z()));
 }

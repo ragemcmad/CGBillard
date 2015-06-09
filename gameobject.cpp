@@ -12,6 +12,7 @@ GameObject::~GameObject()
 
 void GameObject::render(myCam* cam)
 {
+    if (!isVisible) return;
 
     shaderProgram->bind();
     vbo->bind();

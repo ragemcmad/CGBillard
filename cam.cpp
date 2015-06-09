@@ -1,18 +1,32 @@
-
-
 #include "cam.h"
 #include <math.h>
 
 
 myCam::myCam(){
-    this->dist = 10;
-    this->step = 10;
-    this->xwinkel = 0;
-    this->ywinkel = 0;
-    this->updateView();
-    //this->viewMatrix.lookAt(QVector3D(0,0,-40), QVector3D(0,0,0), QVector3D(0,1,40));
     this->projMatrix.setToIdentity();
     this->projMatrix.perspective(95.0f, 1.0f, 0.1f, 1000.0f);
+    this->viewMatrix.setToIdentity();
+    this->viewMatrix.lookAt(QVector3D(0,50,30),QVector3D(0,0,0),QVector3D(0,1,0));
+    this->activePlaymode = true;
+}
+
+void myCam::aktivatePlaymode(QVector3D kugelWhite)
+{
+    int abstand = 30;
+    QVector3D position;
+    position.setX(kugelWhite.x());
+    position.setY(kugelWhite.y());
+    position.setZ(kugelWhite.z());
+    if(position.x()==0 && position.y()==0 && position.z() == 0)
+    {
+        position.setZ(-1);
+    }
+    position.normalize();
+    position.setX(position.x()*abstand + kugelWhite.x());
+    position.setY(10);
+    position.setZ(position.z()*abstand + kugelWhite.z());
+    this->viewMatrix.setToIdentity();
+    this->viewMatrix.lookAt(position,kugelWhite,QVector3D(0,1,0));
 }
 
 
@@ -36,77 +50,4 @@ void myCam::camMove(int x, int y)
     this->viewMatrix = move * this->viewMatrix;
 }
 
-void myCam::camDown(){
-    this->xwinkel= (this->xwinkel+(360-this->step))%360;
-    updateView();
-}
-void myCam::camUp(){
-    this->xwinkel= (this->xwinkel+this->step)%360;
-    updateView();
-}
-void myCam::camLeft(){
-    this->ywinkel= (this->xwinkel+(360-this->step))%360;
-    updateView();
-}
-void myCam::camRight(){
-    this->ywinkel= (this->xwinkel+this->step)%360;
-    updateView();
-}
-
-void myCam::zoomIn(){
-    this->dist -= ((float)this->step)/10;
-    if (this->dist < this->minDist)
-        this->dist = this->minDist;
-    updateView();
-}
-void myCam::zoomOut() {
-    this->dist += (float)(this->step)/10;
-    updateView();
-}
-
-void myCam::updateView(){
-    x = (float)sin(this->ywinkel*(3.1415926/180))*this->dist;
-    y = 0;
-    z = (float)cos(this->ywinkel*(3.1415926/180))*this->dist;
-    //this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-
-void myCam::moveUp(){
-    y+=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-
-void myCam::moveDown(){
-    y-=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-void myCam::moveLeft(){
-    x-=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-void myCam::moveRight(){
-    x+=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-void myCam::moveFront(){
-    z+=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-void myCam::moveBack(){
-    z-=1;
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y+40,z),QVector3D(0,0,0),QVector3D(0,1,0));
-}
-
-void myCam::resetView(){
-    this->ywinkel = 0;
-    this->xwinkel = 0;
-    this->updateView();
-}
 

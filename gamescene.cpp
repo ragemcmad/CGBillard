@@ -49,17 +49,18 @@ void GameScene::initScene()
     kugelWhite->loadModel(p.append(QString("models/sphere_high.obj")));
     kugelWhite->loadTexture(QString(":/textures/kugelWhite.png"));
     kugelWhite->loadShader();
-    kugelWhite->worldMatrix.translate(0,0,18);
+    kugelWhite->worldMatrix.translate(10,0,18);
     this->secondaryObjects->push_back(kugelWhite);
     kugelWhite->setVector(this->secondaryObjects);
     kugelWhite->updatePosition();
-    kugelWhite->v->setZ(-0.9);
-    kugelWhite->v->setX(0.01);
+    //kugelWhite->v->setZ(-0.9);
+    //kugelWhite->v->setX(0.01);
+
 
 
     float zpos = -18;
-    float abstandz = -2;//-1.75;
-    float abstandx = 2.5;//2.01;
+    float abstandz = -1.75;
+    float abstandx = 2.01;
     for(int i = 1; i< 16;i++)
     {
         Kugel* kugel = new Kugel(i);
@@ -104,12 +105,10 @@ void GameScene::renderScene(myCam* cam)
         if(this->secondaryObjects->at(i)->gameProgress(1))
         {
             //Kugel wurde eingelocht
-            this->secondaryObjects->at(i)->eingelocht = true;
+            this->secondaryObjects->at(i)->isVisible = false;
         }
-        if(!this->secondaryObjects->at(i)->eingelocht)
-        {
-            this->secondaryObjects->at(i)->render(cam);
-        }
+        this->secondaryObjects->at(i)->render(cam);
+
     }
 }
 

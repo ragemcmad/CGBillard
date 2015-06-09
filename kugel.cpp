@@ -182,7 +182,7 @@ void Kugel::collisionKugel(Kugel *kugel)
 
 bool Kugel::gameProgress(float ms)
 {
-    if(!this->eingelocht)
+    if (this->isVisible)
     {
         for(int j = 0; j< 10;j++)
         {
@@ -195,7 +195,7 @@ bool Kugel::gameProgress(float ms)
 
             for(int i = 0; i< this->kugeln->size();i++)
             {
-                if(this->kugeln->at(i)->id != this->id && !this->kugeln->at(i)->eingelocht)
+                if(this->kugeln->at(i)->id != this->id && this->kugeln->at(i)->isVisible)
                 {
                     if(this->collisionsCheckKugel(this->kugeln->at(i)))
                     {
@@ -219,7 +219,7 @@ bool Kugel::gameProgress(float ms)
             //check ob diese kugel sich mit einer anderen überlagert
             for(int i = 0; i< this->kugeln->size();i++)
             {
-                if(this->kugeln->at(i)->id != this->id && !this->kugeln->at(i)->eingelocht)
+                if(this->kugeln->at(i)->id != this->id && this->kugeln->at(i)->isVisible)
                 {
                     if(this->collisionsCheckKugel(this->kugeln->at(i)))
                     {

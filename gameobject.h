@@ -16,6 +16,7 @@ public:
     QMatrix4x4 worldMatrix;
     QOpenGLShaderProgram* shaderProgram;
 
+    bool isVisible = true;
 
     GLfloat* vboData;
     GLuint* indexData;
