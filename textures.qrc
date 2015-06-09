@@ -1,22 +1,28 @@
 <RCC>
     <qresource prefix="/">
-        <file>textures/earthmap1k.jpg</file>
-        <file>textures/jupitermap.jpg</file>
-        <file>textures/mars_1k_color.jpg</file>
-        <file>textures/mercurymap.jpg</file>
-        <file>textures/neptunemap.jpg</file>
-        <file>textures/plutomap1k.jpg</file>
-        <file>textures/saturnmap.jpg</file>
-        <file>textures/saturnringcolor.jpg</file>
-        <file>textures/saturnringpattern.gif</file>
-        <file>textures/sunmap.jpg</file>
-        <file>textures/uranusmap.jpg</file>
-        <file>textures/uranusringcolour.jpg</file>
-        <file>textures/uranusringtrans.gif</file>
-        <file>textures/venusmap.jpg</file>
-        <file>textures/deimosbump.jpg</file>
-        <file>textures/moonmap1k.jpg</file>
-        <file>textures/phobosbump.jpg</file>
-        <file>textures/wave.jpg</file>
+        <file>textures/kugel1.png</file>
+        <file>textures/kugel2.png</file>
+        <file>textures/kugel3.png</file>
+        <file>textures/kugel4.png</file>
+        <file>textures/kugel5.png</file>
+        <file>textures/kugel6.png</file>
+        <file>textures/kugel7.png</file>
+        <file>textures/kugel8.png</file>
+        <file>textures/kugel9.png</file>
+        <file>textures/kugel10.png</file>
+        <file>textures/kugel11.png</file>
+        <file>textures/kugel12.png</file>
+        <file>textures/kugel13.png</file>
+        <file>textures/kugel14.png</file>
+        <file>textures/kugel15.png</file>
+        <file>textures/plattehigh.png</file>
+        <file>textures/plattehighvorlage.png</file>
+        <file>textures/plattelow.png</file>
+        <file>textures/plattelowvorlage.png</file>
+        <file>textures/stand.png</file>
+        <file>textures/standvorlage.png</file>
+        <file>textures/table.png</file>
+        <file>textures/tablevorlage.png</file>
+        <file>textures/kugelWhite.png</file>
     </qresource>
 </RCC>

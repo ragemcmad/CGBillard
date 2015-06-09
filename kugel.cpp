@@ -14,6 +14,7 @@ Kugel::Kugel(int id)
     this->id = id;
     this->pos = new QVector3D();
     this->rotation.setToIdentity();
+    this->eingelocht = false;
 }
 
 Kugel::~Kugel()
@@ -28,15 +29,14 @@ void Kugel::loadShader()
     QOpenGLShaderProgram* standardShaderProg = new QOpenGLShaderProgram();
     QOpenGLShader vertShader(QOpenGLShader::Vertex);
     vertShader.compileSourceFile(":/shader/v330.vert");
-    qDebug() << standardShaderProg->log();
+    //qDebug() << shaderProgram.log();
     standardShaderProg->addShader(&vertShader);
-    qDebug() << standardShaderProg->log();
+    //qDebug() << shaderProgram.log();
     QOpenGLShader fragShader(QOpenGLShader::Fragment);
     fragShader.compileSourceFile(":/shader/frag330.frag");
-    qDebug() << standardShaderProg->log();
+    //qDebug() << shaderProgram.log();
     standardShaderProg->addShader(&fragShader);
     standardShaderProg->link();
-    qDebug() << standardShaderProg->log();
 
     // Sonnenshader
     this->shaderProgram = standardShaderProg;
@@ -79,10 +79,12 @@ bool Kugel::collisionsCheckRand()
         if(x>17.5)
         {
             this->pos->setX(17.5f);
+            x = 17.5f;
         }
         else
         {
             this->pos->setX(-17.5f);
+             x = -17.5f;
         }
         this->v->setX(-this->v->x());
         QVector3D vRichtung;
@@ -101,10 +103,12 @@ bool Kugel::collisionsCheckRand()
         if(z>36)
         {
             this->pos->setZ(36);
+            z = 36;
         }
         else
         {
             this->pos->setZ(-36);
+            z = -36;
         }
         this->v->setZ(-this->v->z());
         QVector3D vRichtung;
@@ -118,7 +122,16 @@ bool Kugel::collisionsCheckRand()
 
     }
 
-    return true;
+    //eingelocht abfrage
+    if(x < -16.7 || x > 16.7)
+    {
+        if(z > 35.3 || (z<0.6 && z> -0.6) ||z < -35.3)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Kugel::updatePosition()
@@ -167,55 +180,92 @@ void Kugel::collisionKugel(Kugel *kugel)
 
 }
 
-void Kugel::gameProgress(float ms)
+bool Kugel::gameProgress(float ms)
 {
-    for(int j = 0; j< 10;j++)
+    if(!this->eingelocht)
     {
-        this->collisionsCheckRand();
-
-        for(int i = 0; i< this->kugeln->size();i++)
+        for(int j = 0; j< 10;j++)
         {
-            if(this->kugeln->at(i)->id != this->id)
-            {
-                if(this->collisionsCheckKugel(this->kugeln->at(i)))
-                {
-                    //setze die kugeln auseinander
 
-                    this->collisionKugel(this->kugeln->at(i));
+            //überprüfe kollision mit rand, rückgabe ob die Kugel eingelocht wurde
+            if(this->collisionsCheckRand())
+            {
+                return true; //kugel wurde eingelocht
+            }
+
+            for(int i = 0; i< this->kugeln->size();i++)
+            {
+                if(this->kugeln->at(i)->id != this->id && !this->kugeln->at(i)->eingelocht)
+                {
+                    if(this->collisionsCheckKugel(this->kugeln->at(i)))
+                    {
+                        this->collisionKugel(this->kugeln->at(i));
+                    }
                 }
             }
+
+            QMatrix4x4 rot;
+            rot.setToIdentity();
+            rot.rotate(this->v->z()*2*3.1415f,1,0,0);
+            this->rotation =  rot*this->rotation ;
+            rot.setToIdentity();
+            rot.rotate(-this->v->x()*2*3.1415f,0,0,1);
+            this->rotation = rot*this->rotation;
+
+            this->worldMatrix.setToIdentity();
+            this->worldMatrix.translate(this->v->x()*0.1+this->pos->x(),this->v->y()*0.1+this->pos->y(),this->v->z()*0.1+this->pos->z());
+            this->updatePosition();
+
+            //check ob diese kugel sich mit einer anderen überlagert
+            for(int i = 0; i< this->kugeln->size();i++)
+            {
+                if(this->kugeln->at(i)->id != this->id && !this->kugeln->at(i)->eingelocht)
+                {
+                    if(this->collisionsCheckKugel(this->kugeln->at(i)))
+                    {
+                        //überlagerung! setzte diese Kugel zurück
+                        //numerische näherung
+                        QVector3D richtung;
+                        QVector3D abstandsvector;
+                        abstandsvector.setX(this->pos->x() - this->kugeln->at(i)->pos->x());
+                        abstandsvector.setY(this->pos->y() - this->kugeln->at(i)->pos->y());
+                        abstandsvector.setZ(this->pos->z() - this->kugeln->at(i)->pos->z());
+
+                        float distanz = abstandsvector.length();
+                        float verschiebung;
+
+                        while(distanz < this->radius + this->kugeln->at(i)->radius - 0.01)
+                        {
+                            richtung.setX(this->v->x());
+                            richtung.setY(this->v->y());
+                            richtung.setZ(this->v->z());
+
+                            richtung.normalize();
+                            verschiebung = distanz-this->radius-this->kugeln->at(i)->radius;
+                            this->worldMatrix.translate(richtung.x()*verschiebung,richtung.y()*verschiebung,richtung.z()*verschiebung);
+                            this->updatePosition();
+
+                            abstandsvector.setX(this->pos->x() - this->kugeln->at(i)->pos->x());
+                            abstandsvector.setY(this->pos->y() - this->kugeln->at(i)->pos->y());
+                            abstandsvector.setZ(this->pos->z() - this->kugeln->at(i)->pos->z());
+                            distanz = abstandsvector.length();
+                        }
+                    }
+                }
+            }
+            this->worldMatrix = this->worldMatrix * this->rotation;
+
+            QVector3D vRichtung;
+            vRichtung.setX(this->v->x());
+            vRichtung.setY(this->v->y());
+            vRichtung.setZ(this->v->z());
+
+            vRichtung.normalize();
+            this->v->setX(this->v->x()*reibung-vRichtung.x()*konstantReibung);
+            this->v->setZ(this->v->z()*reibung-vRichtung.z()*konstantReibung);
         }
-
-        QMatrix4x4 rot;
-        rot.setToIdentity();
-        rot.rotate(this->v->z()*2*3.1415f,1,0,0);
-        this->rotation =  rot*this->rotation ;
-        rot.setToIdentity();
-        rot.rotate(-this->v->x()*2*3.1415f,0,0,1);
-        this->rotation = rot*this->rotation;
-
-        this->worldMatrix.setToIdentity();
-        this->worldMatrix.translate(this->v->x()*0.1+this->pos->x(),this->v->y()*0.1+this->pos->y(),this->v->z()*0.1+this->pos->z());
-
-
-
-
-        this->worldMatrix = this->worldMatrix * this->rotation;
-
-
-        QVector3D vRichtung;
-        vRichtung.setX(this->v->x());
-        vRichtung.setY(this->v->y());
-        vRichtung.setZ(this->v->z());
-
-        vRichtung.normalize();
-        this->v->setX(this->v->x()*reibung-vRichtung.x()*konstantReibung);
-        this->v->setZ(this->v->z()*reibung-vRichtung.z()*konstantReibung);
-
-        this->updatePosition();
-
-
     }
+    return false;
 }
 
 

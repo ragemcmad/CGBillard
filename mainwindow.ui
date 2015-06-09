@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
-    <height>480</height>
+    <width>1231</width>
+    <height>801</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,8 +25,8 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>651</width>
-      <height>451</height>
+      <width>1201</width>
+      <height>771</height>
      </rect>
     </property>
    </widget>

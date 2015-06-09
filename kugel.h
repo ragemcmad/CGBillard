@@ -17,6 +17,7 @@ public:
     float masse;
     float reibung;
     float konstantReibung;
+    bool eingelocht;
     int id;
     QVector3D* v;
     QVector3D* pos;
@@ -29,7 +30,7 @@ public:
     bool collisionsCheckRand();
     void collisionKugel(Kugel* k);
     void collisionRand();
-    void gameProgress(float ms);
+    bool gameProgress(float ms);
 
     void setVector(std::vector<Kugel*>* vec);
     void loadShader();

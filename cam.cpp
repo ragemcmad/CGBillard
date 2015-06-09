@@ -12,7 +12,7 @@ myCam::myCam(){
     this->updateView();
     //this->viewMatrix.lookAt(QVector3D(0,0,-40), QVector3D(0,0,0), QVector3D(0,1,40));
     this->projMatrix.setToIdentity();
-    this->projMatrix.perspective(95.0f, 1.0f, 0.1f, 100.0f);
+    this->projMatrix.perspective(95.0f, 1.0f, 0.1f, 1000.0f);
 }
 
 
@@ -101,7 +101,7 @@ void myCam::moveFront(){
 void myCam::moveBack(){
     z-=1;
     this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(QVector3D(x,y,z),QVector3D(0,0,0),QVector3D(0,1,0));
+    this->viewMatrix.lookAt(QVector3D(x,y+40,z),QVector3D(0,0,0),QVector3D(0,1,0));
 }
 
 void myCam::resetView(){
