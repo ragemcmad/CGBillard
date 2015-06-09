@@ -49,7 +49,7 @@ void GameScene::initScene()
     kugelWhite->loadModel(p.append(QString("models/sphere_high.obj")));
     kugelWhite->loadTexture(QString(":/textures/kugelWhite.png"));
     kugelWhite->loadShader();
-    kugelWhite->worldMatrix.translate(10,0,18);
+    kugelWhite->worldMatrix.translate(0,0,18);
     this->secondaryObjects->push_back(kugelWhite);
     kugelWhite->setVector(this->secondaryObjects);
     kugelWhite->updatePosition();

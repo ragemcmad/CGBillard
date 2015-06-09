@@ -12,11 +12,12 @@ public:
 	
 	GameScene myScene;
 	
-	Game();
+    Game(GameScene gameScene);
 	void gameStep();
 	
 	
-	private void turn(int player, bool &finish,bool &win);
+private:
+    //void turn(int player, bool &finish,bool &win);
 	
-}
+};
 #endif THEGAME
