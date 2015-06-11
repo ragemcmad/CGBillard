@@ -63,17 +63,25 @@ void Game::gameStep(){
 //			if
 //		else			 //p2 turn
 //	}
-// else if (!this->whiteBall.isActive && this->watch && !this->myScene.hasActives()) {
+//  // test ob rundenende
+//	else if (this->watch && !this->myScene.hasActives()) {
+//		//test auf rundenende 
+//		if (!this->whiteBall.isActive)
+//		{
+//			//this->setBall = true;
+//			// temporär	
+// 			this->whiteBall->pos->setX(sin(angle*(3.1415926/180)));
+//      	this->whiteBall->pos->setY(0);
+//      	this->whiteBall->pos->setZ(cos(angle*(3.1415926/180)));
+//		}
 //		if (this->turn)
 // 			this->turn = false;
 //		else
 //			this->turn = true;
 //
-//		//this->setBall = true;	
-// 		this->whiteBall->pos->setX(sin(angle*(3.1415926/180)));
-//      this->whiteBall->pos->setY(0);
-//      this->whiteBall->pos->setZ(cos(angle*(3.1415926/180)));
+//
 //  }
+//	else if (
 }
 //void Game::turn(int player, bool &finish, bool &win)
 //{
