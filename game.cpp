@@ -2,27 +2,43 @@
 
 Game::Game(){
     myScene = new GameScene();
-    myScene.initScene();
+    myScene->initScene();
 	cam = new myCam();
-	cam->aktivatePlaymode(QVector3D(this->myScene.secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene.secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene.secondaryObjects->at(0)->worldMatrix.column(3).z()));
+    cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
+    this->whiteBall = this->myScene->secondaryObjects->at(0);
+    this->blackBall = this->myScene->secondaryObjects->at(8);
 
 }
 
+void Game::shoot()
+{
+    if(this->watch == false)
+    {
+        float angle = -this->cam->getCamAngle()+180;
+        this->whiteBall->v->setX(sin(angle*(3.1415926/180)));
+        this->whiteBall->v->setY(0);
+        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)));
+        this->watch = true;
+        this->cam->aktivateWatchmode();
+    }
+}
+
+
 void Game::gameStep(){
 	
-	this->myScene.render(cam);
+    this->myScene->renderScene(cam);
 	
-	if (this->cam->isMoving)
-		this->cam->moveStep();
-	else if (this->finish)
-		;
-	// test auf spielende
-	else if (!this->blackBall.isActive && this->watch && !this->myScene.hasActives()) {
-		this->finish = true;
-		if (!this->turn) //p1 turn
-			if 
-		else			 //p2 turn
-	}
+//	if (this->cam->isMoving)
+//		this->cam->moveStep();
+//	else if (this->finish)
+//		;
+//	// test auf spielende
+//	else if (!this->blackBall.isActive && this->watch && !this->myScene.hasActives()) {
+//		this->finish = true;
+//		if (!this->turn) //p1 turn
+//			if
+//		else			 //p2 turn
+//	}
 }
 //void Game::turn(int player, bool &finish, bool &win)
 //{

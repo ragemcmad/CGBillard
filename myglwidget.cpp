@@ -50,7 +50,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent *e){
 
 void MyGLWidget::mouseMoveEvent(QMouseEvent *e){
     if (this->isPressed){
-        this->cam->camRotate(mousepositionOldX-e->x(),mousepositionOldY-e->y());
+        this->theGame->cam->camRotate(mousepositionOldX-e->x(),mousepositionOldY-e->y());
     }
 
     this->mousepositionOldX = e->x();
@@ -66,37 +66,15 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
 {
 
     if(event->key() == Qt::Key_A)
-        this->cam->camMove(1,0);
+        this->theGame->cam->camMove(1,0);
     if(event->key() == Qt::Key_W)
-        this->cam->camMove(0,1);
+        this->theGame->cam->camMove(0,1);
     if(event->key() == Qt::Key_S)
-        this->cam->camMove(0,-1);
+        this->theGame->cam->camMove(0,-1);
     if(event->key() == Qt::Key_D)
-        this->cam->camMove(-1,0);
-
-
-//    qDebug() << event->key();
-//    if(event->key() == Qt::Key_Up)
-//        this->cam->camUp();
-//    else if(event->key()== Qt::Key_Down)
-//        this->cam->camDown();
-//    else if(event->key()== Qt::Key_Left)
-//        this->cam->camLeft();
-//    else if(event->key()== Qt::Key_Right)
-//        this->cam->camRight();
-//    else if(event->key()== 56)
-//        this->cam->moveUp();
-//    else if(event->key()== 50)
-//        this->cam->moveDown();
-//    else if(event->key()== 52)
-//        this->cam->moveLeft();
-//    else if(event->key()== 54)
-//        this->cam->moveRight();
-//    else if(event->key()== 49)
-//        this->cam->moveFront();
-    //else if(event->key()== 57)
-        //this->cam->moveBack();
-
+        this->theGame->cam->camMove(-1,0);
+    if(event->key() == Qt::Key_Space)
+        this->theGame->shoot();
     else
         QGLWidget::keyPressEvent(event);
     updateGL();
@@ -119,7 +97,7 @@ void MyGLWidget::paintGL()
     //QMatrix4x4 m;
     //m.setToIdentity();
     //this->sso->render(m, cam, counter);
-    this->scene.renderScene(cam);
+    this->theGame->gameStep();
 }
 
 void MyGLWidget::resizeGL(int width, int height)

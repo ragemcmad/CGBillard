@@ -17,7 +17,7 @@ public:
 
     void initScene();
     void renderScene(myCam* cam);
-	bool hasActive();
+    bool hasActives();
 
 };
 

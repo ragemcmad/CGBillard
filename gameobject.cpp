@@ -73,7 +73,6 @@ void GameObject::render(myCam* cam)
 
 }
 
-
 void GameObject::loadModel(QString ex_path)
 {
     ModelLoader model;

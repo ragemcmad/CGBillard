@@ -28,6 +28,14 @@ void GameScene::initScene()
     tisch->worldMatrix.scale(0.5,1,0.5);
     this->primaryObjects->push_back(tisch);
 
+//    GameObject* koe = new GameObject();
+//    koe->loadModel(p.append(QString("models/koe.obj")));
+//    koe->loadTexture(QString(":/textures/koe.png"));
+//    koe->loadShader();
+//    koe->worldMatrix.scale(0.5,1,0.5);
+//    this->primaryObjects->push_back(tisch);
+//
+
     p = path::getPath();
     Tisch* tischbodenH = new Tisch();
     tischbodenH->loadModel(p.append(QString("models/bodenHigh.obj")));
@@ -55,7 +63,6 @@ void GameScene::initScene()
     kugelWhite->updatePosition();
     //kugelWhite->v->setZ(-0.9);
     //kugelWhite->v->setX(0.01);
-
 
 
     float zpos = -18;
@@ -112,10 +119,10 @@ void GameScene::renderScene(myCam* cam)
     }
 }
 bool GameScene::hasActives(){
-	for (int i=0; i<this->primaryObjects->size();i++)
-		if (this->primaryObject->at(i)->isActive) return true;
-	for (int i=0; i<this->secondaryObjects->size();i++)
-		if (this->secondaryObject->at(i)->isActive) return true;
+    //for (int i=0; i<this->primaryObjects->size();i++)
+//		if (this->primaryObject->at(i)->isActive) return true;
+    //for (int i=0; i<this->secondaryObjects->size();i++)
+    //	if (this->secondaryObject->at(i)->isActive) return true;
 	return false;
 }
 

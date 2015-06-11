@@ -6,6 +6,7 @@
 #include <QOpenGLBuffer>
 #include "cam.h"
 #include "gamescene.h"
+#include "game.h"
 
 class MyGLWidget : public QGLWidget
 {

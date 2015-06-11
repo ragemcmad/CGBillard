@@ -2,13 +2,14 @@
 #define THEGAME
 #include "GameScene.h"
 #include "cam.h"
+#include "kugel.h"
 class Game {
 public:
 	
 	int gameState;
 	
 	bool turn; // false = p1 | true = p2
-	bool watch; // false = watch | true = play;
+    bool watch; // false = play | true = watch
 	bool finish = false;
 	
 	bool p1HasTeam = false;
@@ -19,12 +20,12 @@ public:
 	GameScene* myScene;
 	myCam* cam;
 	
-	GameObject* blackBall;
-	GameObject* whiteBall;
+    Kugel* blackBall;
+    Kugel* whiteBall;
 	
-    Game(GameScene gameScene);
+    Game();
 	void gameStep();
-	
+    void shoot();
 	
 private:
     //void turn(int player, bool &finish,bool &win);

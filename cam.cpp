@@ -9,10 +9,14 @@ myCam::myCam(){
     this->viewMatrix.lookAt(QVector3D(0,50,30),QVector3D(0,0,0),QVector3D(0,1,0));
     this->activePlaymode = true;
     this->freeCameramode = false;
+    this->angleX = 0;
+    this->angleY = 0;
+    this->distanz = 30;
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite)
 {
+    this->activePlaymode = true;
     this->kugelWhite = kugelWhite;
     int abstand = 30;
     QVector3D position;
@@ -29,8 +33,19 @@ void myCam::aktivatePlaymode(QVector3D kugelWhite)
     position.setZ(position.z()*abstand + kugelWhite.z());
     this->viewMatrix.setToIdentity();
     this->viewMatrix.lookAt(position,kugelWhite,QVector3D(0,1,0));
+    this->freeCameramode = false;
 }
 
+void myCam::aktivateWatchmode()
+{
+    this->activePlaymode = false;
+    this->freeCameramode = true;
+}
+
+float myCam::getCamAngle()
+{
+    return this->angleY;
+}
 
 void myCam::camRotate(int x,int y)
 {
@@ -47,41 +62,25 @@ void myCam::camRotate(int x,int y)
     }
     else
     {
-        QMatrix4x4 rotation;
-        rotation.setToIdentity();
-        rotation.rotate(y*0.5,1,0,0);
-        rotation.rotate(x*0.5,0,1,0);
+        this->angleX -= y*0.1;
+        this->angleY += x*0.1;
 
-        this->viewMatrix.translate(this->kugelWhite);
-        viewMatrix = viewMatrix * rotation;
-        this->viewMatrix.translate(-this->kugelWhite);
+        if(this->angleX > 60)
+        {
+            this->angleX = 60;
+        }
+        if(this->angleX<10)
+        {
+            this->angleX = 10;
+        }
+
+        this->viewMatrix.setToIdentity();
+        this->viewMatrix.translate(0,0,-distanz);
+        this->viewMatrix.rotate(angleX,1,0,0);
+        this->viewMatrix.rotate(angleY,0,1,0);
 
 
-        //QVector3D position;
-        //position.setX(this->viewMatrix.row(0).x());
-        //position.setY(this->viewMatrix.row(0).y());
-        //position.setZ(this->viewMatrix.row(0).z());
-        //this->viewMatrix.setToIdentity();
-        //this->viewMatrix.lookAt(position,this->kugelWhite,QVector3D(0,100,0));
-
-
-   //     QVector3D position;
-   //     position.setX(this->viewMatrix.column(3).x()-this->kugelWhite.x());
-   //     position.setY(this->viewMatrix.column(3).y()-this->kugelWhite.y());
-   //     position.setZ(this->viewMatrix.column(3).z()-this->kugelWhite.z());
-   //
-   //     QMatrix4x4 rotation;
-   //     rotation.setToIdentity();
-   //     rotation.rotate(y*0.5,1,0,0);
-   //     rotation.rotate(x*0.5,0,1,0);
-   //     position = rotation * position;
-   //
-   //     position.setX(position.x()+this->kugelWhite.x());
-   //     position.setY(position.y()+this->kugelWhite.y());
-   //     position.setZ(position.z()+this->kugelWhite.z());
-   //
-   //     this->viewMatrix.setToIdentity();
-   //     this->viewMatrix.lookAt(position,this->kugelWhite,QVector3D(0,1,0));
+        this->viewMatrix.translate(-kugelWhite);
     }
 }
 
