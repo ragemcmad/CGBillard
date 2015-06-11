@@ -50,9 +50,9 @@ void Game::gameStep(){
 //			this->turn = true;
 //
 //		//this->setBall = true;	
-// 		this->whiteBall->v->setX(sin(angle*(3.1415926/180)));
-//      this->whiteBall->v->setY(0);
-//      this->whiteBall->v->setZ(cos(angle*(3.1415926/180)));
+// 		this->whiteBall->pos->setX(sin(angle*(3.1415926/180)));
+//      this->whiteBall->pos->setY(0);
+//      this->whiteBall->pos->setZ(cos(angle*(3.1415926/180)));
 //  }
 }
 //void Game::turn(int player, bool &finish, bool &win)
