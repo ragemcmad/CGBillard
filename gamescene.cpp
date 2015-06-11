@@ -11,6 +11,8 @@ GameScene::GameScene()
     this->secondaryObjects = new std::vector<Kugel*>();
 	this->halbeKugeln = new std::vector<Kugel*>();
 	this->ganzeKugeln = new std::vector<Kugel*>();
+	this->eingelochteHalbe = new std::vector<Kugel*>();
+	this->eingelochteGanze = new std::vector<Kugel*>();
 }
 
 GameScene::~GameScene()
@@ -65,6 +67,8 @@ void GameScene::initScene()
     //kugelWhite->v->setZ(-0.9);
     //kugelWhite->v->setX(0.01);
 
+	kugelwhite->meineAktiven = NULL;
+	kugelwhite->meineEingelochten = NULL;
 
     float zpos = -18;
     float abstandz = -1.75;
@@ -78,9 +82,17 @@ void GameScene::initScene()
         kugel->loadTexture(QString::fromStdString(convert.str()));
         kugel->loadShader();
 		if (i>8)
+		{
 			this->halbeKugeln->push_back(kugel);
+			kugel->meineAktiven = this->halbeKugeln;
+			kugel->meineEingelochten = this->eingelochteHalbe;
+		}
 		else if (i<8)
+		{
 			this->ganzeKugeln->push_back(kugel);
+			kugel->meineAktiven = this->ganzeKugeln;
+			kugel->meineEingelochten = this->eingelochteGanze;
+		}
 			
         switch(i)
         {
@@ -88,7 +100,11 @@ void GameScene::initScene()
             case 1:kugel->worldMatrix.translate(-1*abstandx/2 ,0,zpos+1*abstandz); break;
             case 3:kugel->worldMatrix.translate(1*abstandx/2,0,zpos+1*abstandz); break;
             case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); break;
-            case 8:kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); break;
+            case 8: // schwarze Kugel
+				kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); 
+				kugel->meineAktiven = NULL;
+				kugel->meineEingelochten = NULL;
+				break;
             case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz); break;
             case 7:kugel->worldMatrix.translate(-3*abstandx/2,0,zpos+3*abstandz); break;
             case 15:kugel->worldMatrix.translate(-1*abstandx/2,0,zpos+3*abstandz); break;

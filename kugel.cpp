@@ -14,7 +14,6 @@ Kugel::Kugel(int id)
     this->id = id;
     this->pos = new QVector3D();
     this->rotation.setToIdentity();
-    this->eingelocht = false;
 }
 
 Kugel::~Kugel()

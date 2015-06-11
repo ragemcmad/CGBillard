@@ -17,12 +17,15 @@ public:
     float masse;
     float reibung;
     float konstantReibung;
-    bool eingelocht;
     int id;
     QVector3D* v;
     QVector3D* pos;
 
     std::vector<Kugel*>* kugeln;
+	
+	std::vector<Kugel*>* meineAktiven;
+	std::vector<Kugel*>* meineEingelochten;
+	
     QMatrix4x4 rotation;
 
     void updatePosition();
