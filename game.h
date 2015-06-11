@@ -12,6 +12,8 @@ public:
     bool watch; // false = play | true = watch
 	bool finish = false;
 	
+	bool setBall = false;
+	
 	bool p1HasTeam = false;
 	bool p2HasTeam = false;
 	bool p1HasFull; // true = p1 full | false = p1 half

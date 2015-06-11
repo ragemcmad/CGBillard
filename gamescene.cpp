@@ -9,7 +9,8 @@ GameScene::GameScene()
 {
     this->primaryObjects = new std::vector<GameObject*>();
     this->secondaryObjects = new std::vector<Kugel*>();
-
+	this->halbeKugeln = new std::vector<Kugel*>();
+	this->ganzeKugeln = new std::vector<Kugel*>();
 }
 
 GameScene::~GameScene()
@@ -76,6 +77,11 @@ void GameScene::initScene()
         convert <<":/textures/kugel"<< i<<".png";
         kugel->loadTexture(QString::fromStdString(convert.str()));
         kugel->loadShader();
+		if (i>8)
+			this->halbeKugeln->push_back(kugel);
+		else if (i<8)
+			this->ganzeKugeln->push_back(kugel);
+			
         switch(i)
         {
             case 11:kugel->worldMatrix.translate(0,0,zpos); break;
