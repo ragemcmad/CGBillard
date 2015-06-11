@@ -7,7 +7,8 @@ Game::Game(){
     cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
     this->whiteBall = this->myScene->secondaryObjects->at(0);
     this->blackBall = this->myScene->secondaryObjects->at(8);
-
+    this->koe = this->myScene->primaryObjects->at(0);
+    this->watch = false;
 }
 
 void Game::shoot()
@@ -20,12 +21,31 @@ void Game::shoot()
         this->whiteBall->v->setZ(cos(angle*(3.1415926/180)));
         this->watch = true;
         this->cam->aktivateWatchmode();
+        this->koe->isVisible = false;
     }
 }
 
 void Game::camMove(int x, int y)
 {
     this->camMove(x,y);
+
+}
+void Game::camRotate(int x, int y)
+{
+    this->cam->camRotate(x,y);
+    if(this->watch == false)
+    {
+        this->koe->isVisible = true;
+        float angle = -this->cam->getCamAngle()+180;
+        this->koe->worldMatrix.setToIdentity();
+        this->koe->worldMatrix.rotate(10,1,0,0);
+        this->koe->worldMatrix.rotate(angle,0,1,0);
+        QVector3D position;
+        position.setX(this->whiteBall->pos->x());
+        position.setY(this->whiteBall->pos->y());
+        position.setZ(this->whiteBall->pos->z());
+        this->koe->worldMatrix.translate(position);
+    }
 }
 
 void Game::gameStep(){
