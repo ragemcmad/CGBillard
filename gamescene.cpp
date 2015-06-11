@@ -13,6 +13,7 @@ GameScene::GameScene()
 	this->ganzeKugeln = new std::vector<Kugel*>();
 	this->eingelochteHalbe = new std::vector<Kugel*>();
 	this->eingelochteGanze = new std::vector<Kugel*>();
+
 }
 
 GameScene::~GameScene()
@@ -67,8 +68,8 @@ void GameScene::initScene()
     //kugelWhite->v->setZ(-0.9);
     //kugelWhite->v->setX(0.01);
 
-	kugelwhite->meineAktiven = NULL;
-	kugelwhite->meineEingelochten = NULL;
+    kugelWhite->meineAktiven = NULL;
+    kugelWhite->meineEingelochten = NULL;
 
     float zpos = -18;
     float abstandz = -1.75;
@@ -102,7 +103,7 @@ void GameScene::initScene()
             case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); break;
             case 8: // schwarze Kugel
 				kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); 
-				kugel->meineAktiven = NULL;
+                kugel->meineAktiven = NULL;
 				kugel->meineEingelochten = NULL;
 				break;
             case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz); break;
@@ -131,20 +132,15 @@ void GameScene::renderScene(myCam* cam)
     }
     for(int i = 0; i< this->secondaryObjects->size();i++)
     {
-        if(this->secondaryObjects->at(i)->gameProgress(1))
-        {
-            //Kugel wurde eingelocht
-            this->secondaryObjects->at(i)->isVisible = false;
-        }
         this->secondaryObjects->at(i)->render(cam);
-
     }
 }
-bool GameScene::hasActives(){
-    //for (int i=0; i<this->primaryObjects->size();i++)
-//		if (this->primaryObject->at(i)->isActive) return true;
-    //for (int i=0; i<this->secondaryObjects->size();i++)
-    //	if (this->secondaryObject->at(i)->isActive) return true;
-	return false;
+bool GameScene::hasMovingBalls(){
+    for (int i=0; i<this->secondaryObjects->size();i++)
+    {
+        if(this->secondaryObjects->at(i)->isMoving())
+            return true;
+    }
+    return false;
 }
 

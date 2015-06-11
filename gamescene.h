@@ -22,7 +22,7 @@ public:
 	std::vector<Kugel*>* eingelochteGanze;
     void initScene();
     void renderScene(myCam* cam);
-    bool hasActives();
+    bool hasMovingBalls();
 
 };
 

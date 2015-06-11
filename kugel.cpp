@@ -179,17 +179,22 @@ void Kugel::collisionKugel(Kugel *kugel)
 
 }
 
-bool Kugel::gameProgress(float ms)
+void Kugel::gameProgress(float ms)
 {
-    if (this->isVisible)
+    for(int j = 0; j< 10;j++)
     {
-        for(int j = 0; j< 10;j++)
+        if (this->isVisible)
         {
-
             //überprüfe kollision mit rand, rückgabe ob die Kugel eingelocht wurde
             if(this->collisionsCheckRand())
             {
-                return true; //kugel wurde eingelocht
+                if(meineEingelochten != NULL)
+                    this->meineEingelochten->push_back(this);
+                this->isVisible = false;
+                this->v->setX(0);
+                this->v->setY(0);
+                this->v->setZ(0);
+                return; //kugel wurde eingelocht
             }
 
             for(int i = 0; i< this->kugeln->size();i++)
@@ -262,9 +267,22 @@ bool Kugel::gameProgress(float ms)
             vRichtung.normalize();
             this->v->setX(this->v->x()*reibung-vRichtung.x()*konstantReibung);
             this->v->setZ(this->v->z()*reibung-vRichtung.z()*konstantReibung);
+            if(this->v->length() < 0.0001)
+            {
+                this->v->setX(0);
+                this->v->setY(0);
+                this->v->setZ(0);
+            }
+
         }
     }
-    return false;
+    return;
 }
 
+bool Kugel::isMoving()
+{
+    if(this->v->x() != 0 || this->v->y() != 0 || this->v->z() != 0)
+        return true;
+    return false;
+}
 

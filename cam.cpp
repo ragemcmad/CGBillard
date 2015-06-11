@@ -12,6 +12,12 @@ myCam::myCam(){
     this->angleX = 0;
     this->angleY = 0;
     this->distanz = 30;
+    this->isMoving = false;
+}
+
+void myCam::moveStep()
+{
+
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite)

@@ -50,42 +50,42 @@ void Game::camRotate(int x, int y)
     }
 }
 
-void Game::gameStep(){
-	
+void Game::gameStep()
+{
+    for(int i = 0; i<this->myScene->secondaryObjects->size();i++)
+    {
+        this->myScene->secondaryObjects->at(i)->gameProgress(0);
+    }
+
     this->myScene->renderScene(cam);
 	
-//	if (this->cam->isMoving)
-//		this->cam->moveStep();
-//	else if (this->finish)
-//		;
-//	// test auf spielende
-//	else if (!this->blackBall.isActive && this->watch && !this->myScene.hasActives()) {
-//		this->finish = true;
-//		if (!this->turn) //p1 turn
-//			
-//		else			 //p2 turn
-//	}
-//  // test ob rundenende
-//	else if (this->watch && !this->myScene.hasActives()) {
-//		//test auf rundenende 
-//		if (!this->whiteBall.isActive)
-//		{
-//			//this->setBall = true;
-//			// temporär	
-// 			this->whiteBall->pos->setX(sin(angle*(3.1415926/180)));
-//      	this->whiteBall->pos->setY(0);
-//      	this->whiteBall->pos->setZ(cos(angle*(3.1415926/180)));
-//		}
-//		if (this->turn)
-// 			this->turn = false;
-//		else
-//			this->turn = true;
-//		this->watch = false;
-//
-//  }
-//	else if (
+    if (this->cam->isMoving)
+        this->cam->moveStep();
+    else if (this->finish)
+        return;
+    // test auf spielende
+    else if (!this->blackBall->isVisible && this->watch && !this->myScene->hasMovingBalls()) {
+        this->finish = true;
+        //if (!this->turn) //p1 turn
+        //
+        //else			 //p2 turn
+    }
+  // test ob rundenende
+    else if (this->watch && !this->myScene->hasMovingBalls())
+    {
+        //test auf rundenende
+        if (!this->whiteBall->isVisible)
+        {
+            //this->setBall = true;
+            // temporär
+            this->whiteBall->pos->setX(0);
+            this->whiteBall->pos->setY(0);
+            this->whiteBall->pos->setZ(18);
+            this->whiteBall->isVisible = true;
+        }
+        this->turn = !this->turn;
+        this->watch = false;
+        this->cam->aktivatePlaymode(*this->whiteBall->pos);
+
+    }
 }
-//void Game::turn(int player, bool &finish, bool &win)
-//{
-//
-//}

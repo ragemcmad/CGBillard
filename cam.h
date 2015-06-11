@@ -18,7 +18,9 @@ private:
 public:
     QMatrix4x4 viewMatrix,projMatrix;
     myCam();
+    bool isMoving;
 
+    void moveStep();
     void aktivatePlaymode(QVector3D kugelWhite);
     void aktivateWatchmode();
     void camRotate(int x,int y);

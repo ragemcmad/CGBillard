@@ -33,7 +33,8 @@ public:
     bool collisionsCheckRand();
     void collisionKugel(Kugel* k);
     void collisionRand();
-    bool gameProgress(float ms);
+    void gameProgress(float ms);
+    bool isMoving();
 
     void setVector(std::vector<Kugel*>* vec);
     void loadShader();
