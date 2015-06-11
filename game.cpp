@@ -60,7 +60,7 @@ void Game::gameStep(){
 //	else if (!this->blackBall.isActive && this->watch && !this->myScene.hasActives()) {
 //		this->finish = true;
 //		if (!this->turn) //p1 turn
-//			if
+//			
 //		else			 //p2 turn
 //	}
 //  // test ob rundenende
@@ -78,7 +78,7 @@ void Game::gameStep(){
 // 			this->turn = false;
 //		else
 //			this->turn = true;
-//
+//		this->watch = false;
 //
 //  }
 //	else if (
