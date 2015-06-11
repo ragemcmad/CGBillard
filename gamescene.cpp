@@ -7,7 +7,7 @@
 
 GameScene::GameScene()
 {
-    this->primaryObjects = new std::vector<Tisch*>();
+    this->primaryObjects = new std::vector<GameObject*>();
     this->secondaryObjects = new std::vector<Kugel*>();
 
 }
@@ -21,20 +21,20 @@ void GameScene::initScene()
 {
     QString p = path::getPath();
 
-    Tisch* tisch = new Tisch();
+    GameObject* koe = new GameObject();
+    koe->loadModel(p.append(QString("models/koe.obj")));
+    koe->loadTexture(QString(":/textures/koe.png"));
+    koe->loadShader();
+    koe->worldMatrix.scale(0.5,0.5,0.5);
+    this->primaryObjects->push_back(koe);
+
+    p = path::getPath();
+    GameObject* tisch = new GameObject();
     tisch->loadModel(p.append(QString("models/tisch.obj")));
     tisch->loadTexture(QString(":/textures/table.png"));
     tisch->loadShader();
     tisch->worldMatrix.scale(0.5,1,0.5);
-    this->primaryObjects->push_back(tisch);
-
-//    GameObject* koe = new GameObject();
-//    koe->loadModel(p.append(QString("models/koe.obj")));
-//    koe->loadTexture(QString(":/textures/koe.png"));
-//    koe->loadShader();
-//    koe->worldMatrix.scale(0.5,1,0.5);
-//    this->primaryObjects->push_back(tisch);
-//
+    this->primaryObjects->push_back(tisch);   
 
     p = path::getPath();
     Tisch* tischbodenH = new Tisch();
@@ -44,12 +44,12 @@ void GameScene::initScene()
     tischbodenH->worldMatrix.scale(0.5,1,0.5);
     this->primaryObjects->push_back(tischbodenH);
 
-    p = path::getPath();
-    Tisch* tischbodenL = new Tisch();
-    tischbodenL->loadModel(p.append(QString("models/bodenLow.obj")));
-    tischbodenL->loadTexture(QString(":/textures/plattelow.png"));
-    tischbodenL->loadShader();
-    tischbodenL->worldMatrix.scale(0.5,1,0.5);
+   // p = path::getPath();
+   // Tisch* tischbodenL = new Tisch();
+   // tischbodenL->loadModel(p.append(QString("models/bodenLow.obj")));
+   // tischbodenL->loadTexture(QString(":/textures/plattelow.png"));
+   // tischbodenL->loadShader();
+   // tischbodenL->worldMatrix.scale(0.5,1,0.5);
     //this->primaryObjects->push_back(tischbodenL);
 
     p = path::getPath();

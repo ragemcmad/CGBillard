@@ -4,8 +4,11 @@
 
 class Koe : public GameObject
 {
+
+
 public:
     Koe();
+    void loadShader();
 };
 
 #endif // KOE_H

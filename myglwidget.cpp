@@ -66,13 +66,13 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
 {
 
     if(event->key() == Qt::Key_A)
-        this->theGame->cam->camMove(1,0);
+        this->theGame->camMove(1,0);
     if(event->key() == Qt::Key_W)
-        this->theGame->cam->camMove(0,1);
+        this->theGame->camMove(0,1);
     if(event->key() == Qt::Key_S)
-        this->theGame->cam->camMove(0,-1);
+        this->theGame->camMove(0,-1);
     if(event->key() == Qt::Key_D)
-        this->theGame->cam->camMove(-1,0);
+        this->theGame->camMove(-1,0);
     if(event->key() == Qt::Key_Space)
         this->theGame->shoot();
     else

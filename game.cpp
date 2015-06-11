@@ -23,6 +23,10 @@ void Game::shoot()
     }
 }
 
+void Game::camMove(int x, int y)
+{
+    this->camMove(x,y);
+}
 
 void Game::gameStep(){
 	

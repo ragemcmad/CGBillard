@@ -22,10 +22,12 @@ public:
 	
     Kugel* blackBall;
     Kugel* whiteBall;
+    GameObject* koe;
 	
     Game();
 	void gameStep();
     void shoot();
+    void camMove(int x, int y);
 	
 private:
     //void turn(int player, bool &finish,bool &win);
