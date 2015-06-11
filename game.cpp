@@ -27,7 +27,7 @@ void Game::shoot()
 
 void Game::camMove(int x, int y)
 {
-    this->camMove(x,y);
+    this->cam->camMove(x,y);
 
 }
 void Game::camRotate(int x, int y)
@@ -38,13 +38,15 @@ void Game::camRotate(int x, int y)
         this->koe->isVisible = true;
         float angle = -this->cam->getCamAngle()+180;
         this->koe->worldMatrix.setToIdentity();
-        this->koe->worldMatrix.rotate(10,1,0,0);
-        this->koe->worldMatrix.rotate(angle,0,1,0);
         QVector3D position;
         position.setX(this->whiteBall->pos->x());
         position.setY(this->whiteBall->pos->y());
         position.setZ(this->whiteBall->pos->z());
         this->koe->worldMatrix.translate(position);
+        this->koe->worldMatrix.rotate(angle,0,1,0);
+        this->koe->worldMatrix.rotate(10,1,0,0);
+        this->koe->worldMatrix.translate(0,0,-1);
+
     }
 }
 

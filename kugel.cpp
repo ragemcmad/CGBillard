@@ -3,8 +3,8 @@
 
 Kugel::Kugel(int id)
 {
-    this->reibung = 1;//0.9999f;
-    this->konstantReibung = 0;//0.0001f;
+    this->reibung = 0.9999f;
+    this->konstantReibung = 0.0001f;
     this->masse = 1;
     this->radius = 1;
     this->v = new QVector3D();

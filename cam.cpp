@@ -69,9 +69,9 @@ void myCam::camRotate(int x,int y)
         {
             this->angleX = 60;
         }
-        if(this->angleX<10)
+        if(this->angleX<15)
         {
-            this->angleX = 10;
+            this->angleX = 15;
         }
 
         this->viewMatrix.setToIdentity();
