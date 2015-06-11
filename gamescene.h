@@ -15,6 +15,8 @@ public:
 
     std::vector<GameObject*>* primaryObjects;
     std::vector<Kugel*>* secondaryObjects;
+	std::vector<Kugel*>* halbeKugeln;
+	std::vector<Kugel*>* ganzeKugeln;
     void initScene();
     void renderScene(myCam* cam);
     bool hasActives();

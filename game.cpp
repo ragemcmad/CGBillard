@@ -43,6 +43,17 @@ void Game::gameStep(){
 //			if
 //		else			 //p2 turn
 //	}
+// else if (!this->whiteBall.isActive && this->watch && !this->myScene.hasActives()) {
+//		if (this->turn)
+// 			this->turn = false;
+//		else
+//			this->turn = true;
+//
+//		//this->setBall = true;	
+// 		this->whiteBall->v->setX(sin(angle*(3.1415926/180)));
+//      this->whiteBall->v->setY(0);
+//      this->whiteBall->v->setZ(cos(angle*(3.1415926/180)));
+//  }
 }
 //void Game::turn(int player, bool &finish, bool &win)
 //{
