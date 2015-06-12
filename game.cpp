@@ -9,6 +9,7 @@ Game::Game(){
     this->blackBall = this->myScene->secondaryObjects->at(8);
     this->koe = this->myScene->primaryObjects->at(0);
     this->watch = false;
+    this->updateKoe();
 }
 
 void Game::shoot()
@@ -28,27 +29,28 @@ void Game::shoot()
 void Game::camMove(int x, int y)
 {
     this->cam->camMove(x,y);
-
 }
+
 void Game::camRotate(int x, int y)
 {
     this->cam->camRotate(x,y);
-    if(this->watch == false)
-    {
-        this->koe->isVisible = true;
-        float angle = -this->cam->getCamAngle()+180;
-        this->koe->worldMatrix.setToIdentity();
-        QVector3D position;
-        position.setX(this->whiteBall->pos->x());
-        position.setY(this->whiteBall->pos->y());
-        position.setZ(this->whiteBall->pos->z());
-        this->koe->worldMatrix.translate(position);
-        this->koe->worldMatrix.rotate(angle,0,1,0);
-        this->koe->worldMatrix.rotate(10,1,0,0);
-        this->koe->worldMatrix.translate(0,0,-1);
-
-    }
+    updateKoe();
 }
+
+void Game::updateKoe()
+{
+    float angle = -this->cam->getCamAngle()+180;
+    this->koe->worldMatrix.setToIdentity();
+    QVector3D position;
+    position.setX(this->whiteBall->pos->x());
+    position.setY(this->whiteBall->pos->y());
+    position.setZ(this->whiteBall->pos->z());
+    this->koe->worldMatrix.translate(position);
+    this->koe->worldMatrix.rotate(angle,0,1,0);
+    this->koe->worldMatrix.rotate(10,1,0,0);
+    this->koe->worldMatrix.translate(0,0,-1);
+}
+
 
 void Game::gameStep()
 {
@@ -85,7 +87,8 @@ void Game::gameStep()
         }
         this->turn = !this->turn;
         this->watch = false;
+        this->koe->isVisible = true;
         this->cam->aktivatePlaymode(*this->whiteBall->pos);
-
+        this->updateKoe();
     }
 }
