@@ -15,11 +15,21 @@ private:
     float angleY;
     float distanz;
 
+	QVector3D* moveZiel;
+	QVector3D* moveLookatZiel;
+	
+	QVector3D* moveStart;
+	QVector3D* moveLookatStart;
+	
+	int moveDuration; // max Zeit/Framezahl
+	int moveTime; // vergangene Zeit/Framezahl
+	
 public:
     QMatrix4x4 viewMatrix,projMatrix;
     myCam();
     bool isMoving;
 
+	void startAnimation(QVector3D* start, Qvector3D* startLookAt, int duration = 500);
     void moveStep();
     void aktivatePlaymode(QVector3D kugelWhite);
     void aktivateWatchmode();
