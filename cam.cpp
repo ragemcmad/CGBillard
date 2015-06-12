@@ -15,9 +15,33 @@ myCam::myCam(){
     this->isMoving = false;
 }
 
-void myCam::moveStep()
+void myCam::startAnimation(QVector3D* ziel, QVector3D* zielLookat, int duration)
 {
+	this->isMoving = true;
+	this->moveZiel = ziel;
+	this->moveLookatZiel = zielLookat;
+	this->moveTime = 0;
+	this->moveDuration = duration;
+	float dist = (ziel-zielLookat)->length();
+	
+	QMatrix4x4 matrixcopy = QMatrix4x4(this->viewMatrix);
+	matrixcopy.translate(dist);
+	this->moveLookatStart = -(this->viewMatrix[3].xyz * ((QVector3D)this->viewMatrix[x]).xyz);
+}
 
+void myCam::moveStep(int time)
+{	
+	if ((this->moveLookatStart-this->moveLookatZiel).length()<0.001 && (this->moveStart-this->moveZiel).length()<0.001){
+		this->viewMatrix.lookAt(this->moveZiel,this->moveLookatZiel,QVector3D(0,1,0));
+		this->isMoving = false;
+	}
+	else 
+	{
+		this->moveTime += time;
+		QVector3D iamAt = (this->moveZiel-this->moveStart) * sin((this->moveTime/this->duration)*3.1415926)+this->moveStart;
+		QVector3D ilookAt = (this->moveLookatZiel-this->moveLookatStart) * sin((this.>moveTime/this->duration)*3.1415926)+this->moveLookatStart;
+		this->vieMatrix.lookAt(iamAt, ilookAt, QVector3D(0,1,0)); 
+	}
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite)
