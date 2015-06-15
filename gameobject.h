@@ -5,6 +5,7 @@
 #include<QOpenGLTexture>
 #include"modelloader.h"
 #include"cam.h"
+#include"lightsources.h"
 
 class GameObject
 {
@@ -15,6 +16,7 @@ public:
     ~GameObject();
     QMatrix4x4 worldMatrix;
     QOpenGLShaderProgram* shaderProgram;
+    LightSources* lights;
 
     bool isVisible = true;
 
@@ -34,6 +36,7 @@ public:
     void loadModel(QString path);
     void loadTexture(QString path);
     void loadShader();
+    void loadLights(LightSources* lights);
 
 };
 

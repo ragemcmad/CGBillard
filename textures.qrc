@@ -25,5 +25,6 @@
         <file>textures/tablevorlage.png</file>
         <file>textures/kugelWhite.png</file>
         <file>textures/koe.png</file>
+        <file>textures/gui.png</file>
     </qresource>
 </RCC>

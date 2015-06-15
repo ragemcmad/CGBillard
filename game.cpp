@@ -23,6 +23,7 @@ void Game::shoot()
         this->watch = true;
         this->cam->aktivateWatchmode();
         this->koe->isVisible = false;
+        this->cam->startAnimation(QVector3D(0,30,50),QVector3D(0,0,0),100);
     }
 }
 
@@ -62,7 +63,7 @@ void Game::gameStep()
     this->myScene->renderScene(cam);
 	
     if (this->cam->isMoving)
-        this->cam->moveStep();
+        this->cam->moveStep(1);
     else if (this->finish)
         return;
     // test auf spielende

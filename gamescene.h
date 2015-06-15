@@ -6,6 +6,8 @@
 #include "kugel.h"
 #include "tisch.h"
 #include "koe.h"
+#include "gui.h"
+#include "lightsources.h"
 
 class GameScene
 {
@@ -20,9 +22,11 @@ public:
 	std::vector<Kugel*>* eingelochteHalbe;
 	std::vector<Kugel*>* ganzeKugeln;
 	std::vector<Kugel*>* eingelochteGanze;
+    GUI *gui;
     void initScene();
     void renderScene(myCam* cam);
     bool hasMovingBalls();
+    LightSources* lights;
 
 };
 

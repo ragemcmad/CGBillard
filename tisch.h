@@ -8,8 +8,7 @@ public:
     Tisch();
     ~Tisch();
     void loadShader();
-
-
+    void render(myCam* cam);
 };
 
 #endif // TISCH_H

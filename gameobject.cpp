@@ -39,12 +39,16 @@ void GameObject::render(myCam* cam)
     int unifMatrix = shaderProgram->uniformLocation("matrix");
     int unifMatrixProjection = shaderProgram->uniformLocation("projmatrix");
     int unifMatrixView = shaderProgram->uniformLocation("viewmatrix");
-    int uniftimer = shaderProgram->uniformLocation("timer");
-
+    int unifLightpos = shaderProgram->uniformLocation("lightpositions");
+    int unifLightintense = shaderProgram->uniformLocation("lightintensity");
+    int unifCamera = shaderProgram->uniformLocation("camerapositions");
 
     shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
     shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
     shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
+    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4,1);
+    shaderProgram->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
@@ -71,6 +75,11 @@ void GameObject::render(myCam* cam)
     ibo->release();
     vbo->release();
 
+}
+
+void GameObject::loadLights(LightSources* lights)
+{
+    this->lights = lights;
 }
 
 void GameObject::loadModel(QString ex_path)

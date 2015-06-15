@@ -11,21 +11,32 @@ in vec4 texC;
 in vec4 normalvector;
 in vec4 vertex;
 uniform sampler2D texture;
+uniform vec3 lightpositions[4];
+uniform float lightintensity[4];
+uniform vec4 cameraposition;
 
 // must be at 0
 void main()
 {
-    vec3 vert = -normalize(vertex).xyz;
-    vec3 normal = normalize(normalvector).xyz;
-    float angle = dot(vert, normal);
-    if(angle <0)
-        angle = 0;
-    vec4 color =  texture2D(texture, vec2(texC.x, texC.y));
-    color.r = color.r * angle;
-    color.g = color.g * angle;
-    color.b = color.b * angle;
+    //ambient
+    fragColor = vec4(0.05,0.05,0.05,1)*texture2D(texture, vec2(texC.x, texC.y));
 
-    color = vec4(color.rgb,1)*4;
-    fragColor = vec4(0.05,0.05,0.05,1)*texture2D(texture, vec2(texC.x, texC.y)) + color;
+    for(int i = 0;i<4;i++)
+    {
+        vec3 vert = -normalize(vertex.xyz-lightpositions[i]);//-lightpositions[i]);
+        vec3 normal = normalize(normalvector.xyz);
+        float angle = dot(vert, normal);
+        if(angle <0)
+            angle = 0;
+        vec4 color =  texture2D(texture, vec2(texC.x, texC.y));
+        color.r = color.r * angle *lightintensity[i];
+        color.g = color.g * angle *lightintensity[i];
+        color.b = color.b * angle *lightintensity[i];
+
+        //color = vec4(color.rgb,1);
+        fragColor = fragColor + color;
+
+    }
+
 
 }

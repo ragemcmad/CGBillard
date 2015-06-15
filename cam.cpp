@@ -4,7 +4,7 @@
 
 myCam::myCam(){
     this->projMatrix.setToIdentity();
-    this->projMatrix.perspective(95.0f, 1.0f, 0.1f, 1000.0f);
+    this->projMatrix.perspective(95.0f, 1201.0f/771.0f, 0.1f, 1000.0f);
     this->viewMatrix.setToIdentity();
     this->viewMatrix.lookAt(QVector3D(0,50,30),QVector3D(0,0,0),QVector3D(0,1,0));
     this->activePlaymode = true;
@@ -15,33 +15,49 @@ myCam::myCam(){
     this->isMoving = false;
 }
 
-void myCam::startAnimation(QVector3D* ziel, QVector3D* zielLookat, int duration)
+void myCam::startAnimation(QVector3D ziel, QVector3D zielLookat, int duration)
 {
-	this->isMoving = true;
-	this->moveZiel = ziel;
-	this->moveLookatZiel = zielLookat;
-	this->moveTime = 0;
-	this->moveDuration = duration;
-	float dist = (ziel-zielLookat)->length();
-	
-	QMatrix4x4 matrixcopy = QMatrix4x4(this->viewMatrix);
-	matrixcopy.translate(dist);
-	this->moveLookatStart = -(this->viewMatrix[3].xyz * ((QVector3D)this->viewMatrix[x]).xyz);
+    this->isMoving = true;
+    this->moveZiel = ziel;
+    this->moveStart = getPositionFromViewMatrix(this->viewMatrix);
+    this->moveLookatZiel = zielLookat;
+    this->moveTime = 0;
+    this->moveDuration = duration;
+    float dist = (ziel.distanceToPoint(zielLookat));
+    QMatrix4x4 matrixcopy;
+    matrixcopy.translate(0,0,dist);
+    matrixcopy = matrixcopy * this->viewMatrix;
+    this->moveLookatStart = this->getPositionFromViewMatrix(matrixcopy);
+}
+
+QVector3D myCam::getPositionFromViewMatrix(QMatrix4x4 matrix)
+{
+    QMatrix4x4 viewRot = matrix;
+    viewRot.setColumn(3, QVector4D(0,0,0,1));
+    QVector4D p = -(viewRot.transposed() * matrix.column(3));
+    return QVector3D(p.x(), p.y(), p.z());
 }
 
 void myCam::moveStep(int time)
 {	
-	if ((this->moveLookatStart-this->moveLookatZiel).length()<0.001 && (this->moveStart-this->moveZiel).length()<0.001){
-		this->viewMatrix.lookAt(this->moveZiel,this->moveLookatZiel,QVector3D(0,1,0));
-		this->isMoving = false;
-	}
-	else 
-	{
-		this->moveTime += time;
-		QVector3D iamAt = (this->moveZiel-this->moveStart) * sin((this->moveTime/this->duration)*3.1415926)+this->moveStart;
-		QVector3D ilookAt = (this->moveLookatZiel-this->moveLookatStart) * sin((this.>moveTime/this->duration)*3.1415926)+this->moveLookatStart;
-		this->vieMatrix.lookAt(iamAt, ilookAt, QVector3D(0,1,0)); 
-	}
+    if(this->isMoving)
+    {
+        this->moveTime += time;
+        if (this->moveTime >= this->moveDuration)
+        {
+            this->viewMatrix.setToIdentity();
+            this->viewMatrix.lookAt(this->moveZiel,this->moveLookatZiel,QVector3D(0,1,0));
+            this->isMoving = false;
+        }
+        else
+        {
+            //QVector3D iamAt = (this->moveZiel-this->moveStart) * sin((this->moveTime/this->moveDuration)*3.1415926/2.0)+this->moveStart;
+            QVector3D iamAt = (this->moveZiel-this->moveStart) * (-1.0/2.0*cos((this->moveTime/this->moveDuration)*3.1415926)+0.5)+this->moveStart;
+            QVector3D ilookAt = (this->moveLookatZiel-this->moveLookatStart) * (-1.0/2.0*cos((this->moveTime/this->moveDuration)*3.1415926)+0.5)+this->moveLookatStart;
+            this->viewMatrix.setToIdentity();
+            this->viewMatrix.lookAt(iamAt, ilookAt, QVector3D(0,1,0));
+        }
+    }
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite)

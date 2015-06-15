@@ -23,12 +23,15 @@ GameScene::~GameScene()
 
 void GameScene::initScene()
 {
+    this->lights = new LightSources();
+    this->lights->initLights();
     QString p = path::getPath();
 
     GameObject* koe = new GameObject();
     koe->loadModel(p.append(QString("models/koe.obj")));
     koe->loadTexture(QString(":/textures/koe.png"));
     koe->loadShader();
+    koe->loadLights(this->lights);
     koe->worldMatrix.scale(0.5,0.5,0.5);
     this->primaryObjects->push_back(koe);
 
@@ -37,14 +40,26 @@ void GameScene::initScene()
     tisch->loadModel(p.append(QString("models/tisch.obj")));
     tisch->loadTexture(QString(":/textures/table.png"));
     tisch->loadShader();
+    tisch->loadLights(this->lights);
     tisch->worldMatrix.scale(0.5,1,0.5);
     this->primaryObjects->push_back(tisch);   
+
+    p = path::getPath();
+    GameObject* tischbeine = new GameObject();
+    tischbeine->loadModel(p.append(QString("models/stand.obj")));
+    tischbeine->loadTexture(QString(":/textures/stand.png"));
+    tischbeine->loadShader();
+    tischbeine->loadLights(this->lights);
+    tischbeine->worldMatrix.scale(0.5,1,0.5);
+    this->primaryObjects->push_back(tischbeine);
+
 
     p = path::getPath();
     Tisch* tischbodenH = new Tisch();
     tischbodenH->loadModel(p.append(QString("models/bodenHigh.obj")));
     tischbodenH->loadTexture(QString(":/textures/plattehigh.png"));
     tischbodenH->loadShader();
+    tischbodenH->loadLights(this->lights);
     tischbodenH->worldMatrix.scale(0.5,1,0.5);
     this->primaryObjects->push_back(tischbodenH);
 
@@ -61,7 +76,8 @@ void GameScene::initScene()
     kugelWhite->loadModel(p.append(QString("models/sphere_high.obj")));
     kugelWhite->loadTexture(QString(":/textures/kugelWhite.png"));
     kugelWhite->loadShader();
-    kugelWhite->worldMatrix.translate(0,0,18);
+    kugelWhite->loadLights(this->lights);
+    kugelWhite->worldMatrix.translate(10,0,0);
     this->secondaryObjects->push_back(kugelWhite);
     kugelWhite->setVector(this->secondaryObjects);
     kugelWhite->updatePosition();
@@ -82,6 +98,7 @@ void GameScene::initScene()
         convert <<":/textures/kugel"<< i<<".png";
         kugel->loadTexture(QString::fromStdString(convert.str()));
         kugel->loadShader();
+        kugel->loadLights(this->lights);
 		if (i>8)
 		{
 			this->halbeKugeln->push_back(kugel);
@@ -121,7 +138,10 @@ void GameScene::initScene()
         kugel->setVector(this->secondaryObjects);
         kugel->updatePosition();
     }
-
+    p = path::getPath();
+    this->gui = new GUI();
+    this->gui->loadShader();
+    this->gui->setVector(this->secondaryObjects);
 }
 
 void GameScene::renderScene(myCam* cam)
@@ -134,6 +154,7 @@ void GameScene::renderScene(myCam* cam)
     {
         this->secondaryObjects->at(i)->render(cam);
     }
+    this->gui->render();
 }
 bool GameScene::hasMovingBalls(){
     for (int i=0; i<this->secondaryObjects->size();i++)

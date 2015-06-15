@@ -7,6 +7,7 @@
 #include<QOpenGLTexture>
 #include <vector>
 
+
 class Kugel : public GameObject
 {
 public:
@@ -20,7 +21,6 @@ public:
     int id;
     QVector3D* v;
     QVector3D* pos;
-
     std::vector<Kugel*>* kugeln;
 	
 	std::vector<Kugel*>* meineAktiven;

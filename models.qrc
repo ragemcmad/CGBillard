@@ -6,5 +6,7 @@
         <file>models/sphere_low.obj</file>
         <file>models/tisch.obj</file>
         <file>models/koe.obj</file>
+        <file>models/gui.obj</file>
+        <file>models/stand.obj</file>
     </qresource>
 </RCC>
