@@ -26,5 +26,19 @@
         <file>textures/kugelWhite.png</file>
         <file>textures/koe.png</file>
         <file>textures/gui.png</file>
+        <file>textures/kugel1gui.png</file>
+        <file>textures/kugel2gui.png</file>
+        <file>textures/kugel3gui.png</file>
+        <file>textures/kugel4gui.png</file>
+        <file>textures/kugel5gui.png</file>
+        <file>textures/kugel6gui.png</file>
+        <file>textures/kugel7gui.png</file>
+        <file>textures/kugel9gui.png</file>
+        <file>textures/kugel10gui.png</file>
+        <file>textures/kugel11gui.png</file>
+        <file>textures/kugel12gui.png</file>
+        <file>textures/kugel13gui.png</file>
+        <file>textures/kugel14gui.png</file>
+        <file>textures/kugel15gui.png</file>
     </qresource>
 </RCC>

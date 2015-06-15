@@ -2,7 +2,10 @@
 
 Tisch::Tisch()
 {
-
+    for(int i=0;i<16;i++)
+    {
+        this->waveIsActive[i] = false;
+    }
 }
 
 Tisch::~Tisch()
@@ -10,12 +13,27 @@ Tisch::~Tisch()
 
 }
 
+void Tisch::generateWave(float xPosition,float zPosition)
+{
+    for(int i=0;i<16;i++)
+    {
+        if(this->waveIsActive[i] == 0)
+        {
+            this->waveIsActive[i] = 1;
+            this->waveTimeLeft[i] = 0;
+            this->waveStartPosX[i] = xPosition;
+            this->waveStartPosZ[i] = zPosition;
+            return;
+        }
+    }
+}
+
 void Tisch::loadShader()
 {
     // Standardshader
     QOpenGLShaderProgram* standardShaderProg = new QOpenGLShaderProgram();
     QOpenGLShader vertShader(QOpenGLShader::Vertex);
-    vertShader.compileSourceFile(":/shader/v330.vert");
+    vertShader.compileSourceFile(":/shader/table.vert");
     standardShaderProg->addShader(&vertShader);
     //QOpenGLShader tcsShader(QOpenGLShader::TessellationControl);
     //tcsShader.compileSourceFile(":/shader/table.tcs");
@@ -33,11 +51,31 @@ void Tisch::loadShader()
     this->shaderProgram = standardShaderProg;
 
     glEnable(GL_TEXTURE_2D);
-
 }
 
 void Tisch::render(myCam* cam)
 {
+    if(this->waveIsActive[0] == 0)
+    {
+        this->generateWave(0,0);
+    }
+    if(this->waveIsActive[1] == 0)
+    {
+        this->generateWave(10,10);
+    }
+
+    for(int i = 0; i< 16;i++)
+    {
+        if(this->waveIsActive[i] == 1)
+        {
+            this->waveTimeLeft[i]+= 0.3;
+            if(this->waveTimeLeft[i] > 40)
+            {
+                this->waveIsActive[i] = 0;
+            }
+        }
+    }
+
     if (!isVisible) return;
 
     shaderProgram->bind();
@@ -68,6 +106,10 @@ void Tisch::render(myCam* cam)
     int unifLightpos = shaderProgram->uniformLocation("lightpositions");
     int unifLightintense = shaderProgram->uniformLocation("lightintensity");
     int unifCamera = shaderProgram->uniformLocation("camerapositions");
+    int unifWaveA = shaderProgram->uniformLocation("WaveActive");
+    int unifWaveT = shaderProgram->uniformLocation("WaveTime");
+    int unifWaveX = shaderProgram->uniformLocation("WavePosX");
+    int unifWaveZ = shaderProgram->uniformLocation("WavePosZ");
 
     shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
     shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
@@ -75,6 +117,10 @@ void Tisch::render(myCam* cam)
     shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
     shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4,1);
     shaderProgram->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
+    shaderProgram->setUniformValueArray(unifWaveA, this->waveIsActive,16,1);
+    shaderProgram->setUniformValueArray(unifWaveT, this->waveTimeLeft,16,1);
+    shaderProgram->setUniformValueArray(unifWaveX, this->waveStartPosX,16,1);
+    shaderProgram->setUniformValueArray(unifWaveZ, this->waveStartPosZ,16,1);
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);

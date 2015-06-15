@@ -55,21 +55,13 @@ void GameScene::initScene()
 
 
     p = path::getPath();
-    Tisch* tischbodenH = new Tisch();
-    tischbodenH->loadModel(p.append(QString("models/bodenHigh.obj")));
-    tischbodenH->loadTexture(QString(":/textures/plattehigh.png"));
-    tischbodenH->loadShader();
-    tischbodenH->loadLights(this->lights);
-    tischbodenH->worldMatrix.scale(0.5,1,0.5);
-    this->primaryObjects->push_back(tischbodenH);
+    this->tischBoden = new Tisch();
+    this->tischBoden->loadModel(p.append(QString("models/bodenHigh.obj")));
+    this->tischBoden->loadTexture(QString(":/textures/plattehigh.png"));
+    this->tischBoden->loadShader();
+    this->tischBoden->loadLights(this->lights);
+    this->tischBoden->worldMatrix.scale(0.5,1,0.5);
 
-   // p = path::getPath();
-   // Tisch* tischbodenL = new Tisch();
-   // tischbodenL->loadModel(p.append(QString("models/bodenLow.obj")));
-   // tischbodenL->loadTexture(QString(":/textures/plattelow.png"));
-   // tischbodenL->loadShader();
-   // tischbodenL->worldMatrix.scale(0.5,1,0.5);
-    //this->primaryObjects->push_back(tischbodenL);
 
     p = path::getPath();
     Kugel* kugelWhite = new Kugel(0);
@@ -146,6 +138,7 @@ void GameScene::initScene()
 
 void GameScene::renderScene(myCam* cam)
 {
+    this->tischBoden->render(cam);
     for(int i = 0; i< this->primaryObjects->size();i++)
     {
         this->primaryObjects->at(i)->render(cam);

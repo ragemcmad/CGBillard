@@ -15,13 +15,14 @@ public:
     GameScene();
     ~GameScene();
 
+    Tisch *tischBoden;
     std::vector<GameObject*>* primaryObjects;
     std::vector<Kugel*>* secondaryObjects;
 	
 	std::vector<Kugel*>* halbeKugeln;
 	std::vector<Kugel*>* eingelochteHalbe;
 	std::vector<Kugel*>* ganzeKugeln;
-	std::vector<Kugel*>* eingelochteGanze;
+    std::vector<Kugel*>* eingelochteGanze;
     GUI *gui;
     void initScene();
     void renderScene(myCam* cam);

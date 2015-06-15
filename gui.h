@@ -16,7 +16,7 @@ class GUI
 
 public:
     GUI();
-    GuiTexture kugeln[15];
+    GuiTexture kugeln[14];
     GuiTexture players;
     std::vector<Kugel*>* kugelnVector;
     bool p1Full;
