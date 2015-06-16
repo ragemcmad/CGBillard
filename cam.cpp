@@ -13,21 +13,15 @@ myCam::myCam(){
     this->angleY = 0;
     this->distanz = 30;
     this->isMoving = false;
+	this->animation = new Vector<Animation>();
 }
 
-void myCam::startAnimation(QVector3D ziel, QVector3D zielLookat, int duration)
+void myCam::queueAnimation(QVector3D ziel, QVector3D zielLookat, int duration)
 {
-    this->isMoving = true;
-    this->moveZiel = ziel;
-    this->moveStart = getPositionFromViewMatrix(this->viewMatrix);
-    this->moveLookatZiel = zielLookat;
-    this->moveTime = 0;
-    this->moveDuration = duration;
-    float dist = (ziel.distanceToPoint(zielLookat));
-    QMatrix4x4 matrixcopy;
-    matrixcopy.translate(0,0,dist);
-    matrixcopy = matrixcopy * this->viewMatrix;
-    this->moveLookatStart = this->getPositionFromViewMatrix(matrixcopy);
+	this->animations.add(Animation(ziel,zielLookat,duration);
+	if (!this->isMoving)
+		this->nextAnimation();
+		
 }
 
 QVector3D myCam::getPositionFromViewMatrix(QMatrix4x4 matrix)
@@ -48,6 +42,9 @@ void myCam::moveStep(int time)
             this->viewMatrix.setToIdentity();
             this->viewMatrix.lookAt(this->moveZiel,this->moveLookatZiel,QVector3D(0,1,0));
             this->isMoving = false;
+			
+			if (!this->animations.isEmpty())
+				this->nextAnimation();
         }
         else
         {
@@ -58,6 +55,27 @@ void myCam::moveStep(int time)
             this->viewMatrix.lookAt(iamAt, ilookAt, QVector3D(0,1,0));
         }
     }
+}
+
+void myCam::nextAnimation()
+{
+	if (!this->animations.isEmpty)
+	{
+		this->isMoving = true;
+		Animation ani = this->animations.at(this->animations.size()-1);
+		this->animations.pop_back();
+		
+		this->moveZiel = ani.moveZiel;
+		this->moveStart = getPositionFromViewMatrix(this->viewMatrix);
+		this->moveLookatZiel = ani.moveLookatZiel;
+		this->moveTime = 0;
+		this->moveDuration = ani.moveDuration;
+		float dist = (ani.moveZiel.distanceToPoint(ani.moveLookatZiel));
+		QMatrix4x4 matrixcopy;
+		matrixcopy.translate(0,0,dist);
+		matrixcopy = matrixcopy * this->viewMatrix;
+		this->moveLookatStart = this->getPositionFromViewMatrix(matrixcopy);
+	}
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite)

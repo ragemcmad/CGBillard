@@ -74,9 +74,9 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
     if(event->key() == Qt::Key_D)
         this->theGame->camMove(-1,0);
     if(event->key() == Qt::Key_Space)
-        this->theGame->shoot(1);
+        this->theGame->shoot();
 	if(event->key() == Qt::Key_Escape)
-		this->theGame->resetGame();
+		this->theGame->cancel();
     else
         QGLWidget::keyPressEvent(event);
     updateGL();

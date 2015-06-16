@@ -14,7 +14,7 @@ private:
     float angleX;
     float angleY;
     float distanz;
-
+	
     QVector3D moveZiel;
     QVector3D moveLookatZiel;
 	
@@ -25,11 +25,13 @@ private:
     float moveTime; // vergangene Zeit/Framezahl
 public:
     QMatrix4x4 viewMatrix,projMatrix;
+	Vector<Animation> animations;
     myCam();
     bool isMoving;
 
     QVector3D getPositionFromViewMatrix(QMatrix4x4 matrix);
-    void startAnimation(QVector3D ziel, QVector3D zielLookAt, int duration = 500);
+    void queueAnimation(QVector3D ziel, QVector3D zielLookAt, int duration = 500);
+	void nextAnimation();
     void moveStep(int time);
     void aktivatePlaymode(QVector3D kugelWhite);
     void aktivateWatchmode();
@@ -38,6 +40,19 @@ public:
     float getCamAngle();
 };
 
+class Animation 
+{
+	public:
+	
+	QVector3D moveZiel;
+    QVector3D moveLookatZiel;	
+	float moveDuration;
+	
+    QVector3D moveStart;
+    QVector3D moveLookatStart;
+	
+	Animation(QVector3D ziel, QVector3D zielLookAt, int duration)
+}
 
 #endif // CAM
 
