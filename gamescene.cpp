@@ -24,7 +24,8 @@ GameScene::~GameScene()
 void GameScene::initScene()
 {
     this->lights = new LightSources();
-    this->lights->initLights();
+
+
     QString p = path::getPath();
 
     GameObject* koe = new GameObject();
@@ -130,7 +131,11 @@ void GameScene::initScene()
         kugel->setVector(this->secondaryObjects);
         kugel->updatePosition();
     }
-    p = path::getPath();
+
+    this->lights->initLights();
+  //  this->lights->copyBuffer(kugelWhite);
+  //  this->lights->loadTexture();
+
     this->gui = new GUI();
     this->gui->loadShader();
     this->gui->setVector(this->secondaryObjects);

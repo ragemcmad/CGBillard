@@ -21,7 +21,7 @@ void main()
     //ambient
     fragColor = vec4(0.05,0.05,0.05,1)*texture2D(texture, vec2(texC.x, texC.y));
 
-    for(int i = 0;i<4;i++)
+    for(int i = 0;i<2;i++)
     {
         vec3 vert = -normalize(vertex.xyz-lightpositions[i]);//-lightpositions[i]);
         vec3 normal = normalize(normalvector.xyz);
@@ -29,9 +29,9 @@ void main()
         if(angle <0)
             angle = 0;
         vec4 color =  texture2D(texture, vec2(texC.x, texC.y));
-        color.r = color.r * angle *lightintensity[i];
-        color.g = color.g * angle *lightintensity[i];
-        color.b = color.b * angle *lightintensity[i];
+        color.r = color.r * angle *lightintensity[i]*(1.0/distance(vertex.xyz,lightpositions[i]));
+        color.g = color.g * angle *lightintensity[i]*(1.0/distance(vertex.xyz,lightpositions[i]));
+        color.b = color.b * angle *lightintensity[i]*(1.0/distance(vertex.xyz,lightpositions[i]));
 
         //color = vec4(color.rgb,1);
         fragColor = fragColor + color;

@@ -19,6 +19,7 @@ uniform float WaveActive[16];
 uniform float WaveTime[16];
 uniform float WavePosX[16];
 uniform float WavePosZ[16];
+uniform float WaveDuration[16];
 
 // #version 330: in, location=3
 
@@ -38,7 +39,7 @@ void main()
             {
                 vec2 normalDirection = vec2(deltaX,deltaZ);
                 normalDirection = normalize(normalDirection);
-                vertexWave.y = vertexWave.y + ((-cos((WaveTime[i]-distanz)*2.0)*1.0+1.0)*(1.0-(WaveTime[i]/40.0)));
+                vertexWave.y = vertexWave.y + ((-cos((WaveTime[i]-distanz)*2.0)*1.0+1.0)*(1.0-(WaveTime[i]/WaveDuration[i])));
                 normalWave.x = normalWave.x+normalDirection.x *sin((WaveTime[i]-distanz)*2)*(vertexWave.y);
                 normalWave.z = normalWave.z+normalDirection.y *sin((WaveTime[i]-distanz)*2)*(vertexWave.y);
             }
