@@ -21,9 +21,10 @@ private:
     QVector3D moveStart;
     QVector3D moveLookatStart;
 	
+public:
     float moveDuration; // max Zeit/Framezahl
     float moveTime; // vergangene Zeit/Framezahl
-public:
+
     QMatrix4x4 viewMatrix,projMatrix;
     myCam();
     bool isMoving;

@@ -47,7 +47,7 @@ void GameObject::render(myCam* cam)
     shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
     shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
     shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
-    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4,1);
+    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4);
     shaderProgram->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);

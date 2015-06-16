@@ -118,7 +118,7 @@ void Tisch::render(myCam* cam)
     shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
     shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
     shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
-    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4,1);
+    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4);
     shaderProgram->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
     shaderProgram->setUniformValueArray(unifWaveA, this->waveIsActive,16,1);
     shaderProgram->setUniformValueArray(unifWaveT, this->waveTimeLeft,16,1);

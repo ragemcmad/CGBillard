@@ -10,5 +10,7 @@
         <file>shader/table.tes</file>
         <file>shader/table.frag</file>
         <file>shader/table.vert</file>
+        <file>shader/lightsource.frag</file>
+        <file>shader/lightsource.vert</file>
     </qresource>
 </RCC>

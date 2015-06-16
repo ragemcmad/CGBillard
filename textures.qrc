@@ -40,5 +40,6 @@
         <file>textures/kugel13gui.png</file>
         <file>textures/kugel14gui.png</file>
         <file>textures/kugel15gui.png</file>
+        <file>textures/powerbar.png</file>
     </qresource>
 </RCC>

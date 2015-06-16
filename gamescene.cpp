@@ -133,8 +133,8 @@ void GameScene::initScene()
     }
 
     this->lights->initLights();
-  //  this->lights->copyBuffer(kugelWhite);
-  //  this->lights->loadTexture();
+    //this->lights->copyBuffer(kugelWhite);
+    //this->lights->loadTexture(QString(":/textures/powerbar.png"));
 
     this->gui = new GUI();
     this->gui->loadShader();
@@ -143,6 +143,7 @@ void GameScene::initScene()
 
 void GameScene::renderScene(myCam* cam)
 {
+    this->lights->render(cam);
     this->tischBoden->render(cam);
     for(int i = 0; i< this->primaryObjects->size();i++)
     {

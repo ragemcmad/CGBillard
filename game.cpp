@@ -79,7 +79,7 @@ void Game::gameStep()
         this->myScene->secondaryObjects->at(i)->gameProgress(0);
     }
 
-	this->myScene->gui.powerStep;
+    this->myScene->gui->powerStep();
     this->myScene->renderScene(cam);
 	
     if (this->cam->isMoving)
@@ -136,5 +136,5 @@ void Game::gameStep()
         this->updateKoe();
     }
 	else
-		this->myScene->gui.powerStep;
+        this->myScene->gui->powerStep();
 }

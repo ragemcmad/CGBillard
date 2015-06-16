@@ -131,6 +131,10 @@ void GUI::p2Win()
 
 void GUI::powerStep()
 {
-	this->powerLevel = (this->powerLevel+this->powerChange)%this->maxPower;
+    this->powerLevel = (this->powerLevel+this->powerChange);
+    if(this->powerLevel > this->maxPower)
+    {
+        this->powerLevel = 0;
+    }
 }
 
