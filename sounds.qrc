@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sounds/applause_finish.wav</file>
+		<file>sounds/shot_intro.wav</file>
+    </qresource>
+</RCC>

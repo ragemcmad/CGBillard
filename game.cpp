@@ -12,18 +12,26 @@ Game::Game(){
     this->updateKoe();
 }
 
-void Game::shoot(int power)
+void Game::cancel()
 {
 	if (this->cam->isMoving)
 	{
 		this->cam->moveTime = this->cam->moveDuration;
+		return;
 	}
+	if (this->finish)
+		this->resetGame;
+}
+
+void Game::shoot()
+{
+	
     if(this->watch == false)
     {
         float angle = -this->cam->getCamAngle()+180;
-        this->whiteBall->v->setX(sin(angle*(3.1415926/180)));
+        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->gui.powerLevel/this->gui.maxPower));
         this->whiteBall->v->setY(0);
-        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)));
+        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->gui.powerLevel/this->gui.maxPower));
         this->watch = true;
         this->cam->aktivateWatchmode();
         this->koe->isVisible = false;
@@ -57,19 +65,17 @@ void Game::updateKoe()
 }
 
 void Game::resetGame()
-{
-	if (this->finish){
-		this->finish = false;
-        this->teamAreSet = false;
-		this->turn = false;
-		this->watch = false;
-        this->myScene->initScene();
-		delete this->cam;
-		this->cam = new myCam();
-		this->cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
-		this->updateKoe();
-		this->koe->isVisible = true;
-	}
+{	
+	this->finish = false;
+    this->teamAreSet = false;
+	this->turn = false;
+	this->watch = false;
+    this->myScene->initScene();
+	delete this->cam;
+	this->cam = new myCam();
+	this->cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
+	this->koe->isVisible = true;
+	this->updateKoe();
 }
 
 void Game::gameStep()

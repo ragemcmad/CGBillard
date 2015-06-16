@@ -26,8 +26,9 @@ public:
 	
     Game();
 	void resetGame();
+	void cancel();
 	void gameStep();
-    void shoot(int power);
+    void shoot();
     void camMove(int x, int y);
     void camRotate(int x, int y);
     void updateKoe();

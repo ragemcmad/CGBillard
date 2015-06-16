@@ -190,10 +190,13 @@ void Kugel::gameProgress(float ms)
             {
                 if(meineEingelochten != NULL)
                     this->meineEingelochten->push_back(this);
+				if (meineAktiven != NULL)
+					;//this->meineAktiven->delete(this);
                 this->isVisible = false;
                 this->v->setX(0);
                 this->v->setY(0);
                 this->v->setZ(0);
+				
                 return; //kugel wurde eingelocht
             }
 
