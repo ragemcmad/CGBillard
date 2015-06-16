@@ -12,7 +12,7 @@ Game::Game(){
     this->updateKoe();
 }
 
-void Game::shoot()
+void Game::shoot(int power)
 {
     if(this->watch == false)
     {
@@ -52,6 +52,21 @@ void Game::updateKoe()
     this->koe->worldMatrix.translate(0,0,-1);
 }
 
+void Game::resetGame()
+{
+	if (this->finish){
+		this->finish = false;
+		this->teamsAreSet = false;
+		this->turn = false;
+		this->watch = false;
+		this->myScene.initScene();
+		delete this->cam;
+		this->cam = new myCam();
+		this->cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
+		this->updateKoe();
+		this->koe->isVisible = true;
+	}
+}
 
 void Game::gameStep()
 {
@@ -70,8 +85,31 @@ void Game::gameStep()
     else if (!this->blackBall->isVisible && this->watch && !this->myScene->hasMovingBalls()) {
         this->finish = true;
         //if (!this->turn) //p1 turn
-        //
-        //else			 //p2 turn
+        //	if (!this->teamsAreSet)
+		//		this->myScene->gui->p2Win();
+		//	else if (this->p1HasFull)
+		//		if (this->myScene->ganzeKugeln->isEmpty())
+		//			this->myScene->gui->p1Win();
+		//		else
+		//			this->myScene->gui->p2Win();
+		//	else if (this->myScene->halbeKugeln->isEmpty())
+		//			this->myScene->gui->p1Win();
+		//		else
+		//			this->myScene->gui->p2Win();
+	
+		////p2 turn
+		//else if (!this->teamsAreSet)
+		//	this->myScene->gui->p1Win();
+		//else if (!this->p1HasFull)
+		//	if (this->myScene->ganzeKugeln->isEmpty())
+		//		this->myScene->gui->p2Win();
+		//	else
+		//		this->myScene->gui->p1Win();
+		//else if (this->myScene->halbeKugeln->isEmpty())
+		//	this->myScene->gui->p2Win();
+		//else
+		//	this->myScene->gui->p1Win();
+        
     }
   // test ob rundenende
     else if (this->watch && !this->myScene->hasMovingBalls())

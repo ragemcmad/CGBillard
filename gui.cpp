@@ -106,3 +106,13 @@ void GUI::render()
         }
     }
 }
+
+void GUI::p1Win()
+{
+	
+}
+
+void GUI::p2Win()
+{
+	
+}

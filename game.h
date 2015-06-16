@@ -14,10 +14,8 @@ public:
 	
 	bool setBall = false;
 	
-	bool p1HasTeam = false;
-	bool p2HasTeam = false;
+	bool teamAreSet = false;
 	bool p1HasFull; // true = p1 full | false = p1 half
-	bool p2HasFull;
 	
 	GameScene* myScene;
 	myCam* cam;
@@ -27,8 +25,9 @@ public:
     GameObject* koe;
 	
     Game();
+	void resetGame();
 	void gameStep();
-    void shoot();
+    void shoot(int power);
     void camMove(int x, int y);
     void camRotate(int x, int y);
     void updateKoe();

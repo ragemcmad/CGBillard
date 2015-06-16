@@ -6,6 +6,15 @@ Tisch::Tisch()
     {
         this->waveIsActive[i] = false;
     }
+	
+	if(this->waveIsActive[0] == 0)
+    {
+        this->generateWave(0,0, 1000);
+    }
+    if(this->waveIsActive[1] == 0)
+    {
+        this->generateWave(10,10, 1000);
+    }
 }
 
 Tisch::~Tisch()
@@ -13,14 +22,14 @@ Tisch::~Tisch()
 
 }
 
-void Tisch::generateWave(float xPosition,float zPosition)
+void Tisch::generateWave(float xPosition,float zPosition, GLfloat duration)
 {
     for(int i=0;i<16;i++)
     {
         if(this->waveIsActive[i] == 0)
         {
             this->waveIsActive[i] = 1;
-            this->waveTimeLeft[i] = 0;
+            this->waveTimeLeft[i] = duration;
             this->waveStartPosX[i] = xPosition;
             this->waveStartPosZ[i] = zPosition;
             return;
@@ -55,21 +64,13 @@ void Tisch::loadShader()
 
 void Tisch::render(myCam* cam)
 {
-    if(this->waveIsActive[0] == 0)
-    {
-        this->generateWave(0,0);
-    }
-    if(this->waveIsActive[1] == 0)
-    {
-        this->generateWave(10,10);
-    }
-
+	
     for(int i = 0; i< 16;i++)
     {
         if(this->waveIsActive[i] == 1)
         {
-            this->waveTimeLeft[i]+= 0.3;
-            if(this->waveTimeLeft[i] > 40)
+            this->waveTimeLeft[i]+= 1.0;
+            if(this->waveTimeLeft[i] < 1)
             {
                 this->waveIsActive[i] = 0;
             }
