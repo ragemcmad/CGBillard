@@ -3,8 +3,9 @@
 
 #include<QOpenGLShaderProgram>
 #include<vector>
+#include"gameobject.h"
 
-class LightSources
+class LightSources //: public GameObject
 {
 public:
     LightSource();
