@@ -6,14 +6,14 @@ LightSources::LightSources()
 }
 void LightSources::initLights()
 {
-    this->positions[0] = QVector3D(-20,50,-30);
-    this->positions[1] = QVector3D(+20,50,-30);
-    this->positions[2] = QVector3D(+20,50,+30);
-    this->positions[3] = QVector3D(-20,50,+30);
-    this->intensity[0] = QVector3D(30,0,0);
-    this->intensity[1] = QVector3D(0,30,0);
-    this->intensity[2] = QVector3D(0,0,30);
-    this->intensity[3] = QVector3D(30,30,30);
+    this->positions[0] = QVector3D(-40,20,-60);
+    this->positions[1] = QVector3D( 40,20,-60);
+    this->positions[2] = QVector3D( 40,20, 60);
+    this->positions[3] = QVector3D(-40,20, 60);
+    this->intensity[0] = QVector3D(100,0,0);
+    this->intensity[1] = QVector3D(0,100,0);
+    this->intensity[2] = QVector3D(0,0,100);
+    this->intensity[3] = QVector3D(100,100,100);
 
     QString p = path::getPath();
 

@@ -24,10 +24,10 @@ public:
     bool p1Full;
 	float powerLevel;
 	float const maxPower = 100;
-	float const powerChange = 0.1;
+    float const powerChange = 0.5;
 	
-	QVector3D const powerBarPos = QVector3D(95,5,0); 
-	QVector3D const powerBarScale = QVector3D(0.01,0.03,0);
+    QVector3D const powerBarPos = QVector3D(0.95,0.2,0);
+    QVector3D const powerBarScale = QVector3D(0.03,0.3,0);
 	
     void render();
     void loadShader();

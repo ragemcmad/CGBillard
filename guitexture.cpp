@@ -22,6 +22,21 @@ void GuiTexture::copyBuffer(GuiTexture* guielement){
     this->iboLength = guielement->iboLength;
 }
 
+void GuiTexture::setTexturePoints(QVector3D bottomLeft,QVector3D topRight)
+{
+    QMatrix4x4 position;
+    float deltaScaleX = (topRight.x()-bottomLeft.x())/2;
+    float deltaScaleY = (topRight.y()-bottomLeft.y())/2;
+    float midx = (topRight.x()+bottomLeft.x())/2;
+    float midy = (topRight.y()+bottomLeft.y())/2;
+
+    position.scale(deltaScaleX,deltaScaleY,1);
+    position.translate(midx/deltaScaleX,midy/deltaScaleY,0);
+
+    this->setPositionMatrix(position);
+}
+
+
 void GuiTexture::render()
 {
     if (!isVisible) return;

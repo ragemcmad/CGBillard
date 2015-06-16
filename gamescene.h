@@ -23,6 +23,9 @@ public:
 	std::vector<Kugel*>* eingelochteHalbe;
 	std::vector<Kugel*>* ganzeKugeln;
     std::vector<Kugel*>* eingelochteGanze;
+
+    std::vector<QVector3D*>* kugelPositions;
+
     GUI *gui;
     void initScene();
     void renderScene(myCam* cam);

@@ -12,7 +12,8 @@ in vec4 normalvector;
 in vec4 vertex;
 uniform sampler2D texture;
 uniform vec3 lightpositions[4];
-uniform float lightintensity[4];
+uniform vec3 lightintensity[4];
+uniform vec3 kugelPosition[16];
 uniform vec4 cameraposition;
 
 // must be at 0
@@ -29,14 +30,35 @@ void main()
         if(angle <0)
             angle = 0;
         vec4 color =  texture2D(texture, vec2(texC.x, texC.y));
-        color.r = color.r * angle *lightintensity[i];
-        color.g = color.g * angle *lightintensity[i];
-        color.b = color.b * angle *lightintensity[i];
+        color.r = color.r * angle *lightintensity[i].r*(1.0/distance(vertex.xyz,lightpositions[i]));
+        color.g = color.g * angle *lightintensity[i].g*(1.0/distance(vertex.xyz,lightpositions[i]));
+        color.b = color.b * angle *lightintensity[i].b*(1.0/distance(vertex.xyz,lightpositions[i]));
 
         //color = vec4(color.rgb,1);
-        fragColor = fragColor + color;
+
+        bool lightok = true;
+
+        for(int j = 0; j< 16;j++)
+        {
+            vec3 u = lightpositions[i] - vertex.xyz;
+            vec3 a = vertex.xyz;
+            vec3 p = kugelPosition[j];
+            float abstand = length(cross(p-a,u))/length(u);
+            if(abstand < 1)
+            {
+                lightok = false;
+            }
+
+        }
+        if(lightok == true)
+        {
+            fragColor = fragColor + color;
+        }
 
     }
+
+
+
 
 
 }

@@ -59,7 +59,7 @@ void GUI::loadShader()
 	this->powerBar.setPositionMatrix(position);
 	this->powerBar.copyBuffer(&this->kugeln[0]);
 	this->powerBar.loadTexture(QString::fromStdString(":/textures/powerbar.png"));
-	
+    this->powerBar.shaderProgram = standardShaderProg;
 	
 	position.setToIdentity();
     position.scale(0.3);
@@ -67,7 +67,8 @@ void GUI::loadShader()
 	this->winSign.setPositionMatrix(position);
 	this->winSign.copyBuffer(&this->kugeln[0]);
 	this->winSign.isVisible = false;
-	
+    this->winSign.shaderProgram = standardShaderProg;
+
     setTeam(true);
 }
 
@@ -107,7 +108,7 @@ void GUI::setVector(std::vector<Kugel*>* vec)
 void GUI::render()
 {
     glClear(GL_DEPTH_BUFFER_BIT);
-
+    powerStep();
     this->players.render();
     for(int i = 0; i< 14;i++)
     {
@@ -146,10 +147,17 @@ void GUI::p2Win()
 
 void GUI::powerStep()
 {
-    this->powerLevel = (this->powerLevel+this->powerChange);
+    this->powerLevel += this->powerChange;
     if(this->powerLevel > this->maxPower)
     {
         this->powerLevel = 0;
     }
+    //position.scale(0,this->powerLevel,0);
+
+    this->powerBar.setTexturePoints(this->powerBarPos,
+                                    QVector3D(this->powerBarPos.x()+this->powerBarScale.x(),
+                                              this->powerBarPos.y()+this->powerBarScale.y()*(1-(this->maxPower-this->powerLevel)/this->maxPower),
+                                              0)
+                                    );
 }
 

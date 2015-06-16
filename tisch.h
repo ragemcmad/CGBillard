@@ -12,6 +12,7 @@ class Tisch : public GameObject
 
 
 public:
+    std::vector<QVector3D*>* kugelPositions;
     Tisch();
     ~Tisch();
     void loadShader();

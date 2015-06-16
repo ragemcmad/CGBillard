@@ -13,7 +13,7 @@ GameScene::GameScene()
 	this->ganzeKugeln = new std::vector<Kugel*>();
 	this->eingelochteHalbe = new std::vector<Kugel*>();
 	this->eingelochteGanze = new std::vector<Kugel*>();
-
+    this->kugelPositions = new std::vector<QVector3D*>();
 }
 
 GameScene::~GameScene()
@@ -62,7 +62,7 @@ void GameScene::initScene()
     this->tischBoden->loadShader();
     this->tischBoden->loadLights(this->lights);
     this->tischBoden->worldMatrix.scale(0.5,1,0.5);
-
+    this->tischBoden->kugelPositions = this->kugelPositions;
 
     p = path::getPath();
     Kugel* kugelWhite = new Kugel(0);
@@ -70,10 +70,11 @@ void GameScene::initScene()
     kugelWhite->loadTexture(QString(":/textures/kugelWhite.png"));
     kugelWhite->loadShader();
     kugelWhite->loadLights(this->lights);
-    kugelWhite->worldMatrix.translate(10,0,0);
+    kugelWhite->worldMatrix.translate(0,0,18);
     this->secondaryObjects->push_back(kugelWhite);
     kugelWhite->setVector(this->secondaryObjects);
     kugelWhite->updatePosition();
+    this->kugelPositions->push_back(kugelWhite->pos);
     //kugelWhite->v->setZ(-0.9);
     //kugelWhite->v->setX(0.01);
 
@@ -130,6 +131,7 @@ void GameScene::initScene()
         this->secondaryObjects->push_back(kugel);
         kugel->setVector(this->secondaryObjects);
         kugel->updatePosition();
+        this->kugelPositions->push_back(kugel->pos);
     }
 
     this->lights->initLights();
