@@ -18,6 +18,7 @@ public:
     GUI();
     GuiTexture kugeln[14];
     GuiTexture players;
+	GuiTexture winSign;
 	GuiTexture powerBar;
     std::vector<Kugel*>* kugelnVector;
     bool p1Full;

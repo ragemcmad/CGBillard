@@ -56,8 +56,17 @@ void GUI::loadShader()
     position.translate(this->powerBarPos);
 	
 	p = path::getPath();
+	this->powerBar.setPositionMatrix(position);
 	this->powerBar.copyBuffer(&this->kugeln[0]);
 	this->powerBar.loadTexture(QString::fromStdString(":/textures/powerbar.png"));
+	
+	
+	position.setToIdentity();
+    position.scale(0.3);
+	
+	this->winSign.setPositionMatrix(position);
+	this->winSign.copyBuffer(&this->kugeln[0]);
+	this->winSign.isVisible = false;
 	
     setTeam(true);
 }
@@ -117,16 +126,22 @@ void GUI::render()
             }
         }
     }
+	this->winSign.render();
+	this->powerBar.render();
 }
 
 void GUI::p1Win()
 {
-	
+	QString p = path::getPath();
+	this->winSign.loadTexture(QString::fromStdString(":/textures/p1Win.png"));
+	this->winSign.isVisible = true;
 }
 
 void GUI::p2Win()
 {
-	
+	QString p = path::getPath();
+	this->winSign.loadTexture(QString::fromStdString(":/textures/p2Win.png"));
+	this->winSign.isVisible = true;
 }
 
 void GUI::powerStep()
