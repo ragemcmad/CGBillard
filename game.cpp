@@ -56,10 +56,10 @@ void Game::resetGame()
 {
 	if (this->finish){
 		this->finish = false;
-		this->teamsAreSet = false;
+        this->teamAreSet = false;
 		this->turn = false;
 		this->watch = false;
-		this->myScene.initScene();
+        this->myScene->initScene();
 		delete this->cam;
 		this->cam = new myCam();
 		this->cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));

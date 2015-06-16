@@ -9,11 +9,11 @@ Tisch::Tisch()
 	
 	if(this->waveIsActive[0] == 0)
     {
-        this->generateWave(0,0, 1000);
+        this->generateWave(0,0, 40);
     }
     if(this->waveIsActive[1] == 0)
     {
-        this->generateWave(10,10, 1000);
+        this->generateWave(10,10, 60);
     }
 }
 
@@ -22,16 +22,17 @@ Tisch::~Tisch()
 
 }
 
-void Tisch::generateWave(float xPosition,float zPosition, GLfloat duration)
+void Tisch::generateWave(float xPosition,float zPosition, float duration)
 {
     for(int i=0;i<16;i++)
     {
         if(this->waveIsActive[i] == 0)
         {
             this->waveIsActive[i] = 1;
-            this->waveTimeLeft[i] = duration;
+            this->waveTimeLeft[i] = 0;
             this->waveStartPosX[i] = xPosition;
             this->waveStartPosZ[i] = zPosition;
+            this->waveDuration[i] = duration;
             return;
         }
     }
@@ -70,7 +71,7 @@ void Tisch::render(myCam* cam)
         if(this->waveIsActive[i] == 1)
         {
             this->waveTimeLeft[i]+= 1.0;
-            if(this->waveTimeLeft[i] < 1)
+            if(this->waveDuration[i] < this->waveTimeLeft[i])
             {
                 this->waveIsActive[i] = 0;
             }
@@ -108,6 +109,7 @@ void Tisch::render(myCam* cam)
     int unifLightintense = shaderProgram->uniformLocation("lightintensity");
     int unifCamera = shaderProgram->uniformLocation("camerapositions");
     int unifWaveA = shaderProgram->uniformLocation("WaveActive");
+    int unifWaveD = shaderProgram->uniformLocation("WaveDuration");
     int unifWaveT = shaderProgram->uniformLocation("WaveTime");
     int unifWaveX = shaderProgram->uniformLocation("WavePosX");
     int unifWaveZ = shaderProgram->uniformLocation("WavePosZ");
@@ -122,6 +124,7 @@ void Tisch::render(myCam* cam)
     shaderProgram->setUniformValueArray(unifWaveT, this->waveTimeLeft,16,1);
     shaderProgram->setUniformValueArray(unifWaveX, this->waveStartPosX,16,1);
     shaderProgram->setUniformValueArray(unifWaveZ, this->waveStartPosZ,16,1);
+    shaderProgram->setUniformValueArray(unifWaveD, this->waveDuration,16,1);
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
