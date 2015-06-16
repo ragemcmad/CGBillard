@@ -47,6 +47,18 @@ void GUI::loadShader()
     this->players.copyBuffer(&this->kugeln[0]);
     this->players.shaderProgram = standardShaderProg;
     this->players.loadTexture(QString::fromStdString(":/textures/gui.png"));
+	
+	this->powerLevel = 0;
+	
+	
+	position.setToIdentity();
+    position.scale(this->powerBarScale);
+    position.translate(this->powerBarPos);
+	
+	p = path::getPath();
+	this->powerBar.copyBuffer(&this->kugeln[0]);
+	this->powerBar.loadTexture(QString::fromStdString(":/textures/powerbar.png"));
+	
     setTeam(true);
 }
 
@@ -116,3 +128,9 @@ void GUI::p2Win()
 {
 	
 }
+
+void GUI::powerStep()
+{
+	this->powerLevel = (this->powerLevel+this->powerChange)%this->maxPower;
+}
+

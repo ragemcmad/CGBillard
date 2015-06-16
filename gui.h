@@ -18,15 +18,23 @@ public:
     GUI();
     GuiTexture kugeln[14];
     GuiTexture players;
+	GuiTexture powerBar;
     std::vector<Kugel*>* kugelnVector;
     bool p1Full;
-
+	float powerLevel;
+	float const maxPower = 100;
+	float const powerChange = 0.1;
+	
+	QVector3D const powerBarPos = QVector3D(95,5,0); 
+	QVector3D const powerBarScale = QVector3D(0.01,0.03,0);
+	
     void render();
     void loadShader();
     void setTeam(bool p1Full);
     void setVector(std::vector<Kugel*>* vec);
 	void p1Win();
 	void p2Win();
+	void powerStep();
 
 };
 

@@ -14,6 +14,10 @@ Game::Game(){
 
 void Game::shoot(int power)
 {
+	if (this->cam->isMoving)
+	{
+		this->cam->moveTime = this->cam->moveDuration;
+	}
     if(this->watch == false)
     {
         float angle = -this->cam->getCamAngle()+180;
@@ -75,6 +79,7 @@ void Game::gameStep()
         this->myScene->secondaryObjects->at(i)->gameProgress(0);
     }
 
+	this->myScene->gui.powerStep;
     this->myScene->renderScene(cam);
 	
     if (this->cam->isMoving)
@@ -130,4 +135,6 @@ void Game::gameStep()
         this->cam->aktivatePlaymode(*this->whiteBall->pos);
         this->updateKoe();
     }
+	else
+		this->myScene->gui.powerStep;
 }
