@@ -12,5 +12,7 @@
         <file>shader/table.vert</file>
         <file>shader/lightsource.frag</file>
         <file>shader/lightsource.vert</file>
+        <file>shader/kugel.frag</file>
+        <file>shader/kugel.vert</file>
     </qresource>
 </RCC>

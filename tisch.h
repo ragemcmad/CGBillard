@@ -13,6 +13,9 @@ class Tisch : public GameObject
 
 public:
     std::vector<QVector3D*>* kugelPositions;
+    std::vector<bool*>* kugelActive;
+    std::vector<QVector3D*>* kugelColor;
+
     Tisch();
     ~Tisch();
     void loadShader();

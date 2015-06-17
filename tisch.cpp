@@ -66,7 +66,8 @@ void Tisch::loadShader()
 void Tisch::render(myCam* cam)
 {
     QVector3D kugeln[16];
-	
+    float kugelnActive[16];
+    QVector3D kugelColor[16];
     for(int i = 0; i< 16;i++)
     {
         if(this->waveIsActive[i] == 1)
@@ -79,6 +80,15 @@ void Tisch::render(myCam* cam)
         }
 
         kugeln[i] = *this->kugelPositions->at(i);
+        kugelColor[i] = *this->kugelColor->at(i);
+        if(*this->kugelActive->at(i) == true)
+        {
+            kugelnActive[i] = 1;
+        }
+        else
+        {
+            kugelnActive[i] = 0;
+        }
     }
 
     if (!isVisible) return;
@@ -117,6 +127,8 @@ void Tisch::render(myCam* cam)
     int unifWaveX = shaderProgram->uniformLocation("WavePosX");
     int unifWaveZ = shaderProgram->uniformLocation("WavePosZ");
     int unifKugelPos = shaderProgram->uniformLocation("kugelPosition");
+    int unifKugelA = shaderProgram->uniformLocation("kugelActive");
+    int unifKugelC = shaderProgram->uniformLocation("kugelColor");
 
     shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
     shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
@@ -130,6 +142,8 @@ void Tisch::render(myCam* cam)
     shaderProgram->setUniformValueArray(unifWaveZ, this->waveStartPosZ,16,1);
     shaderProgram->setUniformValueArray(unifWaveD, this->waveDuration,16,1);
     shaderProgram->setUniformValueArray(unifKugelPos, kugeln,16);
+    shaderProgram->setUniformValueArray(unifKugelA, kugelnActive,16,1);
+    shaderProgram->setUniformValueArray(unifKugelC, kugelColor,16);
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);

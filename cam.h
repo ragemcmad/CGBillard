@@ -2,9 +2,9 @@
 #define CAM
 
 
-
 #include<QOpenGLShaderProgram>
 #include<QOpenGLBuffer>
+#include"animation.h"
 
 class myCam {
 private:
@@ -26,7 +26,7 @@ public:
     float moveTime; // vergangene Zeit/Framezahl
 
     QMatrix4x4 viewMatrix,projMatrix;
-	Vector<Animation> animations;
+    std::vector<Animation> animations;
     myCam();
     bool isMoving;
 
@@ -41,19 +41,6 @@ public:
     float getCamAngle();
 };
 
-class Animation 
-{
-	public:
-	
-	QVector3D moveZiel;
-    QVector3D moveLookatZiel;	
-	float moveDuration;
-	
-    QVector3D moveStart;
-    QVector3D moveLookatStart;
-	
-	Animation(QVector3D ziel, QVector3D zielLookAt, int duration)
-}
 
 #endif // CAM
 

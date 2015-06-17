@@ -1,0 +1,59 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2015-04-10T09:38:33
+#
+#-------------------------------------------------
+
+QT       += core gui
+QT       += opengl
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = CGBillard
+TEMPLATE = app
+
+
+SOURCES += main.cpp\
+        mainwindow.cpp \
+    myglwidget.cpp \
+    cam.cpp \
+    modelloader.cpp \
+    gamescene.cpp \
+    gameobject.cpp \
+    game.cpp \
+    kugel.cpp \
+    tisch.cpp \
+    gui.cpp \
+    lightsources.cpp \
+    guitexture.cpp \
+    animation.cpp \
+    sort.cpp
+
+HEADERS  += mainwindow.h \
+    myglwidget.h \
+    cam.h \
+    sonnensystemobjekt.h \
+    modelloader.h \
+    gamescene.h \
+    gameobject.h \
+    game.h \
+    kugel.h \
+    tisch.h \
+    path.h \
+    gui.h \
+    lightsources.h \
+    guitexture.h \
+    animation.h \
+    sort.h
+
+FORMS    += mainwindow.ui
+
+RESOURCES += \
+    shader.qrc \
+    models.qrc \
+    textures.qrc
+
+LIBS += -LC:/Users/Thomas/Documents/QTProjects/CGBillard/assimp-win-mingw32/code -llibassimp
+
+INCLUDEPATH += C:/Users/Thomas/Documents/QTProjects/CGBillard/assimp-win-mingw32/include
+DEPENDPATH += C:/Users/Thomas/Documents/QTProjects/CGBillard/assimp-win-mingw32/include

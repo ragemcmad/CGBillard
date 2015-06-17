@@ -74,7 +74,6 @@ void GuiTexture::render()
 
     glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
 
-    glDisable(GL_BLEND);
 
     shaderProgram->disableAttributeArray(attrVertices);
     shaderProgram->disableAttributeArray(attrTexCoords);

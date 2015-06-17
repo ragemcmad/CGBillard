@@ -13,12 +13,13 @@ myCam::myCam(){
     this->angleY = 0;
     this->distanz = 30;
     this->isMoving = false;
-	this->animation = new Vector<Animation>();
+    this->animations = std::vector<Animation>();
 }
 
 void myCam::queueAnimation(QVector3D ziel, QVector3D zielLookat, int duration)
 {
-	this->animations.add(Animation(ziel,zielLookat,duration);
+    Animation aniNew = Animation(ziel,zielLookat,duration);
+    this->animations.push_back(aniNew);
 	if (!this->isMoving)
 		this->nextAnimation();
 		
@@ -43,7 +44,7 @@ void myCam::moveStep(int time)
             this->viewMatrix.lookAt(this->moveZiel,this->moveLookatZiel,QVector3D(0,1,0));
             this->isMoving = false;
 			
-			if (!this->animations.isEmpty())
+            if (!this->animations.empty())
 				this->nextAnimation();
         }
         else
@@ -59,7 +60,7 @@ void myCam::moveStep(int time)
 
 void myCam::nextAnimation()
 {
-	if (!this->animations.isEmpty)
+    if (!this->animations.empty())
 	{
 		this->isMoving = true;
 		Animation ani = this->animations.at(this->animations.size()-1);

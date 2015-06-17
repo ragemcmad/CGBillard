@@ -14,6 +14,67 @@ Kugel::Kugel(int id)
     this->id = id;
     this->pos = new QVector3D();
     this->rotation.setToIdentity();
+    this->color = new QVector3D(0,0,0);
+    this->kugelIndex = new std::vector<int>();
+    for(int i = 0; i< 16;i++)
+    {
+        this->kugelIndex->push_back(i);
+    }
+    this->isVisible = true;
+}
+
+float Kugel::distanz(QVector3D p1,QVector3D p2)
+{
+    float d = (p1-p2).length();
+    return d;
+}
+
+void Kugel::quickSort(int L,int R,std::vector<Kugel*>* kugel, std::vector<int> &list,QVector3D pos)
+{
+    if(L>= 0 && R< list.size() && L!=R)
+    {
+        int i = L;
+        int j = R;
+        int p = list.at((L+R)/2);
+        while(i<j)
+        {
+            while(i<R&&distanz(*kugel->at(list.at(i))->pos,pos)<distanz(*kugel->at(p)->pos,pos))
+            {
+                i++;
+            }
+
+            while(j>0&&distanz(*kugel->at(list.at(j))->pos,pos)>distanz(*kugel->at(p)->pos,pos))
+            {
+                j--;
+            }
+            if(i<j)
+            {
+                int tmp = list.at(i);
+                list.at(i) = list.at(j);
+                list.at(j) = tmp;
+                i++;
+                j--;
+            }
+        }
+        if(i==j)
+        {
+            if(distanz(*kugel->at(list.at(i))->pos,pos)<distanz(*kugel->at(p)->pos,pos))
+            {
+                quickSort(L,i-1,kugel,list,pos);
+                quickSort(i,R,kugel,list,pos);
+            }
+            else
+            {
+                quickSort(L,i,kugel,list,pos);
+                quickSort(i+1,R,kugel,list,pos);
+            }
+        }
+        else
+        {
+            quickSort(L,j,kugel,list,pos);
+            quickSort(i,R,kugel,list,pos);
+        }
+    }
 }
 
 Kugel::~Kugel()
@@ -22,17 +83,91 @@ Kugel::~Kugel()
 }
 
 
+
+void Kugel::render(myCam* cam)
+{
+    if (!isVisible) return;
+
+    quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
+
+    shaderProgram->bind();
+    vbo->bind();
+    ibo->bind();
+
+    int attrVertices = shaderProgram->attributeLocation("vert");
+    //int attrColors = shaderProgram->attributeLocation(("color"));
+    int attrTexCoords = shaderProgram->attributeLocation("texCoord");
+    int attrNormals = shaderProgram->attributeLocation("normal");
+
+
+    shaderProgram->enableAttributeArray(attrVertices);
+    //shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, 0, 4, 32);
+    //shaderProgram->enableAttributeArray(attrColors);
+    //shaderProgram->setAttributeBuffer(attrColors, GL_FLOAT, 16, 4, 32);
+    shaderProgram->enableAttributeArray(attrTexCoords);
+    shaderProgram->enableAttributeArray(attrNormals);
+
+
+    //qDebug() << attrVertices;
+    //qDebug() << shaderProgram->log();
+
+
+    QVector3D campos = cam->getPositionFromViewMatrix(cam->viewMatrix);
+
+    int unifMatrix = shaderProgram->uniformLocation("matrix");
+    int unifMatrixProjection = shaderProgram->uniformLocation("projmatrix");
+    int unifMatrixView = shaderProgram->uniformLocation("viewmatrix");
+    int unifLightpos = shaderProgram->uniformLocation("lightpositions");
+    int unifLightintense = shaderProgram->uniformLocation("lightintensity");
+    int unifCamera = shaderProgram->uniformLocation("cameraposition");
+
+    shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
+    shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
+    shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
+    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4);
+    shaderProgram->setUniformValue(unifCamera, campos);
+
+    //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
+    qTex->bind(1);
+    //QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);
+    shaderProgram->setUniformValue("texture", 1);
+
+    int offset = 0;
+    size_t stride = 12 * sizeof(GLfloat);
+    shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, offset, 4, stride);
+    offset = 4 * sizeof(GLfloat);
+    shaderProgram->setAttributeBuffer(attrNormals, GL_FLOAT, offset, 4, stride);
+    offset = 8 * sizeof(GLfloat);
+    shaderProgram->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
+
+    shaderProgram->disableAttributeArray(attrVertices);
+    shaderProgram->disableAttributeArray(attrTexCoords);
+    shaderProgram->disableAttributeArray(attrNormals);
+
+
+    qTex->release();
+    ibo->release();
+    vbo->release();
+
+}
+
 void Kugel::loadShader()
 {
     // Standardshader
     QOpenGLShaderProgram* standardShaderProg = new QOpenGLShaderProgram();
     QOpenGLShader vertShader(QOpenGLShader::Vertex);
-    vertShader.compileSourceFile(":/shader/v330.vert");
+    vertShader.compileSourceFile(":/shader/kugel.vert");
     //qDebug() << shaderProgram.log();
     standardShaderProg->addShader(&vertShader);
     //qDebug() << shaderProgram.log();
     QOpenGLShader fragShader(QOpenGLShader::Fragment);
-    fragShader.compileSourceFile(":/shader/frag330.frag");
+    fragShader.compileSourceFile(":/shader/kugel.frag");
     //qDebug() << shaderProgram.log();
     standardShaderProg->addShader(&fragShader);
     standardShaderProg->link();

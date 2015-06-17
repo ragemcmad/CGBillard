@@ -20,7 +20,7 @@ void Game::cancel()
 		return;
 	}
 	if (this->finish)
-		this->resetGame;
+        this->resetGame();
 }
 
 void Game::shoot()
@@ -29,13 +29,13 @@ void Game::shoot()
     if(this->watch == false)
     {
         float angle = -this->cam->getCamAngle()+180;
-        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->gui.powerLevel/this->gui.maxPower));
+        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
         this->whiteBall->v->setY(0);
-        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->gui.powerLevel/this->gui.maxPower));
+        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
         this->watch = true;
         this->cam->aktivateWatchmode();
         this->koe->isVisible = false;
-        this->cam->startAnimation(QVector3D(0,30,50),QVector3D(0,0,0),100);
+        this->cam->queueAnimation(QVector3D(0,30,50),QVector3D(0,0,0),100);
     }
 }
 
@@ -74,20 +74,37 @@ void Game::resetGame()
 	delete this->cam;
 	this->cam = new myCam();
 	this->cam->aktivatePlaymode(QVector3D(this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).x(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).y(),this->myScene->secondaryObjects->at(0)->worldMatrix.column(3).z()));
-	this->koe->isVisible = true;
+    this->koe->isVisible = true;
 	this->updateKoe();
 }
 
 void Game::gameStep()
 {
+    int countGanzeEingelocht = this->myScene->eingelochteGanze->size();
+    int countHalbeEingelocht = this->myScene->eingelochteHalbe->size();
+
     for(int i = 0; i<this->myScene->secondaryObjects->size();i++)
     {
         this->myScene->secondaryObjects->at(i)->gameProgress(0);
     }
 
+    //generate wave
+    for(int i = countGanzeEingelocht;i<this->myScene->eingelochteGanze->size();i++)
+    {
+        QVector3D pos = *this->myScene->eingelochteGanze->at(i)->pos;
+        this->myScene->tischBoden->generateWave(pos.x()*2,pos.z()*2,80);
+    }
+    for(int i = countHalbeEingelocht;i<this->myScene->eingelochteHalbe->size();i++)
+    {
+        QVector3D pos = *this->myScene->eingelochteHalbe->at(i)->pos;
+        this->myScene->tischBoden->generateWave(pos.x()*2,pos.z()*2,80);
+    }
+
     this->myScene->gui->powerStep();
+
     this->myScene->renderScene(cam);
-	
+
+
     if (this->cam->isMoving)
         this->cam->moveStep(1);
     else if (this->finish)

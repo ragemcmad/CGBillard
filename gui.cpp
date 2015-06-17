@@ -34,14 +34,21 @@ void GUI::loadShader()
 
     this->kugeln[0].loadModel(p.append(QString("models/gui.obj")));
     this->kugeln[0].shaderProgram = standardShaderProg;
-    this->kugeln[0].loadTexture(QString::fromStdString(":/textures/kugel10gui.png"));
+    this->kugeln[0].loadTexture(QString::fromStdString(":/textures/kugel1gui.png"));
     this->kugeln[0].setPositionMatrix(position);
     for(int i = 1;i<14;i++)
     {
         this->kugeln[i].shaderProgram = standardShaderProg;
         this->kugeln[i].copyBuffer(&this->kugeln[0]);
         std::stringstream convert;
-        convert <<":/textures/kugel"<< i<<"gui.png";
+        if(i<7)
+        {
+            convert <<":/textures/kugel"<< i+1<<"gui.png";
+        }
+        else
+        {
+            convert <<":/textures/kugel"<< i+2<<"gui.png";
+        }
         this->kugeln[i].loadTexture(QString::fromStdString(convert.str()));
     }
     this->players.copyBuffer(&this->kugeln[0]);
@@ -69,7 +76,7 @@ void GUI::loadShader()
 	this->winSign.isVisible = false;
     this->winSign.shaderProgram = standardShaderProg;
 
-    setTeam(true);
+    setTeam(false);
 }
 
 void GUI::setTeam(bool p1Full)
@@ -77,8 +84,8 @@ void GUI::setTeam(bool p1Full)
     this->p1Full = p1Full;
     QMatrix4x4 position;
     position.setToIdentity();
-    position.scale(0.05);
-    position.translate(-11,17.5,0);
+    position.scale(0.039,0.05,1);
+    position.translate(-15,17.5,0);
 
     for(int i = 0; i<7;i++)
     {
@@ -88,7 +95,7 @@ void GUI::setTeam(bool p1Full)
             this->kugeln[i+7].setPositionMatrix(position);
         position.translate(2,0,0);
     }
-    position.translate(6,-34.5,0);
+    position.translate(16,-34.5,0);
     for(int i = 0; i<7;i++)
     {
         if(this->p1Full== true)
@@ -102,7 +109,6 @@ void GUI::setTeam(bool p1Full)
 void GUI::setVector(std::vector<Kugel*>* vec)
 {
     this->kugelnVector = vec;
-
 }
 
 void GUI::render()
@@ -112,7 +118,7 @@ void GUI::render()
     this->players.render();
     for(int i = 0; i< 14;i++)
     {
-        if(i<8)
+        if(i<7)
         {
             if(this->kugelnVector->at(i+1)->isVisible == false && this->kugelnVector->at(i+1)->id ==i+1)
             {

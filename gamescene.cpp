@@ -14,6 +14,10 @@ GameScene::GameScene()
 	this->eingelochteHalbe = new std::vector<Kugel*>();
 	this->eingelochteGanze = new std::vector<Kugel*>();
     this->kugelPositions = new std::vector<QVector3D*>();
+    this->kugelActive = new std::vector<bool*>();
+    this->kugelColor = new std::vector<QVector3D*>();
+    this->kugelIndex = new std::vector<int>();
+    this->KugelnAlle = new std::vector<Kugel*>();
 }
 
 GameScene::~GameScene()
@@ -63,6 +67,8 @@ void GameScene::initScene()
     this->tischBoden->loadLights(this->lights);
     this->tischBoden->worldMatrix.scale(0.5,1,0.5);
     this->tischBoden->kugelPositions = this->kugelPositions;
+    this->tischBoden->kugelActive = this->kugelActive;
+    this->tischBoden->kugelColor = this->kugelColor;
 
     p = path::getPath();
     Kugel* kugelWhite = new Kugel(0);
@@ -72,9 +78,13 @@ void GameScene::initScene()
     kugelWhite->loadLights(this->lights);
     kugelWhite->worldMatrix.translate(0,0,18);
     this->secondaryObjects->push_back(kugelWhite);
+    this->KugelnAlle->push_back(kugelWhite);
     kugelWhite->setVector(this->secondaryObjects);
     kugelWhite->updatePosition();
     this->kugelPositions->push_back(kugelWhite->pos);
+    this->kugelActive->push_back(&kugelWhite->isVisible);
+    this->kugelColor->push_back(kugelWhite->color);
+    this->kugelIndex->push_back(0);
     //kugelWhite->v->setZ(-0.9);
     //kugelWhite->v->setX(0.01);
 
@@ -85,7 +95,7 @@ void GameScene::initScene()
     float abstandz = -1.75;
     float abstandx = 2.01;
     for(int i = 1; i< 16;i++)
-    {
+    {        
         Kugel* kugel = new Kugel(i);
         kugel->copyBuffer(kugelWhite);
         std::stringstream convert;
@@ -108,30 +118,38 @@ void GameScene::initScene()
 			
         switch(i)
         {
-            case 11:kugel->worldMatrix.translate(0,0,zpos); break;
-            case 1:kugel->worldMatrix.translate(-1*abstandx/2 ,0,zpos+1*abstandz); break;
-            case 3:kugel->worldMatrix.translate(1*abstandx/2,0,zpos+1*abstandz); break;
-            case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); break;
+            case 11:kugel->worldMatrix.translate(0,0,zpos); kugel->color = new QVector3D(255,127,0) ;break;
+        case 1:kugel->worldMatrix.translate(-1*abstandx/2 ,0,zpos+1*abstandz); kugel->color = new QVector3D(255,255,0); break;
+            case 3:kugel->worldMatrix.translate(1*abstandx/2,0,zpos+1*abstandz); kugel->color = new QVector3D(255,127,0); break;
+            case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); kugel->color = new QVector3D(51,104,51); break;
             case 8: // schwarze Kugel
 				kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); 
                 kugel->meineAktiven = NULL;
 				kugel->meineEingelochten = NULL;
+                kugel->color = new QVector3D(0,0,0);
 				break;
-            case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz); break;
-            case 7:kugel->worldMatrix.translate(-3*abstandx/2,0,zpos+3*abstandz); break;
-            case 15:kugel->worldMatrix.translate(-1*abstandx/2,0,zpos+3*abstandz); break;
-            case 9:kugel->worldMatrix.translate(+1*abstandx/2,0,zpos+3*abstandz); break;
-            case 2:kugel->worldMatrix.translate(3*abstandx/2,0,zpos+3*abstandz); break;
-            case 12:kugel->worldMatrix.translate(-2*abstandx,0,zpos+4*abstandz); break;
-            case 4:kugel->worldMatrix.translate(-1*abstandx,0,zpos+4*abstandz); break;
-            case 10:kugel->worldMatrix.translate(0*abstandx,0,zpos+4*abstandz); break;
-            case 6:kugel->worldMatrix.translate(1*abstandx,0,zpos+4*abstandz); break;
-            case 5:kugel->worldMatrix.translate(2*abstandx,0,zpos+4*abstandz); break;
+            case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz); kugel->color = new QVector3D(255,183,112); break;
+            case 7:kugel->worldMatrix.translate(-3*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(159,7,7); break;
+            case 15:kugel->worldMatrix.translate(-1*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(159,7,7); break;
+            case 9:kugel->worldMatrix.translate(+1*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(255,255,0); break;
+            case 2:kugel->worldMatrix.translate(3*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(0,0,255); break;
+            case 12:kugel->worldMatrix.translate(-2*abstandx,0,zpos+4*abstandz); kugel->color = new QVector3D(114,0,138); break;
+            case 4:kugel->worldMatrix.translate(-1*abstandx,0,zpos+4*abstandz); kugel->color = new QVector3D(114,0,138); break;
+            case 10:kugel->worldMatrix.translate(0*abstandx,0,zpos+4*abstandz); kugel->color = new QVector3D(0,0,255); break;
+            case 6:kugel->worldMatrix.translate(1*abstandx,0,zpos+4*abstandz); kugel->color = new QVector3D(51,104,51); break;
+            case 5:kugel->worldMatrix.translate(2*abstandx,0,zpos+4*abstandz); kugel->color = new QVector3D(255,183,112); break;
         }
         this->secondaryObjects->push_back(kugel);
         kugel->setVector(this->secondaryObjects);
         kugel->updatePosition();
         this->kugelPositions->push_back(kugel->pos);
+        this->kugelActive->push_back(&kugel->isVisible);
+        kugel->color->setX(kugel->color->x()/ 255.0);
+        kugel->color->setY(kugel->color->y()/ 255.0);
+        kugel->color->setZ(kugel->color->z()/ 255.0);
+        this->kugelColor->push_back(kugel->color);
+        this->kugelIndex->push_back(i);
+        this->KugelnAlle->push_back(kugel);
     }
 
     this->lights->initLights();
@@ -151,12 +169,19 @@ void GameScene::renderScene(myCam* cam)
     {
         this->primaryObjects->at(i)->render(cam);
     }
-    for(int i = 0; i< this->secondaryObjects->size();i++)
+
+    this->secondaryObjects->at(0)->quickSort(0,15,this->KugelnAlle, *this->kugelIndex,cam->getPositionFromViewMatrix(cam->viewMatrix));
+
+    for(int i = 15; i>= 0;i--)
     {
-        this->secondaryObjects->at(i)->render(cam);
+        this->secondaryObjects->at(this->kugelIndex->at(i))->render(cam);
     }
+
+
+
     this->gui->render();
 }
+
 bool GameScene::hasMovingBalls(){
     for (int i=0; i<this->secondaryObjects->size();i++)
     {

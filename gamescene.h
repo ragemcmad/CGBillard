@@ -23,8 +23,13 @@ public:
 	std::vector<Kugel*>* eingelochteHalbe;
 	std::vector<Kugel*>* ganzeKugeln;
     std::vector<Kugel*>* eingelochteGanze;
+    std::vector<Kugel*>* KugelnAlle;
 
     std::vector<QVector3D*>* kugelPositions;
+    std::vector<bool*>* kugelActive;
+    std::vector<QVector3D*>* kugelColor;
+    std::vector<int>* kugelIndex;
+
 
     GUI *gui;
     void initScene();
