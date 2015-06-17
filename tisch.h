@@ -19,7 +19,7 @@ public:
     Tisch();
     ~Tisch();
     void loadShader();
-    void render(myCam* cam);
+    void render(myCam* cam,int kugel);
     void generateWave(float xPosition,float zPosition,float duration);
 
 };

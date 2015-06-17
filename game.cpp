@@ -102,8 +102,16 @@ void Game::gameStep()
 
     this->myScene->gui->powerStep();
 
+
+    //for(int i = 0; i< 16;i++)
+    //{
+    //    this->myScene->renderScene(cam,i);
+    //}
+
+
     this->myScene->renderScene(cam);
 
+    this->myScene->gui->render();
 
     if (this->cam->isMoving)
         this->cam->moveStep(1);
@@ -164,8 +172,12 @@ void Game::gameStep()
 
 void Game::showOff() // DiscoMode ON
 {
-	QVector3D altePos = this->cam.getPosition();
-	QVector3D pos1 = (altePos-this->whiteBall->pos);
+    QVector3D altePos = this->cam->getPositionFromViewMatrix(this->cam->viewMatrix);
+    QVector3D pos1;
+    pos1.setX(altePos.x()-this->whiteBall->pos->x());
+    pos1.setY(altePos.y()-this->whiteBall->pos->y());
+    pos1.setZ(altePos.z()-this->whiteBall->pos->z());
+
 		
 	QMatrix4x4 rotaMatrix;
 	//rotaMatrix.setToIdentity();

@@ -161,25 +161,40 @@ void GameScene::initScene()
     this->gui->setVector(this->secondaryObjects);
 }
 
-void GameScene::renderScene(myCam* cam)
+void GameScene::renderScene(myCam* cam, int kugel)
 {
-    this->lights->render(cam);
-    this->tischBoden->render(cam);
+    myCam kugelCam;
+
+    if(kugel >= 0)
+    {
+        QMatrix4x4 position;
+        position.setToIdentity();
+        position.translate(-*this->KugelnAlle->at(kugel)->pos);
+        kugelCam.viewMatrix = position;
+
+        cam = &kugelCam;
+    }
+
+    if(kugel==-1)
+    {
+        this->lights->render(cam);
+    }
+
+    this->tischBoden->render(cam, kugel);
     for(int i = 0; i< this->primaryObjects->size();i++)
     {
-        this->primaryObjects->at(i)->render(cam);
+        this->primaryObjects->at(i)->render(cam,kugel);
     }
 
     this->secondaryObjects->at(0)->quickSort(0,15,this->KugelnAlle, *this->kugelIndex,cam->getPositionFromViewMatrix(cam->viewMatrix));
 
     for(int i = 15; i>= 0;i--)
     {
-        this->secondaryObjects->at(this->kugelIndex->at(i))->render(cam);
+        this->secondaryObjects->at(this->kugelIndex->at(i))->render(cam,kugel);
     }
 
 
 
-    this->gui->render();
 }
 
 bool GameScene::hasMovingBalls(){

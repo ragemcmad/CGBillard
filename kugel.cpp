@@ -1,5 +1,8 @@
+#include <GL/glew.h>
+
 #include "kugel.h"
 #include <math.h>
+#include <iostream>
 
 Kugel::Kugel(int id)
 {
@@ -21,6 +24,10 @@ Kugel::Kugel(int id)
         this->kugelIndex->push_back(i);
     }
     this->isVisible = true;
+
+    fbo = 0;
+    colorCubeMap = 0;
+    depthCubeMap = 0;
 }
 
 float Kugel::distanz(QVector3D p1,QVector3D p2)
@@ -79,14 +86,88 @@ void Kugel::quickSort(int L,int R,std::vector<Kugel*>* kugel, std::vector<int> &
 
 Kugel::~Kugel()
 {
+  if (fbo)
+  {
+      glDeleteFramebuffers(1, &fbo);
 
+      glDeleteTextures(1, &colorCubeMap);
+      glDeleteTextures(1, &depthCubeMap);
+  }
+
+
+}
+
+void Kugel::initFBO(int w, int h)
+{
+    glGenFramebuffers(1, &fbo);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+
+    glGenTextures(1, &colorCubeMap);
+    glGenTextures(1, &depthCubeMap);
+
+
+    GLenum target = GL_TEXTURE_CUBE_MAP;
+
+        // initializing depth map
+        glBindTexture(target, depthCubeMap);
+        // setting up texture parameters (obligatory):
+        glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_COMPARE_MODE,
+                                GL_COMPARE_REF_TO_TEXTURE);
+        glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_GREATER);
+
+        for(int face = 0; face < 6; ++face)
+            // initializing faces
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0,
+                         GL_DEPTH_COMPONENT24, w, h, 0,
+                         GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+        // attaching to the framebuffer
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                             depthCubeMap, 0);
+
+
+           // initializing color maps
+        glBindTexture(target, colorCubeMap);
+        glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        for(int face = 0; face < 6; ++face)
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0,
+                         GL_RGBA, w, h, 0,
+                         GL_RGBA, GL_FLOAT, 0);
+
+        // attaching to the framebuffer
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                             colorCubeMap, 0);
+
+           glDrawBuffer(GL_COLOR_ATTACHMENT0); // don't forget to do this!
+           // OpenGL won't be filling attachments you haven't mentioned here.
+           // binding default framebuffer
+
+
+           if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+               std::cout << "fbo incomplete" << std::endl;
+           glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
 
-void Kugel::render(myCam* cam)
+void Kugel::render(myCam* cam,int kugel)
 {
     if (!isVisible) return;
+
+    if (!fbo)
+        initFBO(255, 255);
 
     quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
 

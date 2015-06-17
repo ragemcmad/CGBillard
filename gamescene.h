@@ -33,7 +33,7 @@ public:
 
     GUI *gui;
     void initScene();
-    void renderScene(myCam* cam);
+    void renderScene(myCam* cam, int kugel = -1);
     bool hasMovingBalls();
     LightSources* lights;
 

@@ -1,9 +1,10 @@
+#include <GL/glew.h>
 #include "myglwidget.h"
 #include <QKeyEvent>
 #include <QWheelEvent>
 #include <QOpenGLBuffer>
 #include <qdebug.h>
-
+#include <iostream>
 
 
 
@@ -134,4 +135,8 @@ void MyGLWidget::initializeGL()
     this->counter = 0;
     //sso->buildSystem();
     this->theGame = new Game();
+
+    if (glewInit() != GLEW_OK)
+        std::cout<< "glew error\n"<<std::endl;
+
 }

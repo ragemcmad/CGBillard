@@ -29,9 +29,16 @@ public:
 	std::vector<Kugel*>* meineAktiven;
 	std::vector<Kugel*>* meineEingelochten;
 	
+    GLuint fbo;
+
+    GLuint colorCubeMap;
+    GLuint depthCubeMap;
+
+    void initFBO(int w, int h);
+
     QMatrix4x4 rotation;
     QVector3D* color;
-    void render(myCam* cam);
+    void render(myCam* cam,int kugel);
     void updatePosition();
     bool collisionsCheckKugel(Kugel* k);
     bool collisionsCheckRand();
