@@ -17,6 +17,9 @@ public:
     bool teamsAreSet = false;
 	bool p1HasFull; // true = p1 full | false = p1 half
 	
+    bool hatEingelocht = false;
+    bool hatGegnerEingelocht = false;
+
 	GameScene* myScene;
 	myCam* cam;
 	

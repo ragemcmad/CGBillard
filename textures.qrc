@@ -43,5 +43,9 @@
         <file>textures/powerbar.png</file>
         <file>textures/p1win.png</file>
         <file>textures/p2win.png</file>
+        <file>textures/spieler_1_noturn(1).png</file>
+        <file>textures/spieler_1_turn(1).png</file>
+        <file>textures/spieler_2_noturn(1).png</file>
+        <file>textures/spieler_2_turn(1).png</file>
     </qresource>
 </RCC>

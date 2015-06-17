@@ -91,6 +91,7 @@ void Game::gameStep()
         this->myScene->secondaryObjects->at(i)->gameProgress(0);
     }
 
+
     //generate wave
     for(int i = countGanzeEingelocht;i<this->myScene->eingelochteGanze->size();i++)
     {
@@ -121,6 +122,45 @@ void Game::gameStep()
     this->myScene->renderScene(cam);
 
     this->myScene->gui->render();
+
+    if (!turn) // test auf eingelocht
+    {
+      if (p1HasFull && (countGanzeEingelocht < this->myScene->eingelochteGanze->size()))
+      {
+          this->hatEingelocht =true;
+      }
+      if (p1HasFull && (countHalbeEingelocht == this->myScene->eingelochteHalbe->size()))
+      {
+          this->hatGegnerEingelocht =true;
+      }
+      if (!p1HasFull && (countHalbeEingelocht == this->myScene->eingelochteHalbe->size()))
+      {
+          this->hatEingelocht =true;
+      }
+      if (!p1HasFull && (countGanzeEingelocht < this->myScene->eingelochteGanze->size()))
+      {
+          this->hatGegnerEingelocht =true;
+      }
+    }
+    else
+    {
+        if (!p1HasFull && (countGanzeEingelocht < this->myScene->eingelochteGanze->size()))
+        {
+            this->hatEingelocht =true;
+        }
+        if (p1HasFull && (countHalbeEingelocht < this->myScene->eingelochteHalbe->size()))
+        {
+            this->hatGegnerEingelocht =true;
+        }
+        if (!p1HasFull && (countHalbeEingelocht < this->myScene->eingelochteHalbe->size()))
+        {
+            this->hatEingelocht =true;
+        }
+        if (p1HasFull && (countGanzeEingelocht < this->myScene->eingelochteGanze->size()))
+        {
+            this->hatGegnerEingelocht =true;
+        }
+    }
 
     if (this->cam->isMoving)
         this->cam->moveStep(1);
@@ -156,26 +196,33 @@ void Game::gameStep()
             this->myScene->gui->p1Win();
         
     }
+
   // test ob rundenende
     else if (this->watch && !this->myScene->hasMovingBalls())
     {
         //test auf rundenende
-        if (!this->whiteBall->isVisible)
+        if (!this->whiteBall->isVisible || this->hatGegnerEingelocht || !this->hatEingelocht)
         {
-            //this->setBall = true;
-            // temporär
-            this->whiteBall->pos->setX(0);
-            this->whiteBall->pos->setY(0);
-            this->whiteBall->pos->setZ(18);
-            this->whiteBall->isVisible = true;
+            if (!this->whiteBall->isVisible)
+            {
+                //this->setBall = true;
+                // temporär
+                this->whiteBall->pos->setX(0);
+                this->whiteBall->pos->setY(0);
+                this->whiteBall->pos->setZ(18);
+                this->whiteBall->isVisible = true;
+            }
+            this->turn = !(this->turn);
+            this->myScene->gui->powerBarPos.setX(-(this->myScene->gui->powerBarPos.x()));
         }
         this->myScene->gui->powerBar.isVisible = true;
-        this->myScene->gui->powerBarPos.setX(-(this->myScene->gui->powerBarPos.x()));
-        this->turn = !this->turn;
+
         this->watch = false;
         this->koe->isVisible = true;
         this->cam->aktivatePlaymode(*this->whiteBall->pos);
         this->updateKoe();
+        this->hatEingelocht = false;
+        this->hatGegnerEingelocht = false;
     }
 	else
         this->myScene->gui->powerStep();
