@@ -32,6 +32,8 @@ public:
     void camMove(int x, int y);
     void camRotate(int x, int y);
     void updateKoe();
+	
+	void showOff();
 
 private:
     //void turn(int player, bool &finish,bool &win);
