@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "game.h"
 
 Game::Game(){
@@ -34,8 +35,9 @@ void Game::shoot()
         this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
         this->watch = true;
         this->cam->aktivateWatchmode();
-        this->koe->isVisible = false;
-        this->cam->queueAnimation(QVector3D(0,30,50),QVector3D(0,0,0),100);
+        this->koe->isVisible = false;        
+        this->myScene->gui->powerBar.isVisible = false;
+        this->cam->queueAnimation(QVector3D(0,40,1),QVector3D(0,0,0),100);
     }
 }
 
@@ -67,9 +69,10 @@ void Game::updateKoe()
 void Game::resetGame()
 {	
 	this->finish = false;
-    this->teamAreSet = false;
+    this->teamsAreSet = false;
 	this->turn = false;
 	this->watch = false;
+    delete this->myScene->gui;
     this->myScene->initScene();
 	delete this->cam;
 	this->cam = new myCam();
@@ -103,11 +106,17 @@ void Game::gameStep()
     this->myScene->gui->powerStep();
 
 
-    //for(int i = 0; i< 16;i++)
-    //{
-    //    this->myScene->renderScene(cam,i);
-    //}
+    for(int i = 0; i< 0;i++)
+    {
+        this->myScene->secondaryObjects->at(i)->initFBO(255, 255);
+        glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        this->myScene->renderScene(cam,i);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawBuffer(GL_BACK);
 
     this->myScene->renderScene(cam);
 
@@ -120,31 +129,31 @@ void Game::gameStep()
     // test auf spielende
     else if (!this->blackBall->isVisible && this->watch && !this->myScene->hasMovingBalls()) {
         this->finish = true;
-        //if (!this->turn) //p1 turn
-        //	if (!this->teamsAreSet)
-		//		this->myScene->gui->p2Win();
-		//	else if (this->p1HasFull)
-		//		if (this->myScene->ganzeKugeln->isEmpty())
-		//			this->myScene->gui->p1Win();
-		//		else
-		//			this->myScene->gui->p2Win();
-		//	else if (this->myScene->halbeKugeln->isEmpty())
-		//			this->myScene->gui->p1Win();
-		//		else
-		//			this->myScene->gui->p2Win();
+        if (!this->turn) //p1 turn
+            if (!this->teamsAreSet)
+                this->myScene->gui->p2Win();
+            else if (this->p1HasFull)
+                if (this->myScene->ganzeKugeln->empty())
+                    this->myScene->gui->p1Win();
+                else
+                    this->myScene->gui->p2Win();
+            else if (this->myScene->halbeKugeln->empty())
+                    this->myScene->gui->p1Win();
+                else
+                    this->myScene->gui->p2Win();
 	
-		////p2 turn
-		//else if (!this->teamsAreSet)
-		//	this->myScene->gui->p1Win();
-		//else if (!this->p1HasFull)
-		//	if (this->myScene->ganzeKugeln->isEmpty())
-		//		this->myScene->gui->p2Win();
-		//	else
-		//		this->myScene->gui->p1Win();
-		//else if (this->myScene->halbeKugeln->isEmpty())
-		//	this->myScene->gui->p2Win();
-		//else
-		//	this->myScene->gui->p1Win();
+        //p2 turn
+        else if (!this->teamsAreSet)
+            this->myScene->gui->p1Win();
+        else if (!this->p1HasFull)
+            if (this->myScene->ganzeKugeln->empty())
+                this->myScene->gui->p2Win();
+            else
+                this->myScene->gui->p1Win();
+        else if (this->myScene->halbeKugeln->empty())
+            this->myScene->gui->p2Win();
+        else
+            this->myScene->gui->p1Win();
         
     }
   // test ob rundenende
@@ -160,6 +169,8 @@ void Game::gameStep()
             this->whiteBall->pos->setZ(18);
             this->whiteBall->isVisible = true;
         }
+        this->myScene->gui->powerBar.isVisible = true;
+        this->myScene->gui->powerBarPos.setX(-(this->myScene->gui->powerBarPos.x()));
         this->turn = !this->turn;
         this->watch = false;
         this->koe->isVisible = true;

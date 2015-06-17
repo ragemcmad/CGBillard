@@ -57,8 +57,7 @@ void main()
     }
     fragColor.a = alpha;
 
-    //fragColor.a= 0.3;
-    max(fragColor.a,0.4);
+    fragColor.a= 0.3;//max(fragColor.a,0.3);
 
     fragColor.r = fragColor.r + colorSpecAll.r;
     fragColor.g = fragColor.g + colorSpecAll.g;

@@ -14,7 +14,7 @@ public:
 	
 	bool setBall = false;
 	
-	bool teamAreSet = false;
+    bool teamsAreSet = false;
 	bool p1HasFull; // true = p1 full | false = p1 half
 	
 	GameScene* myScene;

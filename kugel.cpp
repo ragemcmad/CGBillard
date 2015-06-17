@@ -99,6 +99,9 @@ Kugel::~Kugel()
 
 void Kugel::initFBO(int w, int h)
 {
+    if (fbo)
+        return;
+
     glGenFramebuffers(1, &fbo);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -165,9 +168,6 @@ void Kugel::initFBO(int w, int h)
 void Kugel::render(myCam* cam,int kugel)
 {
     if (!isVisible) return;
-
-    if (!fbo)
-        initFBO(255, 255);
 
     quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
 

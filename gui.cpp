@@ -3,6 +3,7 @@
 GUI::GUI()
 {
     this->p1Full = NULL;
+    this->powerBarPos = QVector3D(0.95,0.0,0);
 }
 
 void GUI::loadShader()
@@ -140,15 +141,17 @@ void GUI::render()
 void GUI::p1Win()
 {
 	QString p = path::getPath();
-	this->winSign.loadTexture(QString::fromStdString(":/textures/p1Win.png"));
+    this->winSign.loadTexture(QString::fromStdString(":/textures/p1win.png"));
 	this->winSign.isVisible = true;
+    this->powerBar.isVisible = false;
 }
 
 void GUI::p2Win()
 {
 	QString p = path::getPath();
-	this->winSign.loadTexture(QString::fromStdString(":/textures/p2Win.png"));
+    this->winSign.loadTexture(QString::fromStdString(":/textures/p2win.png"));
 	this->winSign.isVisible = true;
+    this->powerBar.isVisible = false;
 }
 
 void GUI::powerStep()

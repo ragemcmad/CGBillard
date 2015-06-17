@@ -41,5 +41,7 @@
         <file>textures/kugel14gui.png</file>
         <file>textures/kugel15gui.png</file>
         <file>textures/powerbar.png</file>
+        <file>textures/p1win.png</file>
+        <file>textures/p2win.png</file>
     </qresource>
 </RCC>

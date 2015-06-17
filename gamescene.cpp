@@ -123,6 +123,7 @@ void GameScene::initScene()
             case 3:kugel->worldMatrix.translate(1*abstandx/2,0,zpos+1*abstandz); kugel->color = new QVector3D(255,127,0); break;
             case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); kugel->color = new QVector3D(51,104,51); break;
             case 8: // schwarze Kugel
+                //kugel->isVisible = false;
 				kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); 
                 kugel->meineAktiven = NULL;
 				kugel->meineEingelochten = NULL;
@@ -163,7 +164,8 @@ void GameScene::initScene()
 
 void GameScene::renderScene(myCam* cam, int kugel)
 {
-    myCam kugelCam;
+    myCam kugelCam(90.0f, 1.0f);
+
 
     if(kugel >= 0)
     {
@@ -173,6 +175,36 @@ void GameScene::renderScene(myCam* cam, int kugel)
         kugelCam.viewMatrix = position;
 
         cam = &kugelCam;
+
+        QVector3D campos = *this->KugelnAlle->at(kugel)->pos;
+        QVector3D camdir[6] =
+        {
+            QVector3D(1,0,0),
+            QVector3D(-1,0,0),
+            QVector3D(0,1,0),
+            QVector3D(0,-1,0),
+            QVector3D(0,0,1),
+            QVector3D(0,0,-1)
+        };
+
+        QVector3D camup[6] =
+        {
+            QVector3D(0,1,0),
+            QVector3D(0,1,0),
+            QVector3D(0,0,1),
+            QVector3D(0,0,1),
+            QVector3D(0,1,0),
+            QVector3D(0,1,0)
+        };
+
+        for (int i = 0; i < 6; ++i)
+        {
+            QVector3D camtarget = campos + camdir[i];
+
+            cam->viewMatrixCube[i].setToIdentity();
+            cam->viewMatrixCube[i].lookAt(campos, camtarget,camup[i]);
+        }
+        cam->isCubeCamera = true;
     }
 
     if(kugel==-1)
