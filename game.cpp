@@ -164,10 +164,10 @@ void Game::gameStep()
 
 void Game::showOff() // DiscoMode ON
 {
-	QVector3D altePos = this->cam.getPosition();
-	QVector3D pos1 = (altePos-this->whiteBall->pos);
+    //QVector3D altePos = this->cam.getPosition();
+    //QVector3D pos1 = (altePos-this->whiteBall->pos);
 		
-	QMatrix4x4 rotaMatrix;
+    //QMatrix4x4 rotaMatrix;
 	//rotaMatrix.setToIdentity();
 	//rotaMatrix.rotate(90,0,1,0);
 	//(pos1*rotaMatrix).transpose();

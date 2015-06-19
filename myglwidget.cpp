@@ -116,7 +116,7 @@ void MyGLWidget::resizeGL(int width, int height)
    // Set projection matrix to a perspective projection
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   glFrustum(-0.05 , 0.05, -0.05, 0.05, 0.1, 100.0);
+   glFrustum(-0.05 , 0.05, -0.05, 0.05, 0.1, 1000.0);
    //gluPerspective(45.0f, aspect, 0.1, 100.0);
 }
 
