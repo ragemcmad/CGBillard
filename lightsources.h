@@ -30,7 +30,19 @@ public:
     void initLights();
     QVector3D positions[4];
     QVector3D intensity[4];
+    std::vector<Animation>* animations[4];
+    float moveDuration[4];
+    float moveTime[4];
+    QVector3D moveStart[4];
+    QVector3D moveZiel[4];
 
+    bool isMoving[4];
+
+    void queueAnimation(QVector3D ziel, int pos, int duration = 500);
+    void nextAnimation(int pos);
+    void moveStep(int time);
+
+    void adjustIntensity(int helligkeit);
 
     void render(myCam*);
 

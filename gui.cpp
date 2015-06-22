@@ -2,13 +2,19 @@
 
 GUI::GUI()
 {
+    maxPower = 100;
+    powerChange = 0.5;
     this->p1Full = NULL;
+    this->powerBarPos = QVector3D(-0.95,0.0,0);
+    this->powerBarScale  = QVector3D(0.04,0.4,0);
+}
+
+GUI::~GUI()
+{
 }
 
 void GUI::loadShader()
 {
-
-
     // Standardshader
     QOpenGLShaderProgram* standardShaderProg = new QOpenGLShaderProgram();
     QOpenGLShader vertShader(QOpenGLShader::Vertex);
@@ -31,7 +37,6 @@ void GUI::loadShader()
     position.scale(0.05);
     position.translate(8,-17,0);
 
-
     this->kugeln[0].loadModel(p.append(QString("models/gui.obj")));
     this->kugeln[0].shaderProgram = standardShaderProg;
     this->kugeln[0].loadTexture(QString::fromStdString(":/textures/kugel1gui.png"));
@@ -51,10 +56,13 @@ void GUI::loadShader()
         }
         this->kugeln[i].loadTexture(QString::fromStdString(convert.str()));
     }
-    this->players.copyBuffer(&this->kugeln[0]);
-    this->players.shaderProgram = standardShaderProg;
-    this->players.loadTexture(QString::fromStdString(":/textures/gui.png"));
-	
+    this->players1.copyBuffer(&this->kugeln[0]);
+    this->players1.shaderProgram = standardShaderProg;
+    this->players1.loadTexture(QString::fromStdString(":/textures/guiP1aktiv.png"));
+    this->players2.copyBuffer(&this->kugeln[0]);
+    this->players2.shaderProgram = standardShaderProg;
+    this->players2.loadTexture(QString::fromStdString(":/textures/guiP2aktiv.png"));
+
 	this->powerLevel = 0;
 	
 	
@@ -69,14 +77,14 @@ void GUI::loadShader()
     this->powerBar.shaderProgram = standardShaderProg;
 	
 	position.setToIdentity();
-    position.scale(0.3);
+    position.scale(0.4);
 	
 	this->winSign.setPositionMatrix(position);
 	this->winSign.copyBuffer(&this->kugeln[0]);
 	this->winSign.isVisible = false;
     this->winSign.shaderProgram = standardShaderProg;
 
-    setTeam(false);
+
 }
 
 void GUI::setTeam(bool p1Full)
@@ -111,11 +119,14 @@ void GUI::setVector(std::vector<Kugel*>* vec)
     this->kugelnVector = vec;
 }
 
-void GUI::render()
+void GUI::render(bool turn)
 {
     glClear(GL_DEPTH_BUFFER_BIT);
     powerStep();
-    this->players.render();
+    if (turn)
+        this->players2.render();
+    else
+        this->players1.render();
     for(int i = 0; i< 14;i++)
     {
         if(i<7)
@@ -140,15 +151,17 @@ void GUI::render()
 void GUI::p1Win()
 {
 	QString p = path::getPath();
-	this->winSign.loadTexture(QString::fromStdString(":/textures/p1Win.png"));
+    this->winSign.loadTexture(QString::fromStdString(":/textures/p1win.png"));
 	this->winSign.isVisible = true;
+    this->powerBar.isVisible = false;
 }
 
 void GUI::p2Win()
 {
 	QString p = path::getPath();
-	this->winSign.loadTexture(QString::fromStdString(":/textures/p2Win.png"));
+    this->winSign.loadTexture(QString::fromStdString(":/textures/p2win.png"));
 	this->winSign.isVisible = true;
+    this->powerBar.isVisible = false;
 }
 
 void GUI::powerStep()

@@ -18,7 +18,7 @@ public:
     QOpenGLShaderProgram* shaderProgram;
     LightSources* lights;
 
-    bool isVisible = true;
+    bool isVisible;
 
     GLfloat* vboData;
     GLuint* indexData;
@@ -31,7 +31,7 @@ public:
     QOpenGLBuffer* vbo;
     QOpenGLBuffer* ibo;
 
-    void render(myCam*);
+    void render(myCam*,int kugel);
     void copyBuffer(GameObject* sso);
     void loadModel(QString path);
     void loadTexture(QString path);

@@ -6,15 +6,6 @@ Tisch::Tisch()
     {
         this->waveIsActive[i] = false;
     }
-	
-	if(this->waveIsActive[0] == 0)
-    {
-        this->generateWave(0,0, 40);
-    }
-    if(this->waveIsActive[1] == 0)
-    {
-        this->generateWave(10,10, 60);
-    }
 }
 
 Tisch::~Tisch()
@@ -63,7 +54,7 @@ void Tisch::loadShader()
     glEnable(GL_TEXTURE_2D);
 }
 
-void Tisch::render(myCam* cam)
+void Tisch::render(myCam* cam,int kugel)
 {
     QVector3D kugeln[16];
     float kugelnActive[16];

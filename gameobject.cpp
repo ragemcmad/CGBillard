@@ -2,15 +2,15 @@
 
 GameObject::GameObject()
 {
+    isVisible = true;
 }
 
 GameObject::~GameObject()
 {
-
 }
 
 
-void GameObject::render(myCam* cam)
+void GameObject::render(myCam* cam,int kugel)
 {
     if (!isVisible) return;
 

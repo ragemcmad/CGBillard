@@ -27,7 +27,10 @@ public:
 
     QMatrix4x4 viewMatrix,projMatrix;
     std::vector<Animation> animations;
-    myCam();
+    QMatrix4x4 viewMatrixCube[6];
+    bool isCubeCamera;
+
+    myCam(float fov = 95.0f, float aspect = 1201.0f/771.0f);
     bool isMoving;
 
     QVector3D getPositionFromViewMatrix(QMatrix4x4 matrix);

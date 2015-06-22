@@ -2,9 +2,9 @@
 #include <math.h>
 
 
-myCam::myCam(){
+myCam::myCam(float fov, float aspect){
     this->projMatrix.setToIdentity();
-    this->projMatrix.perspective(95.0f, 1201.0f/771.0f, 0.1f, 1000.0f);
+    this->projMatrix.perspective(fov, aspect, 0.1f, 1000.0f);
     this->viewMatrix.setToIdentity();
     this->viewMatrix.lookAt(QVector3D(0,50,30),QVector3D(0,0,0),QVector3D(0,1,0));
     this->activePlaymode = true;
@@ -14,6 +14,7 @@ myCam::myCam(){
     this->distanz = 30;
     this->isMoving = false;
     this->animations = std::vector<Animation>();
+    this->isCubeCamera = false;
 }
 
 void myCam::queueAnimation(QVector3D ziel, QVector3D zielLookat, int duration)
@@ -96,8 +97,9 @@ void myCam::aktivatePlaymode(QVector3D kugelWhite)
     position.setX(position.x()*abstand + kugelWhite.x());
     position.setY(8);
     position.setZ(position.z()*abstand + kugelWhite.z());
-    this->viewMatrix.setToIdentity();
-    this->viewMatrix.lookAt(position,kugelWhite,QVector3D(0,1,0));
+    //this->viewMatrix.setToIdentity();
+    //this->viewMatrix.lookAt(position,kugelWhite,QVector3D(0,1,0));
+    this->queueAnimation(position,kugelWhite,100);
     position = position-kugelWhite;
 
     if(position.x()>0 && position.z()>0)

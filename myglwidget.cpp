@@ -1,10 +1,12 @@
+
 #include "myglwidget.h"
+
+
 #include <QKeyEvent>
 #include <QWheelEvent>
 #include <QOpenGLBuffer>
 #include <qdebug.h>
-
-
+#include <iostream>
 
 
 MyGLWidget::MyGLWidget(QWidget *parent) : QGLWidget(parent)
@@ -38,7 +40,7 @@ void MyGLWidget::wheelEvent(QWheelEvent *event)
 //    } else {
 //        this->cam->zoomOut();
 //    }
-//    qDebug() << "scroll " <<event->delta();
+qDebug() << "scroll " <<event->delta();
 }
 
 void MyGLWidget::mousePressEvent(QMouseEvent *e){
@@ -66,19 +68,35 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
 {
 
     if(event->key() == Qt::Key_A)
+    {
         this->theGame->camMove(1,0);
+        this->theGame->ballMove(-1,0);
+    }
     if(event->key() == Qt::Key_W)
+    {
         this->theGame->camMove(0,1);
+        this->theGame->ballMove(0,-1);
+    }
     if(event->key() == Qt::Key_S)
+    {
         this->theGame->camMove(0,-1);
+        this->theGame->ballMove(0,1);
+    }
     if(event->key() == Qt::Key_D)
+    {
         this->theGame->camMove(-1,0);
+        this->theGame->ballMove(1,0);
+    }
     if(event->key() == Qt::Key_Space)
         this->theGame->shoot();
 	if(event->key() == Qt::Key_Enter)
-		this->theGame->showOff();
+        this->theGame->animateLights();
 	if(event->key() == Qt::Key_Escape)
 		this->theGame->cancel();
+    if(event->key() == Qt::Key_Plus)
+        this->theGame->myScene->lights->adjustIntensity(1);
+    if(event->key() == Qt::Key_Minus)
+        this->theGame->myScene->lights->adjustIntensity(-1);
     else
         QGLWidget::keyPressEvent(event);
     updateGL();
@@ -101,7 +119,13 @@ void MyGLWidget::paintGL()
     //QMatrix4x4 m;
     //m.setToIdentity();
     //this->sso->render(m, cam, counter);
+
     this->theGame->gameStep();
+    if (this->theGame->killMe)
+    {
+        delete this->theGame;
+        this->theGame = new Game();
+    }
 }
 
 void MyGLWidget::resizeGL(int width, int height)
@@ -134,4 +158,8 @@ void MyGLWidget::initializeGL()
     this->counter = 0;
     //sso->buildSystem();
     this->theGame = new Game();
+
+    //if (glewInit() != GLEW_OK)
+    //    std::cout<< "glew error\n"<<std::endl;
+
 }
