@@ -3,20 +3,22 @@
 #include "GameScene.h"
 #include "cam.h"
 #include "kugel.h"
+#include <windows.h>
+#include <mmsystem.h>
+#include "soundsys.h"
+
 class Game {
 public:
-	
-	int gameState;
-	
-	bool turn; // false = p1 | true = p2
+    bool turn; // false = p1 | true = p2
     bool watch; // false = play | true = watch
-	bool finish = false;
-	
-	bool setBall = false;
-	
-	bool teamAreSet = false;
+    bool finish;
+    bool setBall;
+    bool teamsAreSet;
 	bool p1HasFull; // true = p1 full | false = p1 half
-	
+    bool hatEingelocht;
+    bool hatGegnerEingelocht;
+    bool killMe;
+
 	GameScene* myScene;
 	myCam* cam;
 	
@@ -25,18 +27,15 @@ public:
     GameObject* koe;
 	
     Game();
+    ~Game();
 	void resetGame();
 	void cancel();
 	void gameStep();
     void shoot();
     void camMove(int x, int y);
     void camRotate(int x, int y);
-    void updateKoe();
-	
-	void showOff();
-
-private:
-    //void turn(int player, bool &finish,bool &win);
-	
+    void ballMove(int x, int y);
+    void updateKoe();	
+    void animateLights();
 };
-#endif THEGAME
+#endif

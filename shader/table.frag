@@ -54,7 +54,8 @@ void main()
                     color.r = color.r * kugelColor[j].r;
                     color.g = color.g * kugelColor[j].g;
                     color.b = color.b * kugelColor[j].b;
-                    lightIntense = lightIntense+(pow(cos(abstand*3.1415926)+2,8))/3800.5-0.3;
+                    lightIntense = lightIntense+(pow(cos(abstand*3.1415926)+2,8))/((3800.5-0.3));
+                    //lightIntense = lightIntense*10/distance(vertex.xyz,lightpositions[i]);
                 }
             }
         }

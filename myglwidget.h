@@ -1,9 +1,11 @@
 #ifndef MYGLWIDGET_H
 #define MYGLWIDGET_H
 
+#include <GL/glew.h>
 #include <QGLWidget>
 #include <qtimer.h>
 #include <QOpenGLBuffer>
+
 #include "cam.h"
 #include "gamescene.h"
 #include "game.h"
