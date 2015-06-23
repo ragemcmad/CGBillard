@@ -34,6 +34,7 @@ public:
     bool isTrainingScene;
 
     void initScene();
+    void initTraining1();
     void renderScene(myCam* cam, int kugel = -1);
     bool hasMovingBalls();
 

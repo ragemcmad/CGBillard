@@ -21,7 +21,7 @@ Game::Game()
     this->watch = false;
     this->hatEingelocht=false;
     this->hatGegnerEingelocht=false;
-    this->updateKoe();
+    this->updateKoe(this->myScene->gui->powerBarScale.y());
     SoundSys::playIntro();
 }
 
@@ -34,7 +34,7 @@ void Game::cancel()
 	if (this->cam->isMoving)
 	{
 		this->cam->moveTime = this->cam->moveDuration;
-        this->updateKoe();
+        this->updateKoe(this->myScene->gui->powerBarScale.y());
 		return;
 	}
 	if (this->finish)
@@ -74,9 +74,8 @@ void Game::shoot()
         if (!collide){
             this->setBall = false;
             this->koe->isVisible = true;
-            this->updateKoe();
             this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe();
+            this->updateKoe(this->myScene->gui->powerBarScale.y());
             this->myScene->gui->powerBar.isVisible = true;
             this->watch = false;
             for (int i=0;i<this->myScene->KugelnAlle->size();i++)
@@ -96,7 +95,7 @@ void Game::camMove(int x, int y)
 void Game::camRotate(int x, int y)
 {
     this->cam->camRotate(x,y);
-    updateKoe();
+    updateKoe(this->myScene->gui->powerBarScale.y());
 }
 
 void Game::ballMove(int x, int z)
@@ -114,7 +113,7 @@ void Game::ballMove(int x, int z)
     }
 }
 
-void Game::updateKoe()
+void Game::updateKoe(float dist)
 {
     float angle = -this->cam->getCamAngle()+180;
     this->koe->worldMatrix.setToIdentity();
@@ -125,7 +124,7 @@ void Game::updateKoe()
     this->koe->worldMatrix.translate(position);
     this->koe->worldMatrix.rotate(angle,0,1,0);
     this->koe->worldMatrix.rotate(10,1,0,0);
-    this->koe->worldMatrix.translate(0,0,-1);
+    this->koe->worldMatrix.translate(0,0,-1-dist);
 }
 
 void Game::resetGame()
@@ -285,7 +284,7 @@ void Game::gameStep()
             this->myScene->gui->powerBar.isVisible = true;
             this->koe->isVisible = true;
             this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe();
+            this->updateKoe(this->myScene->gui->powerBarScale.y());
             this->watch = false;
             for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
             {
@@ -314,31 +313,18 @@ void Game::animateLights() // DiscoMode ON
 	
 	//this->myScene->lights[0] = 
 
-<<<<<<< HEAD
     int dur = 800;
-=======
-    int dur = 500;
->>>>>>> 065fa562ae4f93e1bacee757cafdf637510a8c4a
 
     this->myScene->lights->intensity[0] = QVector3D(100,0,0);//(70,0,0);
     this->myScene->lights->intensity[1] = QVector3D(0,100,0);//(0,70,0);
     this->myScene->lights->intensity[2] = QVector3D(0,0,100);//(0,0,70)
 
-<<<<<<< HEAD
     //for (uint i = 0; i<10; i++)
     uint i = 0;
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[(i+1)%4],i%4,dur);
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[(i+3)%4],(i+1)%4,dur);
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[(i+2)%4],(i+3)%4,dur);
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[i%4],(i+2)%4,dur);
-
-=======
-    this->myScene->lights->queueAnimation(this->myScene->lights->positions[1],0,dur);
-    this->myScene->lights->queueAnimation(this->myScene->lights->positions[2],1,dur);
-    this->myScene->lights->queueAnimation(this->myScene->lights->positions[3],2,dur);
-    this->myScene->lights->queueAnimation(this->myScene->lights->positions[0],3,dur);
->>>>>>> 065fa562ae4f93e1bacee757cafdf637510a8c4a
-
     this->myScene->tischBoden->generateWave(40,80,80);
     this->myScene->tischBoden->generateWave(-40,-80,80);
 
