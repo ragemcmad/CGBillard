@@ -175,8 +175,6 @@ void Game::gameStep()
 
     this->myScene->renderScene(cam);
 
-
-
     bool ganzeEingelocht = (countGanzeEingelocht < this->myScene->eingelochteGanze->size());
     bool halbeEingelocht = (countHalbeEingelocht < this->myScene->eingelochteHalbe->size());
     if (!teamsAreSet && (ganzeEingelocht | halbeEingelocht))
@@ -316,12 +314,17 @@ void Game::animateLights() // DiscoMode ON
 	
 	//this->myScene->lights[0] = 
 
+<<<<<<< HEAD
     int dur = 800;
+=======
+    int dur = 500;
+>>>>>>> 065fa562ae4f93e1bacee757cafdf637510a8c4a
 
     this->myScene->lights->intensity[0] = QVector3D(100,0,0);//(70,0,0);
     this->myScene->lights->intensity[1] = QVector3D(0,100,0);//(0,70,0);
     this->myScene->lights->intensity[2] = QVector3D(0,0,100);//(0,0,70)
 
+<<<<<<< HEAD
     //for (uint i = 0; i<10; i++)
     uint i = 0;
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[(i+1)%4],i%4,dur);
@@ -329,6 +332,12 @@ void Game::animateLights() // DiscoMode ON
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[(i+2)%4],(i+3)%4,dur);
         this->myScene->lights->queueAnimation(this->myScene->lights->positions[i%4],(i+2)%4,dur);
 
+=======
+    this->myScene->lights->queueAnimation(this->myScene->lights->positions[1],0,dur);
+    this->myScene->lights->queueAnimation(this->myScene->lights->positions[2],1,dur);
+    this->myScene->lights->queueAnimation(this->myScene->lights->positions[3],2,dur);
+    this->myScene->lights->queueAnimation(this->myScene->lights->positions[0],3,dur);
+>>>>>>> 065fa562ae4f93e1bacee757cafdf637510a8c4a
 
     this->myScene->tischBoden->generateWave(40,80,80);
     this->myScene->tischBoden->generateWave(-40,-80,80);

@@ -82,7 +82,6 @@ void GUI::loadShader()
 	this->winSign.copyBuffer(&this->kugeln[0]);
 	this->winSign.isVisible = false;
     this->winSign.shaderProgram = standardShaderProg;
-
 }
 
 void GUI::setTeam(bool p1Full)
