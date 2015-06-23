@@ -172,22 +172,27 @@ void Kugel::render(myCam* cam,int kugel)
 
     quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
 
-    shaderProgram->bind();
+    QOpenGLShaderProgram* shader = shaderProgram;
+
+    if (cam->isCubeCamera)
+        shader = shaderProgramCube;
+
+    shader->bind();
     vbo->bind();
     ibo->bind();
 
-    int attrVertices = shaderProgram->attributeLocation("vert");
-    //int attrColors = shaderProgram->attributeLocation(("color"));
-    int attrTexCoords = shaderProgram->attributeLocation("texCoord");
-    int attrNormals = shaderProgram->attributeLocation("normal");
+    int attrVertices =  shader->attributeLocation("vert");
+    //int attrColors =  shader->attributeLocation(("color"));
+    int attrTexCoords = shader->attributeLocation("texCoord");
+    int attrNormals  =  shader->attributeLocation("normal");
 
 
-    shaderProgram->enableAttributeArray(attrVertices);
-    //shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, 0, 4, 32);
-    //shaderProgram->enableAttributeArray(attrColors);
-    //shaderProgram->setAttributeBuffer(attrColors, GL_FLOAT, 16, 4, 32);
-    shaderProgram->enableAttributeArray(attrTexCoords);
-    shaderProgram->enableAttributeArray(attrNormals);
+    shader->enableAttributeArray(attrVertices);
+    //shaderam->setAttributeBuffer(attrVertices, GL_FLOAT, 0, 4, 32);
+    //shaderam->enableAttributeArray(attrColors);
+    //shaderam->setAttributeBuffer(attrColors, GL_FLOAT, 16, 4, 32);
+    shader->enableAttributeArray(attrTexCoords);
+    shader->enableAttributeArray(attrNormals);
 
 
     //qDebug() << attrVertices;
@@ -196,41 +201,41 @@ void Kugel::render(myCam* cam,int kugel)
 
     QVector3D campos = cam->getPositionFromViewMatrix(cam->viewMatrix);
 
-    int unifMatrix = shaderProgram->uniformLocation("matrix");
-    int unifMatrixProjection = shaderProgram->uniformLocation("projmatrix");
-    int unifMatrixView = shaderProgram->uniformLocation("viewmatrix");
-    int unifLightpos = shaderProgram->uniformLocation("lightpositions");
-    int unifLightintense = shaderProgram->uniformLocation("lightintensity");
-    int unifCamera = shaderProgram->uniformLocation("cameraposition");
+    int unifMatrix = shader->uniformLocation("matrix");
+    int unifMatrixProjection = shader->uniformLocation("projmatrix");
+    int unifMatrixView = shader->uniformLocation("viewmatrix");
+    int unifLightpos = shader->uniformLocation("lightpositions");
+    int unifLightintense = shader->uniformLocation("lightintensity");
+    int unifCamera = shader->uniformLocation("cameraposition");
 
-    shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
-    shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
-    shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
-    shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
-    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4);
-    shaderProgram->setUniformValue(unifCamera, campos);
+    shader->setUniformValue(unifMatrix,this->worldMatrix);
+    shader->setUniformValue(unifMatrixProjection, cam->projMatrix);
+    shader->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shader->setUniformValueArray(unifLightpos, this->lights->positions,4);
+    shader->setUniformValueArray(unifLightintense, this->lights->intensity,4);
+    shader->setUniformValue(unifCamera, campos);
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);
-    shaderProgram->setUniformValue("texture", 1);
+    shader->setUniformValue("texture", 1);
 
     int offset = 0;
     size_t stride = 12 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrVertices, GL_FLOAT, offset, 4, stride);
     offset = 4 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrNormals, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrNormals, GL_FLOAT, offset, 4, stride);
     offset = 8 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
 
-    shaderProgram->disableAttributeArray(attrVertices);
-    shaderProgram->disableAttributeArray(attrTexCoords);
-    shaderProgram->disableAttributeArray(attrNormals);
+    shader->disableAttributeArray(attrVertices);
+    shader->disableAttributeArray(attrTexCoords);
+    shader->disableAttributeArray(attrNormals);
 
 
     qTex->release();
@@ -256,6 +261,25 @@ void Kugel::loadShader()
 
     // Sonnenshader
     this->shaderProgram = standardShaderProg;
+
+
+    // render to cube map shader
+    QOpenGLShaderProgram* cubeShaderProg = new QOpenGLShaderProgram();
+    QOpenGLShader vertShaderCube(QOpenGLShader::Vertex);
+    vertShaderCube.compileSourceFile(":/shader/kugel.vert");
+    //qDebug() << shaderProgram.log();
+    cubeShaderProg->addShader(&vertShaderCube);
+    //qDebug() << shaderProgram.log();
+    QOpenGLShader geomShaderCube(QOpenGLShader::Geometry);
+    geomShaderCube.compileSourceFile(":/shader/cube.geom");
+    cubeShaderProg->addShader(&geomShaderCube);
+    QOpenGLShader fragShaderCube(QOpenGLShader::Fragment);
+    fragShaderCube.compileSourceFile(":/shader/kugel.frag");
+    //qDebug() << shaderProgram.log();
+    cubeShaderProg->addShader(&fragShaderCube);
+    cubeShaderProg->link();
+
+    this->shaderProgramCube = cubeShaderProg;
 
     glEnable(GL_TEXTURE_2D);
 

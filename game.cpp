@@ -136,6 +136,7 @@ void Game::prepareLogic()
 {
     uint countGanzeEingelocht = this->myScene->eingelochteGanze->size();
     uint countHalbeEingelocht = this->myScene->eingelochteHalbe->size();
+    this->moveStuff(1);
 
     //generate wave
     for(uint i = countGanzeEingelocht;i<this->myScene->eingelochteGanze->size();i++)
@@ -210,20 +211,21 @@ void Game::moveStuff(float time)
 
 void Game::renderStuff()
 {
-    this->myScene->gui->render(turn);
-    this->myScene->renderPlayerPOV(cam);
-
-    for(int i = 0; i< 16;i++)
+    for(int i = 0; i< 1;i++)
     {
-        this->myScene->secondaryObjects->at(i)->initFBO(255, 255);
+        this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         this->myScene->renderObjectPOV(cam,i);
     }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK);
 
+    this->myScene->renderPlayerPOV(cam);
+
+    this->myScene->gui->render(turn);
 }
 
 
@@ -259,8 +261,10 @@ void Game::setWinner()
 
 void Game::gameStep()
 {
+
     this->renderStuff();
     this->prepareLogic();
+
     // Gamestate-Changes:
     // keine Änderungen bei Animation, Spielende oder Ballplatzierung
 

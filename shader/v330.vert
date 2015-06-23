@@ -9,9 +9,9 @@
 uniform mat4 matrix;
 uniform mat4 projmatrix;
 uniform mat4 viewmatrix;
-out vec4 texC;
-out vec4 normalvector;
-out vec4 vertex;
+layout(location = 0) out vec4 texC;
+layout(location = 1) out vec4 normalvector;
+layout(location = 2) out vec4 vertex;
 in vec4 normal;
 in vec4 vert;
 in vec4 texCoord;

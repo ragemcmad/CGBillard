@@ -1,13 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>shader/frag130.frag</file>
         <file>shader/frag330.frag</file>
-        <file>shader/v130.vert</file>
         <file>shader/v330.vert</file>
         <file>shader/gui.frag</file>
         <file>shader/gui.vert</file>
-        <file>shader/table.tcs</file>
-        <file>shader/table.tes</file>
         <file>shader/table.frag</file>
         <file>shader/table.vert</file>
         <file>shader/lightsource.frag</file>
@@ -15,6 +11,5 @@
         <file>shader/kugel.frag</file>
         <file>shader/kugel.vert</file>
         <file>shader/cube.geom</file>
-        <file>shader/cube_frag.frag</file>
     </qresource>
 </RCC>

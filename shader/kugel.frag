@@ -6,10 +6,10 @@
 // notes:
 // GL_ARB_separate_shader_objects is not needed for version >= 410
 
+layout(location = 0) in vec4 texC;
+layout(location = 1) in vec4 normalvector;
+layout(location = 2) in vec4 vertex;
 out vec4 fragColor;
-in vec4 texC;
-in vec4 normalvector;
-in vec4 vertex;
 uniform sampler2D texture;
 uniform vec3 lightpositions[4];
 uniform vec3 lightintensity[4];

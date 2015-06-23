@@ -16,6 +16,7 @@ public:
     ~GameObject();
     QMatrix4x4 worldMatrix;
     QOpenGLShaderProgram* shaderProgram;
+    QOpenGLShaderProgram* shaderProgramCube;
     LightSources* lights;
 
     bool isVisible;
@@ -31,11 +32,11 @@ public:
     QOpenGLBuffer* vbo;
     QOpenGLBuffer* ibo;
 
-    void render(myCam*,int kugel);
+    virtual void render(myCam*,int kugel);
     void copyBuffer(GameObject* sso);
     void loadModel(QString path);
     void loadTexture(QString path);
-    void loadShader();
+    virtual void loadShader();
     void loadLights(LightSources* lights);
 
 };
