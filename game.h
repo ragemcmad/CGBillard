@@ -30,6 +30,8 @@ public:
     ~Game();
 	void resetGame();
 	void cancel();
+    void renderStuff();
+    void prepareLogic();
 	void gameStep();
     void shoot();
     void camMove(int x, int y);
