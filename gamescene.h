@@ -35,7 +35,9 @@ public:
 
     void initScene();
     void initTraining1();
-    void renderScene(myCam* cam, int kugel = -1);
+    void render(myCam* cam, int kugel = -1);
+    void renderPlayerPOV(myCam* cam);
+    void renderObjectPOV(myCam* cam, int id);
     bool hasMovingBalls();
 
     LightSources* lights;

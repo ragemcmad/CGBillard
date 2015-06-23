@@ -30,6 +30,8 @@ public:
     ~Game();
 	void resetGame();
 	void cancel();
+    void setWinner();
+    void moveStuff(float i);
     void renderStuff();
     void prepareLogic();
 	void gameStep();

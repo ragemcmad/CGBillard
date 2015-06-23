@@ -138,7 +138,7 @@ void LightSources::nextAnimation(int pos){
     }
 }
 
-void LightSources::moveStep(int time)
+void LightSources::moveStep(float time)
 {
     for (int pos=0; pos<4; pos++){
         if(this->isMoving[pos])

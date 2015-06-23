@@ -40,7 +40,7 @@ public:
 
     void queueAnimation(QVector3D ziel, int pos, int duration = 500);
     void nextAnimation(int pos);
-    void moveStep(int time);
+    void moveStep(float time);
 
     void adjustIntensity(int helligkeit);
 

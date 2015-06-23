@@ -168,56 +168,56 @@ void GameScene::initTraining1() {
 
 }
 
-void GameScene::renderScene(myCam* cam, int kugel)
+void GameScene::renderPlayerPOV(myCam *cam)
+{
+    this->lights->render(cam);
+    this->render(cam, -1);
+}
+
+void GameScene::renderObjectPOV(myCam *cam, int id)
 {
     myCam kugelCam(90.0f, 1.0f);
+    QMatrix4x4 position;
+    position.setToIdentity();
+    position.translate(-*this->KugelnAlle->at(id)->pos);
+    kugelCam.viewMatrix = position;
 
+    cam = &kugelCam;
 
-    if(kugel >= 0)
+    QVector3D campos = *this->KugelnAlle->at(id)->pos;
+    QVector3D camdir[6] =
     {
-        QMatrix4x4 position;
-        position.setToIdentity();
-        position.translate(-*this->KugelnAlle->at(kugel)->pos);
-        kugelCam.viewMatrix = position;
+        QVector3D(1,0,0),
+        QVector3D(-1,0,0),
+        QVector3D(0,1,0),
+        QVector3D(0,-1,0),
+        QVector3D(0,0,1),
+        QVector3D(0,0,-1)
+    };
 
-        cam = &kugelCam;
-
-        QVector3D campos = *this->KugelnAlle->at(kugel)->pos;
-        QVector3D camdir[6] =
-        {
-            QVector3D(1,0,0),
-            QVector3D(-1,0,0),
-            QVector3D(0,1,0),
-            QVector3D(0,-1,0),
-            QVector3D(0,0,1),
-            QVector3D(0,0,-1)
-        };
-
-        QVector3D camup[6] =
-        {
-            QVector3D(0,1,0),
-            QVector3D(0,1,0),
-            QVector3D(0,0,1),
-            QVector3D(0,0,1),
-            QVector3D(0,1,0),
-            QVector3D(0,1,0)
-        };
-
-        for (int i = 0; i < 6; ++i)
-        {
-            QVector3D camtarget = campos + camdir[i];
-
-            cam->viewMatrixCube[i].setToIdentity();
-            cam->viewMatrixCube[i].lookAt(campos, camtarget,camup[i]);
-        }
-        cam->isCubeCamera = true;
-    }
-
-    if(kugel==-1)
+    QVector3D camup[6] =
     {
-        this->lights->render(cam);
-    }
+        QVector3D(0,1,0),
+        QVector3D(0,1,0),
+        QVector3D(0,0,1),
+        QVector3D(0,0,1),
+        QVector3D(0,1,0),
+        QVector3D(0,1,0)
+    };
 
+    for (int i = 0; i < 6; ++i)
+    {
+        QVector3D camtarget = campos + camdir[i];
+
+        cam->viewMatrixCube[i].setToIdentity();
+        cam->viewMatrixCube[i].lookAt(campos, camtarget,camup[i]);
+    }
+    cam->isCubeCamera = true;
+    render(cam,id);
+}
+
+void GameScene::render(myCam* cam, int kugel)
+{
     this->tischBoden->render(cam, kugel);
     for(uint i = 0; i< this->primaryObjects->size();i++)
     {
@@ -230,6 +230,8 @@ void GameScene::renderScene(myCam* cam, int kugel)
     {
         this->secondaryObjects->at(this->kugelIndex->at(i))->render(cam,kugel);
     }
+
+
 
 }
 
