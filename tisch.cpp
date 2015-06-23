@@ -51,6 +51,24 @@ void Tisch::loadShader()
     // Sonnenshader
     this->shaderProgram = standardShaderProg;
 
+    // render to cube map shader
+    QOpenGLShaderProgram* cubeShaderProg = new QOpenGLShaderProgram();
+    QOpenGLShader vertShaderCube(QOpenGLShader::Vertex);
+    vertShaderCube.compileSourceFile(":/shader/table.vert");
+    //qDebug() << shaderProgram.log();
+    cubeShaderProg->addShader(&vertShaderCube);
+    //qDebug() << shaderProgram.log();
+    QOpenGLShader geomShaderCube(QOpenGLShader::Geometry);
+    geomShaderCube.compileSourceFile(":/shader/cube.geom");
+    cubeShaderProg->addShader(&geomShaderCube);
+    QOpenGLShader fragShaderCube(QOpenGLShader::Fragment);
+    fragShaderCube.compileSourceFile(":/shader/table.frag");
+    //qDebug() << shaderProgram.log();
+    cubeShaderProg->addShader(&fragShaderCube);
+    cubeShaderProg->link();
+
+    this->shaderProgramCube = cubeShaderProg;
+
     glEnable(GL_TEXTURE_2D);
 }
 
@@ -84,77 +102,82 @@ void Tisch::render(myCam* cam,int kugel)
 
     if (!isVisible) return;
 
-    shaderProgram->bind();
+    QOpenGLShaderProgram* shader = shaderProgram;
+
+    if (cam->isCubeCamera)
+        shader = shaderProgramCube;
+
+    shader->bind();
     vbo->bind();
     ibo->bind();
 
-    int attrVertices = shaderProgram->attributeLocation("vert");
-    //int attrColors = shaderProgram->attributeLocation(("color"));
-    int attrTexCoords = shaderProgram->attributeLocation("texCoord");
-    int attrNormals = shaderProgram->attributeLocation("normal");
+    int attrVertices = shader->attributeLocation("vert");
+    //int attrColors = shader->attributeLocation(("color"));
+    int attrTexCoords = shader->attributeLocation("texCoord");
+    int attrNormals = shader->attributeLocation("normal");
 
 
-    shaderProgram->enableAttributeArray(attrVertices);
-    //shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, 0, 4, 32);
-    //shaderProgram->enableAttributeArray(attrColors);
-    //shaderProgram->setAttributeBuffer(attrColors, GL_FLOAT, 16, 4, 32);
-    shaderProgram->enableAttributeArray(attrTexCoords);
-    shaderProgram->enableAttributeArray(attrNormals);
+    shader->enableAttributeArray(attrVertices);
+    //shader->setAttributeBuffer(attrVertices, GL_FLOAT, 0, 4, 32);
+    //shader->enableAttributeArray(attrColors);
+    //shader->setAttributeBuffer(attrColors, GL_FLOAT, 16, 4, 32);
+    shader->enableAttributeArray(attrTexCoords);
+    shader->enableAttributeArray(attrNormals);
 
 
     //qDebug() << attrVertices;
     //qDebug() << shaderProgram->log();
 
 
-    int unifMatrix = shaderProgram->uniformLocation("matrix");
-    int unifMatrixProjection = shaderProgram->uniformLocation("projmatrix");
-    int unifMatrixView = shaderProgram->uniformLocation("viewmatrix");
-    int unifLightpos = shaderProgram->uniformLocation("lightpositions");
-    int unifLightintense = shaderProgram->uniformLocation("lightintensity");
-    int unifCamera = shaderProgram->uniformLocation("camerapositions");
-    int unifWaveA = shaderProgram->uniformLocation("WaveActive");
-    int unifWaveD = shaderProgram->uniformLocation("WaveDuration");
-    int unifWaveT = shaderProgram->uniformLocation("WaveTime");
-    int unifWaveX = shaderProgram->uniformLocation("WavePosX");
-    int unifWaveZ = shaderProgram->uniformLocation("WavePosZ");
-    int unifKugelPos = shaderProgram->uniformLocation("kugelPosition");
-    int unifKugelA = shaderProgram->uniformLocation("kugelActive");
-    int unifKugelC = shaderProgram->uniformLocation("kugelColor");
+    int unifMatrix = shader->uniformLocation("matrix");
+    int unifMatrixProjection = shader->uniformLocation("projmatrix");
+    int unifMatrixView = shader->uniformLocation("viewmatrix");
+    int unifLightpos = shader->uniformLocation("lightpositions");
+    int unifLightintense = shader->uniformLocation("lightintensity");
+    int unifCamera = shader->uniformLocation("camerapositions");
+    int unifWaveA = shader->uniformLocation("WaveActive");
+    int unifWaveD = shader->uniformLocation("WaveDuration");
+    int unifWaveT = shader->uniformLocation("WaveTime");
+    int unifWaveX = shader->uniformLocation("WavePosX");
+    int unifWaveZ = shader->uniformLocation("WavePosZ");
+    int unifKugelPos = shader->uniformLocation("kugelPosition");
+    int unifKugelA = shader->uniformLocation("kugelActive");
+    int unifKugelC = shader->uniformLocation("kugelColor");
 
-    shaderProgram->setUniformValue(unifMatrix,this->worldMatrix);
-    shaderProgram->setUniformValue(unifMatrixProjection, cam->projMatrix);
-    shaderProgram->setUniformValue(unifMatrixView, cam->viewMatrix);
-    shaderProgram->setUniformValueArray(unifLightpos, this->lights->positions,4);
-    shaderProgram->setUniformValueArray(unifLightintense, this->lights->intensity,4);
-    shaderProgram->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
-    shaderProgram->setUniformValueArray(unifWaveA, this->waveIsActive,16,1);
-    shaderProgram->setUniformValueArray(unifWaveT, this->waveTimeLeft,16,1);
-    shaderProgram->setUniformValueArray(unifWaveX, this->waveStartPosX,16,1);
-    shaderProgram->setUniformValueArray(unifWaveZ, this->waveStartPosZ,16,1);
-    shaderProgram->setUniformValueArray(unifWaveD, this->waveDuration,16,1);
-    shaderProgram->setUniformValueArray(unifKugelPos, kugeln,16);
-    shaderProgram->setUniformValueArray(unifKugelA, kugelnActive,16,1);
-    shaderProgram->setUniformValueArray(unifKugelC, kugelColor,16);
+    shader->setUniformValue(unifMatrix,this->worldMatrix);
+    shader->setUniformValue(unifMatrixProjection, cam->projMatrix);
+    shader->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shader->setUniformValueArray(unifLightpos, this->lights->positions,4);
+    shader->setUniformValueArray(unifLightintense, this->lights->intensity,4);
+    shader->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
+    shader->setUniformValueArray(unifWaveA, this->waveIsActive,16,1);
+    shader->setUniformValueArray(unifWaveT, this->waveTimeLeft,16,1);
+    shader->setUniformValueArray(unifWaveX, this->waveStartPosX,16,1);
+    shader->setUniformValueArray(unifWaveZ, this->waveStartPosZ,16,1);
+    shader->setUniformValueArray(unifWaveD, this->waveDuration,16,1);
+    shader->setUniformValueArray(unifKugelPos, kugeln,16);
+    shader->setUniformValueArray(unifKugelA, kugelnActive,16,1);
+    shader->setUniformValueArray(unifKugelC, kugelColor,16);
 
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);
-    shaderProgram->setUniformValue("texture", 1);
+    shader->setUniformValue("texture", 1);
 
     int offset = 0;
     size_t stride = 12 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrVertices, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrVertices, GL_FLOAT, offset, 4, stride);
     offset = 4 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrNormals, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrNormals, GL_FLOAT, offset, 4, stride);
     offset = 8 * sizeof(GLfloat);
-    shaderProgram->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
+    shader->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
 
 
     glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
 
-    shaderProgram->disableAttributeArray(attrVertices);
-    shaderProgram->disableAttributeArray(attrTexCoords);
-    shaderProgram->disableAttributeArray(attrNormals);
+    shader->disableAttributeArray(attrVertices);
+    shader->disableAttributeArray(attrTexCoords);
+    shader->disableAttributeArray(attrNormals);
 
 
     qTex->release();

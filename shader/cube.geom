@@ -10,13 +10,13 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 18) out;
 
-in vec4 texC[];
-in vec4 normalvector[];
-in vec4 vertex[];
+layout(location = 0) in vec4 texC[];
+layout(location = 1) in vec4 normalvector[];
+layout(location = 2) in vec4 vertex[];
 
-out fragTexC;
-out fragNormalvector;
-out fragVertex;
+layout(location = 0) out vec4 fragTexC;
+layout(location = 1) out vec4 fragNormalvector;
+layout(location = 2) out vec4 fragVertex;
 
 uniform mat4 cubeViews[6];
 uniform mat4 cubeProj;

@@ -159,9 +159,9 @@ void Game::gameStep()
     this->myScene->gui->powerStep();
 
 
-    for(int i = 0; i< 16;i++)
+    for(int i = 0; i< 5;i++)
     {
-        this->myScene->secondaryObjects->at(i)->initFBO(255, 255);
+        this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
