@@ -28,7 +28,7 @@ void GameScene::initScene()
 {
     this->lights = new LightSources();
 
-
+    isTrainingScene = false;
     QString p = path::getPath();
 
     GameObject* koe = new GameObject();
@@ -161,6 +161,13 @@ void GameScene::initScene()
     this->gui->setVector(this->secondaryObjects);
 }
 
+
+void GameScene::initTraining1() {
+    initScene();
+    isTrainingScene = true;
+
+}
+
 void GameScene::renderScene(myCam* cam, int kugel)
 {
     myCam kugelCam(90.0f, 1.0f);
@@ -223,8 +230,6 @@ void GameScene::renderScene(myCam* cam, int kugel)
     {
         this->secondaryObjects->at(this->kugelIndex->at(i))->render(cam,kugel);
     }
-
-
 
 }
 

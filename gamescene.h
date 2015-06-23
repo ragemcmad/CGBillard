@@ -29,12 +29,15 @@ public:
     std::vector<bool*>* kugelActive;
     std::vector<QVector3D*>* kugelColor;
     std::vector<int>* kugelIndex;
-
-
     GUI *gui;
+
+    bool isTrainingScene;
+
     void initScene();
+    void initTraining1();
     void renderScene(myCam* cam, int kugel = -1);
     bool hasMovingBalls();
+
     LightSources* lights;
 
 };
