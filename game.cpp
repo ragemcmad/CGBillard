@@ -9,8 +9,8 @@ Game::Game()
     teamsAreSet = false;
     hatEingelocht = false;
     hatGegnerEingelocht = false;
-    killMe = false;
-
+    show = false;
+    reset = false;
     myScene = new GameScene();
     myScene->initScene();
 	cam = new myCam();
@@ -21,7 +21,7 @@ Game::Game()
     this->watch = false;
     this->hatEingelocht=false;
     this->hatGegnerEingelocht=false;
-    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->updateKoe();
     SoundSys::playIntro();
 }
 
@@ -33,8 +33,8 @@ void Game::cancel()
 {
 	if (this->cam->isMoving)
 	{
-		this->cam->moveTime = this->cam->moveDuration;
-        this->updateKoe(this->myScene->gui->powerBarScale.y());
+        this->cam->moveTime = this->cam->moveDuration;
+        this->updateKoe();
 		return;
 	}
 	if (this->finish)
@@ -49,9 +49,9 @@ void Game::shoot()
     if(this->watch == false)
     {
         float angle = -this->cam->getCamAngle()+180;
-        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
+        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2.5 * this->myScene->gui->effectivePower));
         this->whiteBall->v->setY(0);
-        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
+        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2.5 * this->myScene->gui->effectivePower));
         this->watch = true;
         this->cam->aktivateWatchmode();
         this->koe->isVisible = false;        
@@ -61,7 +61,7 @@ void Game::shoot()
     if(this->setBall)
     {
         bool collide = false;
-        for (int i=1; i<this->myScene->KugelnAlle->size();i++)
+        for (uint i=1; i<this->myScene->KugelnAlle->size();i++)
         {
             this->whiteBall->updatePosition();
             if (this->whiteBall->pos->distanceToPoint(*(this->myScene->KugelnAlle->at(i)->pos))<2)
@@ -80,14 +80,14 @@ void Game::shoot()
 
 void Game::camMove(int x, int y)
 {
-    if (!this->setBall)
+    if (!this->setBall && !this->show)
         this->cam->camMove(x,y);
 }
 
 void Game::camRotate(int x, int y)
 {
     this->cam->camRotate(x,y);
-    updateKoe(this->myScene->gui->powerBarScale.y());
+    if (!show) this->updateKoe();
 }
 
 void Game::ballMove(int x, int z)
@@ -107,10 +107,11 @@ void Game::ballMove(int x, int z)
 
 void Game::startTurn()
 {
+    this->reset = false;
     this->myScene->gui->powerBar.isVisible = true;
     this->koe->isVisible = true;
     this->cam->aktivatePlaymode(*this->whiteBall->pos);
-    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->updateKoe();
     this->watch = false;
     for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
     {
@@ -118,7 +119,7 @@ void Game::startTurn()
     }
 }
 
-void Game::updateKoe(float dist)
+void Game::updateKoe()
 {
     float angle = -this->cam->getCamAngle()+180;
     this->koe->worldMatrix.setToIdentity();
@@ -129,12 +130,53 @@ void Game::updateKoe(float dist)
     this->koe->worldMatrix.translate(position);
     this->koe->worldMatrix.rotate(angle,0,1,0);
     this->koe->worldMatrix.rotate(10,1,0,0);
-    this->koe->worldMatrix.translate(0,0,-1-dist);
+    this->koe->worldMatrix.translate(0,0,-1.5-(this->myScene->gui->effectivePower*4));
 }
 
 void Game::resetGame()
 {	
-    this->killMe = true;
+    show = false;
+    watch = false;
+    turn = false;
+    finish = false;
+    setBall = false;
+    teamsAreSet = false;
+    hatEingelocht = false;
+    hatGegnerEingelocht = false;
+    reset = true;
+    this->myScene->resetScene();
+}
+
+void Game::loadShow()
+{
+    show = true;
+    turn = false;
+    finish = false;
+    setBall = false;
+    teamsAreSet = false;
+    hatEingelocht = false;
+    watch = true;
+    hatGegnerEingelocht = false;
+    reset = true;
+    this->koe->isVisible = false;
+    this->myScene->initShow();
+    this->cam->aktivatePlaymode(*(this->whiteBall->pos), 10);
+}
+
+void Game::loadTraining()
+{
+    show = false;
+    watch = false;
+    turn = false;
+    finish = false;
+    setBall = false;
+    teamsAreSet = false;
+    hatEingelocht = false;
+    hatGegnerEingelocht = false;
+    this->teamsAreSet = true;
+    this->p1HasFull = true;
+    reset = true;
+    this->myScene->initTraining1();
 }
 
 void Game::prepareLogic()
@@ -196,6 +238,7 @@ void Game::prepareLogic()
     }
 }
 
+
 void Game::moveStuff(float time)
 {
     //move Kugeln
@@ -213,7 +256,10 @@ void Game::moveStuff(float time)
 
     //grow powerbar
     this->myScene->gui->powerStep();
+    this->updateKoe();
+
 }
+
 
 void Game::renderStuff()
 {
@@ -237,21 +283,10 @@ void Game::renderStuff()
 
     this->myScene->renderPlayerPOV(cam);
 
-    /*
-    for(int i = 0; i< this->myScene->testKugel->size();i++)
-    {
-        Kugel* k = this->myScene->testKugel->at(i);
-        k->colorCubeMap = this->myScene->secondaryObjects->at(i)->colorCubeMap;
-        k->render(this->cam, -1);
-        k->colorCubeMap = 0;
-    }
-*/
-
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, myScene->secondaryObjects->at(0)->colorCubeMap);
-
-    this->myScene->gui->render(turn);
+    if (!show)
+        this->myScene->gui->render(turn);
 }
+
 
 
 // Aufruf bei eingelochter Schwarzen Kugel
@@ -284,6 +319,7 @@ void Game::setWinner()
         this->myScene->gui->p1Win();
 }
 
+
 void Game::gameStep()
 {
     this->renderStuff();
@@ -293,6 +329,8 @@ void Game::gameStep()
     if (this->finish | this->setBall)
         return;
     // test auf spielende
+    else if (this->show)
+        this->camRotate(1,0);
     else if (!this->blackBall->isVisible && this->watch && !this->myScene->hasMovingBalls()) {
         this->finish = true;
         SoundSys::playApplause();
@@ -311,19 +349,22 @@ void Game::gameStep()
             {
                 this->resetWhiteBall();
             }
-            this->turn = !(this->turn);
-            this->myScene->gui->mirrorPowerBarX();
+            if (!reset)
+                this->turn = !(this->turn);
+            else
+                reset = false;
         }
         //Rundenende
         this->hatEingelocht = false;
         this->hatGegnerEingelocht = false;
-
+        this->startTurn();
 
     }
     else
         return;
 
 }
+
 
 void Game::resetWhiteBall()
 {
@@ -336,6 +377,7 @@ void Game::resetWhiteBall()
     this->whiteBall->isVisible = true;
     this->setBall = true;
 }
+
 
 void Game::animateLights() // DiscoMode ON
 {

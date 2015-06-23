@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1231</width>
-    <height>801</height>
+    <height>828</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,6 +31,40 @@
     </property>
    </widget>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1231</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game</string>
+    </property>
+    <addaction name="actionStandard_Game"/>
+    <addaction name="actionTraining_1"/>
+    <addaction name="actionReflection_Show"/>
+   </widget>
+   <addaction name="menuGame"/>
+  </widget>
+  <action name="actionStandard_Game">
+   <property name="text">
+    <string>Standard Game</string>
+   </property>
+  </action>
+  <action name="actionTraining_1">
+   <property name="text">
+    <string>Training 1</string>
+   </property>
+  </action>
+  <action name="actionReflection_Show">
+   <property name="text">
+    <string>Reflection Show</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -40,12 +74,61 @@
    <header>myglwidget.h</header>
    <container>1</container>
    <slots>
-    <slot>receiveRotationZ(int)</slot>
-    <slot>receiveRotationY(int)</slot>
-    <slot>receiveRotationX(int)</slot>
+    <slot>newGame()</slot>
+    <slot>newTraining1()</slot>
+    <slot>newShow()</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionStandard_Game</sender>
+   <signal>triggered()</signal>
+   <receiver>widget</receiver>
+   <slot>newGame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTraining_1</sender>
+   <signal>triggered()</signal>
+   <receiver>widget</receiver>
+   <slot>newTraining1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReflection_Show</sender>
+   <signal>triggered()</signal>
+   <receiver>widget</receiver>
+   <slot>newShow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

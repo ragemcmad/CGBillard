@@ -37,7 +37,7 @@ public:
     void queueAnimation(QVector3D ziel, QVector3D zielLookAt, int duration = 500);
 	void nextAnimation();
     void moveStep(int time);
-    void aktivatePlaymode(QVector3D kugelWhite);
+    void aktivatePlaymode(QVector3D kugelWhite, int abstand = 30);
     void aktivateWatchmode();
     void camRotate(int x,int y);
     void camMove(int x, int y);  

@@ -17,7 +17,8 @@ public:
 	bool p1HasFull; // true = p1 full | false = p1 half
     bool hatEingelocht;
     bool hatGegnerEingelocht;
-    bool killMe;
+    bool reset;
+    bool show;
 
 	GameScene* myScene;
 	myCam* cam;
@@ -29,6 +30,8 @@ public:
     Game();
     ~Game();
 	void resetGame();
+    void loadShow();
+    void loadTraining();
 	void cancel();
     void setWinner();
     void moveStuff(float i);
@@ -40,7 +43,7 @@ public:
     void camRotate(int x, int y);
     void ballMove(int x, int y);
     void startTurn();
-    void updateKoe(float dist);
+    void updateKoe();
     void animateLights();
     void resetWhiteBall();
 };

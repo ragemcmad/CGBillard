@@ -27,6 +27,7 @@ public:
 	float powerLevel;
     float maxPower;
     float powerChange;
+    float effectivePower;
 	
     QVector3D powerBarPos;
     QVector3D powerBarScale;
@@ -37,8 +38,7 @@ public:
     void setVector(std::vector<Kugel*>* vec);
 	void p1Win();
 	void p2Win();
-	void powerStep();
-    void mirrorPowerBarX();
+    void powerStep();
 
 };
 

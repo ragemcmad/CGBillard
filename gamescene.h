@@ -31,11 +31,10 @@ public:
     std::vector<int>* kugelIndex;
     GUI *gui;
 
-
-    bool isTrainingScene;
-
     void initScene();
+    void resetScene();
     void initTraining1();
+    void initShow();
     void render(myCam* cam, int kugel = -1);
     void renderPlayerPOV(myCam* cam);
     void renderObjectPOV(myCam* cam, int id);

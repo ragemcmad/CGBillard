@@ -142,7 +142,8 @@ void GUI::render(bool turn)
         }
     }
 	this->winSign.render();
-	this->powerBar.render();
+    this->powerBarPos.setX(std::abs(this->powerBarPos.x())* (-1+2*turn));
+    this->powerBar.render();
 }
 
 void GUI::p1Win()
@@ -168,16 +169,19 @@ void GUI::powerStep()
     {
         this->powerLevel = 0;
     }
-    //position.scale(0,this->powerLevel,0);
+
+    effectivePower = (sin(((this->powerLevel/this->maxPower)+1)*3.1415926)+1);
 
     this->powerBar.setTexturePoints(this->powerBarPos,
+                                    QVector3D(this->powerBarPos.x()+this->powerBarScale.x(),
+                                              this->powerBarPos.y()+this->powerBarScale.y()*(this->effectivePower),
+                                              0)
+                                    );
+                                    /*
                                     QVector3D(this->powerBarPos.x()+this->powerBarScale.x(),
                                               this->powerBarPos.y()+this->powerBarScale.y()*(1-(this->maxPower-this->powerLevel)/this->maxPower),
                                               0)
                                     );
+                                    */
 }
 
-void GUI::mirrorPowerBarX()
-{
-    powerBarPos.setX(-(this->powerBarPos.x()));
-}
