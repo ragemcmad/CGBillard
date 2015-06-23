@@ -156,10 +156,9 @@ void MyGLWidget::initializeGL()
     glClearDepth(1.0f);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     this->counter = 0;
-    //sso->buildSystem();
     this->theGame = new Game();
 
-    //if (glewInit() != GLEW_OK)
-    //    std::cout<< "glew error\n"<<std::endl;
+    if (glewInit() != GLEW_OK)
+        std::cout<< "glew error\n"<<std::endl;
 
 }

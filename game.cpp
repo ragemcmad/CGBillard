@@ -159,8 +159,8 @@ void Game::gameStep()
 
     this->myScene->gui->powerStep();
 
-/*
-    for(int i = 0; i< 0;i++)
+
+    for(int i = 0; i< 16;i++)
     {
         this->myScene->secondaryObjects->at(i)->initFBO(255, 255);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
@@ -171,7 +171,7 @@ void Game::gameStep()
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK);
-    */
+
 
     this->myScene->renderScene(cam);
 
