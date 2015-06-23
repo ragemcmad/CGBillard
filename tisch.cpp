@@ -198,6 +198,12 @@ void Tisch::render(myCam* cam,int kugel)
     shader->setUniformValueArray(unifKugelA, kugelnActive,16,1);
     shader->setUniformValueArray(unifKugelC, kugelColor,16);
 
+    if (cam->isCubeCamera)
+    {
+        shader->setUniformValueArray(shader->uniformLocation("cubeViews"), cam->viewMatrixCube, 6);
+        shader->setUniformValue(shader->uniformLocation("cubeProj"), cam->projMatrix);
+    }
+
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);

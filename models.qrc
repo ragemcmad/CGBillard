@@ -8,5 +8,6 @@
         <file>models/koe.obj</file>
         <file>models/gui.obj</file>
         <file>models/stand.obj</file>
+        <file>models/cube.obj</file>
     </qresource>
 </RCC>

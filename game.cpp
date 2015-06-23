@@ -217,20 +217,38 @@ void Game::moveStuff(float time)
 
 void Game::renderStuff()
 {
-
+    int cubeResolution = 256;
     for(int i = 0; i< 16;i++)
     {
-        this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
+        this->myScene->secondaryObjects->at(i)->initFBO(cubeResolution, cubeResolution);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
+        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+//        glClearColor(0,0,1,1);
+        glViewport(0,0, cubeResolution, cubeResolution);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//        glClearColor(0,0,0,1);
 
         this->myScene->renderObjectPOV(cam,i);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK);
+    glViewport(0,0, 1231, 801);
 
     this->myScene->renderPlayerPOV(cam);
+
+    /*
+    for(int i = 0; i< this->myScene->testKugel->size();i++)
+    {
+        Kugel* k = this->myScene->testKugel->at(i);
+        k->colorCubeMap = this->myScene->secondaryObjects->at(i)->colorCubeMap;
+        k->render(this->cam, -1);
+        k->colorCubeMap = 0;
+    }
+*/
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, myScene->secondaryObjects->at(0)->colorCubeMap);
 
     this->myScene->gui->render(turn);
 }

@@ -11,5 +11,6 @@
         <file>shader/kugel.frag</file>
         <file>shader/kugel.vert</file>
         <file>shader/cube.geom</file>
+        <file>shader/kugel_cube.frag</file>
     </qresource>
 </RCC>

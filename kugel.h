@@ -29,6 +29,8 @@ public:
     std::vector<int>* kugelIndex;
 	std::vector<Kugel*>* meineAktiven;
 	std::vector<Kugel*>* meineEingelochten;
+    QOpenGLShaderProgram* shaderProgramReflection;
+
 	
     GLuint fbo;
 

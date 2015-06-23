@@ -19,9 +19,9 @@ public:
     std::vector<GameObject*>* primaryObjects;
     std::vector<Kugel*>* secondaryObjects;
 	
-	std::vector<Kugel*>* halbeKugeln;
-	std::vector<Kugel*>* eingelochteHalbe;
-	std::vector<Kugel*>* ganzeKugeln;
+    std::vector<Kugel*>* halbeKugeln;
+    std::vector<Kugel*>* eingelochteHalbe;
+    std::vector<Kugel*>* ganzeKugeln;
     std::vector<Kugel*>* eingelochteGanze;
     std::vector<Kugel*>* KugelnAlle;
 
@@ -30,6 +30,7 @@ public:
     std::vector<QVector3D*>* kugelColor;
     std::vector<int>* kugelIndex;
     GUI *gui;
+
 
     bool isTrainingScene;
 

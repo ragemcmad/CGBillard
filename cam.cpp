@@ -4,7 +4,7 @@
 
 myCam::myCam(float fov, float aspect){
     this->projMatrix.setToIdentity();
-    this->projMatrix.perspective(fov, aspect, 0.1f, 1000.0f);
+    this->projMatrix.perspective(fov, aspect, 0.01f, 1000.0f);
     this->viewMatrix.setToIdentity();
     this->viewMatrix.lookAt(QVector3D(0,50,30),QVector3D(0,0,0),QVector3D(0,1,0));
     this->activePlaymode = true;

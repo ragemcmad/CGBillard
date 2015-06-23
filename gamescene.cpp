@@ -61,6 +61,7 @@ void GameScene::initScene()
     p = path::getPath();
     this->tischBoden = new Tisch();
     this->tischBoden->loadModel(p.append(QString("models/bodenHigh.obj")));
+    p = path::getPath();
     this->tischBoden->loadModelLow(p.append(QString("models/bodenLow.obj")));
     this->tischBoden->loadTexture(QString(":/textures/plattehigh.png"));
     this->tischBoden->loadShader();
@@ -72,7 +73,8 @@ void GameScene::initScene()
 
     p = path::getPath();
     Kugel* kugelWhite = new Kugel(0);
-    kugelWhite->loadModel(p.append(QString("models/sphere_high.obj")));
+    kugelWhite->loadModel(p.append(QString("models/sphere_low.obj")));
+    //kugelWhite->loadModel(p.append(QString("models/cube.obj")));
     kugelWhite->loadTexture(QString(":/textures/kugelWhite.png"));
     kugelWhite->loadShader();
     kugelWhite->loadLights(this->lights);
@@ -90,6 +92,9 @@ void GameScene::initScene()
 
     kugelWhite->meineAktiven = NULL;
     kugelWhite->meineEingelochten = NULL;
+
+
+
 
     float zpos = -18;
     float abstandz = -1.75;
@@ -178,6 +183,7 @@ void GameScene::renderPlayerPOV(myCam *cam)
 void GameScene::renderObjectPOV(myCam *cam, int id)
 {
     myCam kugelCam(90.0f, 1.0f);
+
     QMatrix4x4 position;
     position.setToIdentity();
     position.translate(-*this->KugelnAlle->at(id)->pos);
@@ -198,12 +204,12 @@ void GameScene::renderObjectPOV(myCam *cam, int id)
 
     QVector3D camup[6] =
     {
-        QVector3D(0,1,0),
-        QVector3D(0,1,0),
+        QVector3D(0,-1,0),
+        QVector3D(0,-1,0),
         QVector3D(0,0,1),
         QVector3D(0,0,1),
-        QVector3D(0,1,0),
-        QVector3D(0,1,0)
+        QVector3D(0,-1,0),
+        QVector3D(0,-1,0)
     };
 
     for (int i = 0; i < 6; ++i)

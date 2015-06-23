@@ -54,9 +54,10 @@ void GuiTexture::render()
     shaderProgram->enableAttributeArray(attrTexCoords);
     shaderProgram->enableAttributeArray(attrNormals);
 
+    shaderProgram->setUniformValue("debugTex", 2);
 
     qTex->bind(1);
-    shaderProgram->setUniformValue("texture", 1);
+    shaderProgram->setUniformValue("guitex", 1);
 
     int offset = 0;
     size_t stride = 12 * sizeof(GLfloat);

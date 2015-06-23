@@ -170,12 +170,16 @@ void Kugel::render(myCam* cam,int kugel)
 {
     if (!isVisible) return;
 
-    quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
+    //quickSort(0,15,this->kugeln,*this->kugelIndex,*this->pos);
 
     QOpenGLShaderProgram* shader = shaderProgram;
 
     if (cam->isCubeCamera)
         shader = shaderProgramCube;
+    else if(kugel<0)
+        shader = shaderProgramReflection;
+
+
 
     shader->bind();
     vbo->bind();
@@ -218,10 +222,26 @@ void Kugel::render(myCam* cam,int kugel)
     shader->setUniformValueArray(unifLightintense, this->lights->intensity,4);
     shader->setUniformValue(unifCamera, campos);
 
+    if (cam->isCubeCamera)
+    {
+        shader->setUniformValueArray(shader->uniformLocation("cubeViews"), cam->viewMatrixCube, 6);
+        shader->setUniformValue(shader->uniformLocation("cubeProj"), cam->projMatrix);
+    }
+
+    if (kugel < 0)
+    {
+        shader->setUniformValue(shader->uniformLocation("cubeMap"), 2);
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, colorCubeMap);
+
+        shader->setUniformValue(shader->uniformLocation("kugelPos"), *this->pos);
+    }
+
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE1);
     qTex->bind(1);
     //QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);
-    shader->setUniformValue("texture", 1);
+    shader->setUniformValue("colortex", 1);
 
     int offset = 0;
     size_t stride = 12 * sizeof(GLfloat);
@@ -283,6 +303,21 @@ void Kugel::loadShader()
     cubeShaderProg->link();
 
     this->shaderProgramCube = cubeShaderProg;
+
+    // render to cube map shader
+    QOpenGLShaderProgram* reflectShaderProg = new QOpenGLShaderProgram();
+    QOpenGLShader vertShaderReflect(QOpenGLShader::Vertex);
+    vertShaderReflect.compileSourceFile(":/shader/kugel.vert");
+    //qDebug() << shaderProgram.log();
+    reflectShaderProg->addShader(&vertShaderReflect);
+    //qDebug() << shaderProgram.log();
+    QOpenGLShader fragShaderReflect(QOpenGLShader::Fragment);
+    fragShaderReflect.compileSourceFile(":/shader/kugel_cube.frag");
+    //qDebug() << shaderProgram.log();
+    reflectShaderProg->addShader(&fragShaderReflect);
+    reflectShaderProg->link();
+
+    this->shaderProgramReflection = reflectShaderProg;
 
     glEnable(GL_TEXTURE_2D);
 
