@@ -238,6 +238,7 @@ void Game::prepareLogic()
     }
 }
 
+
 void Game::moveStuff(float time)
 {
     //move Kugeln
@@ -259,9 +260,9 @@ void Game::moveStuff(float time)
 
 }
 
+
 void Game::renderStuff()
 {
-
     for(int i = 0; i< 1;i++)
     {
         this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
@@ -279,6 +280,7 @@ void Game::renderStuff()
     if (!show)
         this->myScene->gui->render(turn);
 }
+
 
 
 // Aufruf bei eingelochter Schwarzen Kugel
@@ -310,6 +312,7 @@ void Game::setWinner()
     else
         this->myScene->gui->p1Win();
 }
+
 
 void Game::gameStep()
 {
@@ -356,6 +359,7 @@ void Game::gameStep()
 
 }
 
+
 void Game::resetWhiteBall()
 {
     QVector4D column = this->whiteBall->worldMatrix.column(3);
@@ -367,6 +371,7 @@ void Game::resetWhiteBall()
     this->whiteBall->isVisible = true;
     this->setBall = true;
 }
+
 
 void Game::animateLights() // DiscoMode ON
 {
