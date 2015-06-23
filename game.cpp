@@ -73,15 +73,7 @@ void Game::shoot()
         }
         if (!collide){
             this->setBall = false;
-            this->koe->isVisible = true;
-            this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe(this->myScene->gui->powerBarScale.y());
-            this->myScene->gui->powerBar.isVisible = true;
-            this->watch = false;
-            for (int i=0;i<this->myScene->KugelnAlle->size();i++)
-            {
-                this->myScene->KugelnAlle->at(i)->resetFirstKollision();
-            }
+            this->startTurn();
         }
     }
 }
@@ -113,6 +105,19 @@ void Game::ballMove(int x, int z)
     }
 }
 
+void Game::startTurn()
+{
+    this->myScene->gui->powerBar.isVisible = true;
+    this->koe->isVisible = true;
+    this->cam->aktivatePlaymode(*this->whiteBall->pos);
+    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->watch = false;
+    for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
+    {
+        this->myScene->KugelnAlle->at(i)->resetFirstKollision();
+    }
+}
+
 void Game::updateKoe(float dist)
 {
     float angle = -this->cam->getCamAngle()+180;
@@ -137,12 +142,7 @@ void Game::prepareLogic()
     uint countGanzeEingelocht = this->myScene->eingelochteGanze->size();
     uint countHalbeEingelocht = this->myScene->eingelochteHalbe->size();
 
-    for(uint i = 0; i<this->myScene->secondaryObjects->size();i++)
-    {
-        if (!this->setBall)
-            this->myScene->secondaryObjects->at(i)->gameProgress(0);
-        this->myScene->lights->moveStep(1);
-    }
+    this->moveStuff(1);
 
     //generate wave
     for(uint i = countGanzeEingelocht;i<this->myScene->eingelochteGanze->size();i++)
@@ -196,110 +196,127 @@ void Game::prepareLogic()
     }
 }
 
+void Game::moveStuff(float time)
+{
+    //move Kugeln
+    for(uint i = 0; i<this->myScene->secondaryObjects->size();i++)
+    {
+        if (!this->setBall)
+            this->myScene->secondaryObjects->at(i)->gameProgress(0);
+    }
+    // move lights
+    this->myScene->lights->moveStep(time);
+
+    //move cam
+    if (this->cam->isMoving)
+        this->cam->moveStep(time);
+
+    //grow powerbar
+    this->myScene->gui->powerStep();
+}
+
 void Game::renderStuff()
 {
+
     for(int i = 0; i< 16;i++)
     {
         this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        this->myScene->renderScene(cam,i);
+        this->myScene->renderObjectPOV(cam,i);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK);
 
-    this->myScene->renderScene(cam);
+    this->myScene->renderPlayerPOV(cam);
 
     this->myScene->gui->render(turn);
+}
+
+
+// Aufruf bei eingelochter Schwarzen Kugel
+void Game::setWinner()
+{
+    if (!this->turn) //p1 turn
+        if (!this->teamsAreSet)
+            this->myScene->gui->p2Win();
+        else if (this->p1HasFull)
+            if (this->myScene->ganzeKugeln->empty())
+                this->myScene->gui->p1Win();
+            else
+                this->myScene->gui->p2Win();
+        else if (this->myScene->halbeKugeln->empty())
+                this->myScene->gui->p1Win();
+            else
+                this->myScene->gui->p2Win();
+
+    //p2 turn
+    else if (!this->teamsAreSet)
+        this->myScene->gui->p1Win();
+    else if (!this->p1HasFull)
+        if (this->myScene->ganzeKugeln->empty())
+            this->myScene->gui->p2Win();
+        else
+            this->myScene->gui->p1Win();
+    else if (this->myScene->halbeKugeln->empty())
+        this->myScene->gui->p2Win();
+    else
+        this->myScene->gui->p1Win();
 }
 
 void Game::gameStep()
 {
     this->renderStuff();
     this->prepareLogic();
-    // Gamestate-Changes
-    if (this->cam->isMoving)
-        this->cam->moveStep(1);
-    else if (this->finish | this->setBall)
+    // Gamestate-Changes:
+    // keine Änderungen bei Animation, Spielende oder Ballplatzierung
+    if (this->finish | this->setBall)
         return;
     // test auf spielende
     else if (!this->blackBall->isVisible && this->watch && !this->myScene->hasMovingBalls()) {
         this->finish = true;
         SoundSys::playApplause();
-        if (!this->turn) //p1 turn
-            if (!this->teamsAreSet)
-                this->myScene->gui->p2Win();
-            else if (this->p1HasFull)
-                if (this->myScene->ganzeKugeln->empty())
-                    this->myScene->gui->p1Win();
-                else
-                    this->myScene->gui->p2Win();
-            else if (this->myScene->halbeKugeln->empty())
-                    this->myScene->gui->p1Win();
-                else
-                    this->myScene->gui->p2Win();
-	
-        //p2 turn
-        else if (!this->teamsAreSet)
-            this->myScene->gui->p1Win();
-        else if (!this->p1HasFull)
-            if (this->myScene->ganzeKugeln->empty())
-                this->myScene->gui->p2Win();
-            else
-                this->myScene->gui->p1Win();
-        else if (this->myScene->halbeKugeln->empty())
-            this->myScene->gui->p2Win();
-        else
-            this->myScene->gui->p1Win();        
+        this->setWinner();
     }
-
-  // test ob rundenende
+    // test ob rundenende
     else if (this->watch && !this->myScene->hasMovingBalls())
     {
         bool hitFullsFirst = (this->whiteBall->hitFirst<8 && this->whiteBall->hitFirst>0);
         bool hitHalfsFirst = (this->whiteBall->hitFirst<16 && this->whiteBall->hitFirst>8);
         bool hitOwnFirst = ((this->teamsAreSet && ((this->p1HasFull & !this->turn)|(!this->p1HasFull & this->turn)) & hitFullsFirst) | (this->teamsAreSet & ((!this->p1HasFull & !this->turn)|(this->p1HasFull & this->turn)) & hitHalfsFirst));
-        //test auf rundenende
+        // test auf spielerwechsel
         if (!this->whiteBall->isVisible | this->hatGegnerEingelocht | !this->hatEingelocht | !hitOwnFirst)
         {
             if (!this->whiteBall->isVisible)
             {
-                // temporär
-                //this->whiteBall->pos->setX(0);
-                //this->whiteBall->pos->setY(0);
-                //this->whiteBall->pos->setZ(18);
-                QVector4D column = this->whiteBall->worldMatrix.column(3);
-                column.setX(0);
-                column.setY(0);
-                column.setZ(18);
-                this->whiteBall->worldMatrix.setColumn(3,column);
-                this->whiteBall->updatePosition();
-                this->whiteBall->isVisible = true;
-                this->setBall = true;
+                this->resetWhiteBall();
             }
             this->turn = !(this->turn);
-            this->myScene->gui->powerBarPos.setX(-(this->myScene->gui->powerBarPos.x()));
+            this->myScene->gui->mirrorPowerBarX();
         }
+        //Rundenende
         this->hatEingelocht = false;
         this->hatGegnerEingelocht = false;
 
-        if (!this->setBall)
-        {
-            this->myScene->gui->powerBar.isVisible = true;
-            this->koe->isVisible = true;
-            this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe(this->myScene->gui->powerBarScale.y());
-            this->watch = false;
-            for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
-            {
-                this->myScene->KugelnAlle->at(i)->resetFirstKollision();
-            }
-        }
+
     }
-	else
-        this->myScene->gui->powerStep();
+    else
+        return;
+
+}
+
+void Game::resetWhiteBall()
+{
+    QVector4D column = this->whiteBall->worldMatrix.column(3);
+    column.setX(0);
+    column.setY(0);
+    column.setZ(18);
+    this->whiteBall->worldMatrix.setColumn(3,column);
+    this->whiteBall->updatePosition();
+    this->whiteBall->isVisible = true;
+    this->setBall = true;
 }
 
 void Game::animateLights() // DiscoMode ON

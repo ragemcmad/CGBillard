@@ -30,6 +30,8 @@ public:
     ~Game();
 	void resetGame();
 	void cancel();
+    void setWinner();
+    void moveStuff(float i);
     void renderStuff();
     void prepareLogic();
 	void gameStep();
@@ -37,7 +39,9 @@ public:
     void camMove(int x, int y);
     void camRotate(int x, int y);
     void ballMove(int x, int y);
+    void startTurn();
     void updateKoe(float dist);
     void animateLights();
+    void resetWhiteBall();
 };
 #endif

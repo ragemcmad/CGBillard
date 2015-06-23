@@ -38,6 +38,7 @@ public:
 	void p1Win();
 	void p2Win();
 	void powerStep();
+    void mirrorPowerBarX();
 
 };
 

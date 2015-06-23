@@ -177,3 +177,7 @@ void GUI::powerStep()
                                     );
 }
 
+void GUI::mirrorPowerBarX()
+{
+    powerBarPos.setX(-(this->powerBarPos.x()));
+}
