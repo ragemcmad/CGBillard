@@ -132,7 +132,7 @@ void Game::resetGame()
     this->killMe = true;
 }
 
-void Game::gameStep()
+void Game::prepareLogic()
 {
     uint countGanzeEingelocht = this->myScene->eingelochteGanze->size();
     uint countHalbeEingelocht = this->myScene->eingelochteHalbe->size();
@@ -155,25 +155,9 @@ void Game::gameStep()
         QVector3D pos = *this->myScene->eingelochteHalbe->at(i)->pos;
         this->myScene->tischBoden->generateWave(pos.x()*2,pos.z()*2,80);
     }
-
     this->myScene->gui->powerStep();
 
-
-    for(int i = 0; i< 5;i++)
-    {
-        this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
-        glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        this->myScene->renderScene(cam,i);
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDrawBuffer(GL_BACK);
-
-
-    this->myScene->renderScene(cam);
-
+    // test auf eingelocht
     bool ganzeEingelocht = (countGanzeEingelocht < this->myScene->eingelochteGanze->size());
     bool halbeEingelocht = (countHalbeEingelocht < this->myScene->eingelochteHalbe->size());
     if (!teamsAreSet && (ganzeEingelocht | halbeEingelocht))
@@ -186,10 +170,9 @@ void Game::gameStep()
 
         this->myScene->gui->setTeam(false);
     }
-    this->myScene->gui->render(turn);
 
-
-    if (!turn) // test auf eingelocht
+    // setze Flags falls eingelocht
+    if (!turn) // turn P1
     {
       if ((p1HasFull && ganzeEingelocht) | (!p1HasFull && halbeEingelocht))
       {
@@ -200,7 +183,7 @@ void Game::gameStep()
           this->hatGegnerEingelocht =true;
       }
     }
-    else
+    else // turn P2
     {
         if ((!p1HasFull && ganzeEingelocht) | (p1HasFull && halbeEingelocht))
         {
@@ -211,8 +194,31 @@ void Game::gameStep()
             this->hatGegnerEingelocht =true;
         }
     }
+}
 
+void Game::renderStuff()
+{
+    for(int i = 0; i< 5;i++)
+    {
+        this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
+        glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        this->myScene->renderScene(cam,i);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawBuffer(GL_BACK);
+
+    this->myScene->renderScene(cam);
+
+    this->myScene->gui->render(turn);
+}
+
+void Game::gameStep()
+{
+    this->renderStuff();
+    this->prepareLogic();
     // Gamestate-Changes
     if (this->cam->isMoving)
         this->cam->moveStep(1);
@@ -298,20 +304,6 @@ void Game::gameStep()
 
 void Game::animateLights() // DiscoMode ON
 {
-    //QVector3D altePos = this->cam.getPosition();
-    //QVector3D pos1 = (altePos-this->whiteBall->pos);
-    //pos1.setX(altePos.x()-this->whiteBall->pos->x());
-    //pos1.setY(altePos.y()-this->whiteBall->pos->y());
-    //pos1.setZ(altePos.z()-this->whiteBall->pos->z());
-
-    //QMatrix4x4 rotaMatrix;
-	//rotaMatrix.setToIdentity();
-	//rotaMatrix.rotate(90,0,1,0);
-	//(pos1*rotaMatrix).transpose();
-		
-    //this->cam.queueAnimation(
-	
-	//this->myScene->lights[0] = 
 
     int dur = 800;
 
