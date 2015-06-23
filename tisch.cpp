@@ -72,6 +72,38 @@ void Tisch::loadShader()
     glEnable(GL_TEXTURE_2D);
 }
 
+void Tisch::loadModelLow(QString ex_path)
+{
+    ModelLoader model;
+    bool res = model.loadObjectFromFile(ex_path.toStdString());//ex_path.toStdString());
+    if (res) {
+        // Frage zu erwartende Array-Laeangen ab
+        vboLengthLow = model.lengthOfVBO();
+        iboLengthLow = model.lengthOfIndexArray();
+        // Generiere VBO und Index-Array
+        vboDataLow = new GLfloat[vboLengthLow];
+        indexDataLow = new GLuint[iboLengthLow];
+        model.genVBO(vboDataLow,0,true,true);
+        model.genIndexArray(indexDataLow);
+    }
+
+
+    vboLow = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    iboLow = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
+
+    vboLow->create();
+    vboLow->bind();
+    vboLow->setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboLow->allocate(vboDataLow, sizeof(GLfloat) * vboLengthLow); // modelloader
+    vboLow->release();
+
+    iboLow->create();
+    iboLow->bind();
+    iboLow->setUsagePattern(QOpenGLBuffer::StaticDraw);
+    iboLow->allocate(indexDataLow, sizeof(GLuint) * iboLengthLow); // modelloader
+    iboLow->release();
+}
+
 void Tisch::render(myCam* cam,int kugel)
 {
     QVector3D kugeln[16];
@@ -105,11 +137,19 @@ void Tisch::render(myCam* cam,int kugel)
     QOpenGLShaderProgram* shader = shaderProgram;
 
     if (cam->isCubeCamera)
+    {
         shader = shaderProgramCube;
-
+        vboLow->bind();
+        iboLow->bind();
+    }
+    else
+    {
+        vbo->bind();
+        ibo->bind();
+    }
     shader->bind();
-    vbo->bind();
-    ibo->bind();
+
+
 
     int attrVertices = shader->attributeLocation("vert");
     //int attrColors = shader->attributeLocation(("color"));
@@ -130,8 +170,7 @@ void Tisch::render(myCam* cam,int kugel)
 
 
     int unifMatrix = shader->uniformLocation("matrix");
-    int unifMatrixProjection = shader->uniformLocation("projmatrix");
-    int unifMatrixView = shader->uniformLocation("viewmatrix");
+    int unifMatrixWVP = shader->uniformLocation("worldviewproj");
     int unifLightpos = shader->uniformLocation("lightpositions");
     int unifLightintense = shader->uniformLocation("lightintensity");
     int unifCamera = shader->uniformLocation("camerapositions");
@@ -145,8 +184,8 @@ void Tisch::render(myCam* cam,int kugel)
     int unifKugelC = shader->uniformLocation("kugelColor");
 
     shader->setUniformValue(unifMatrix,this->worldMatrix);
-    shader->setUniformValue(unifMatrixProjection, cam->projMatrix);
-    shader->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shader->setUniformValue(shader->uniformLocation("matrixIT"),this->worldMatrix.inverted().transposed());
+    shader->setUniformValue(unifMatrixWVP, cam->projMatrix * cam->viewMatrix * this->worldMatrix);
     shader->setUniformValueArray(unifLightpos, this->lights->positions,4);
     shader->setUniformValueArray(unifLightintense, this->lights->intensity,4);
     shader->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));
@@ -172,8 +211,14 @@ void Tisch::render(myCam* cam,int kugel)
     offset = 8 * sizeof(GLfloat);
     shader->setAttributeBuffer(attrTexCoords, GL_FLOAT, offset, 4, stride);
 
-
-    glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
+    if(cam->isCubeCamera)
+    {
+        glDrawElements(GL_TRIANGLES, iboLengthLow, GL_UNSIGNED_INT, 0);
+    }
+    else
+    {
+        glDrawElements(GL_TRIANGLES, iboLength, GL_UNSIGNED_INT, 0);
+    }
 
     shader->disableAttributeArray(attrVertices);
     shader->disableAttributeArray(attrTexCoords);
@@ -181,7 +226,16 @@ void Tisch::render(myCam* cam,int kugel)
 
 
     qTex->release();
-    ibo->release();
-    vbo->release();
+
+    if(cam->isCubeCamera)
+    {
+        iboLow->release();
+        vboLow->release();
+    }
+    else
+    {
+        ibo->release();
+        vbo->release();
+    }
 
 }

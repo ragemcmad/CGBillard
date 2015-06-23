@@ -36,15 +36,14 @@ void main()
         anglespec = pow(dot(rayA,rayB),8);
 
 
-        if(angle <0)
-            angle = 0;
+        angle = max(angle, 0);
         vec4 color =  texture2D(texture, vec2(texC.x, texC.y));
         color.r = color.r * angle *lightintensity[i].r*(1.0/distance(vertex.xyz,lightpositions[i]));
         color.g = color.g * angle *lightintensity[i].g*(1.0/distance(vertex.xyz,lightpositions[i]));
         color.b = color.b * angle *lightintensity[i].b*(1.0/distance(vertex.xyz,lightpositions[i]));
 
-        if(anglespec <0 || angle<(3.1415926/4))
-            anglespec = 0;
+
+        anglespec = clamp(anglespec, 0, 3.1415926/4);
         vec4 colorspec = texture2D(texture, vec2(texC.x, texC.y));
         colorspec.r = max(colorspec.r * anglespec,0);
         colorspec.g = max(colorspec.g * anglespec,0);

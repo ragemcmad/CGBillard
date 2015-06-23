@@ -7,8 +7,8 @@
 // GL_ARB_explicit_uniform_location is not needed for version >= 430
 // GL_ARB_separate_shader_objects is not needed for version >= 410
 uniform mat4 matrix;
-uniform mat4 projmatrix;
-uniform mat4 viewmatrix;
+uniform mat4 matrixIT;
+uniform mat4 worldviewproj;
 layout(location = 0) out vec4 texC;
 layout(location = 1) out vec4 normalvector;
 layout(location = 2) out vec4 vertex;
@@ -37,17 +37,18 @@ void main()
             float distanz = sqrt(deltaX*deltaX+deltaZ*deltaZ);
             if(distanz>WaveTime[i]-3.1415926 && distanz < WaveTime[i])
             {
+                float sinT = sin((WaveTime[i]-distanz)*2);
                 vec2 normalDirection = vec2(deltaX,deltaZ);
                 normalDirection = normalize(normalDirection);
                 vertexWave.y = vertexWave.y + ((-cos((WaveTime[i]-distanz)*2.0)*1.0+1.0)*(1.0-(WaveTime[i]/WaveDuration[i])));
-                normalWave.x = normalWave.x+normalDirection.x *sin((WaveTime[i]-distanz)*2)*(vertexWave.y);
-                normalWave.z = normalWave.z+normalDirection.y *sin((WaveTime[i]-distanz)*2)*(vertexWave.y);
+                normalWave.x = normalWave.x+normalDirection.x *sinT*(vertexWave.y);
+                normalWave.z = normalWave.z+normalDirection.y *sinT*(vertexWave.y);
             }
         }
     }
     vertex = matrix * (vertexWave + vert);
-    normalvector = transpose(inverse(matrix))* normalWave;
+    normalvector = matrixIT* normalWave;
     texC = texCoord;
-    gl_Position =  (((projmatrix * viewmatrix) * matrix) * (vertexWave+vert));
+    gl_Position =  worldviewproj * (vertexWave+vert);
 
 }

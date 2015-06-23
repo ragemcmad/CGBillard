@@ -198,7 +198,7 @@ void Game::prepareLogic()
 
 void Game::renderStuff()
 {
-    for(int i = 0; i< 5;i++)
+    for(int i = 0; i< 16;i++)
     {
         this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);

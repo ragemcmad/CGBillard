@@ -9,6 +9,7 @@
 uniform mat4 matrix;
 uniform mat4 projmatrix;
 uniform mat4 viewmatrix;
+uniform mat4 matrixIT;
 layout(location = 0) out vec4 texC;
 layout(location = 1) out vec4 normalvector;
 layout(location = 2) out vec4 vertex;
@@ -20,7 +21,7 @@ in vec4 texCoord;
 void main()
 {
     vertex = matrix * vert;
-    normalvector = transpose(inverse(matrix))* normal;
+    normalvector = matrixIT * normal;
     texC = texCoord;
     gl_Position =  (((projmatrix * viewmatrix) * matrix) * vert);
 

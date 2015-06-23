@@ -207,8 +207,11 @@ void Kugel::render(myCam* cam,int kugel)
     int unifLightpos = shader->uniformLocation("lightpositions");
     int unifLightintense = shader->uniformLocation("lightintensity");
     int unifCamera = shader->uniformLocation("cameraposition");
+    int unifMatrixIT = shader->uniformLocation("matrixIT");
+
 
     shader->setUniformValue(unifMatrix,this->worldMatrix);
+    shader->setUniformValue(unifMatrixIT,worldMatrix.inverted().transposed());
     shader->setUniformValue(unifMatrixProjection, cam->projMatrix);
     shader->setUniformValue(unifMatrixView, cam->viewMatrix);
     shader->setUniformValueArray(unifLightpos, this->lights->positions,4);

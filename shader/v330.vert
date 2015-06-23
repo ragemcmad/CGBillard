@@ -7,8 +7,8 @@
 // GL_ARB_explicit_uniform_location is not needed for version >= 430
 // GL_ARB_separate_shader_objects is not needed for version >= 410
 uniform mat4 matrix;
-uniform mat4 projmatrix;
-uniform mat4 viewmatrix;
+uniform mat4 matrixIT;
+uniform mat4 worldviewproj;
 layout(location = 0) out vec4 texC;
 layout(location = 1) out vec4 normalvector;
 layout(location = 2) out vec4 vertex;
@@ -20,8 +20,8 @@ in vec4 texCoord;
 void main()
 {
     vertex = matrix * vert;
-    normalvector = transpose(inverse(matrix))* normal;
+    normalvector = matrixIT* normal;
     texC = texCoord;
-    gl_Position =  (((projmatrix * viewmatrix) * matrix) * vert);
+    gl_Position =  worldviewproj * vert;
 
 }

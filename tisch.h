@@ -11,6 +11,17 @@ class Tisch : public GameObject
     GLfloat waveTimeLeft[16];
 
 
+    GLfloat* vboDataLow;
+    GLuint* indexDataLow;
+
+
+    unsigned int vboLengthLow;
+    unsigned int iboLengthLow;
+
+    QOpenGLBuffer* vboLow;
+    QOpenGLBuffer* iboLow;
+
+
 public:
     std::vector<QVector3D*>* kugelPositions;
     std::vector<bool*>* kugelActive;
@@ -21,6 +32,7 @@ public:
     void loadShader();
     void render(myCam* cam,int kugel);
     void generateWave(float xPosition,float zPosition,float duration);
+    void loadModelLow(QString path);
 
 };
 

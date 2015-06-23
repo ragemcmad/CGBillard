@@ -42,15 +42,14 @@ void GameObject::render(myCam* cam,int kugel)
 
 
     int unifMatrix = shader->uniformLocation("matrix");
-    int unifMatrixProjection = shader->uniformLocation("projmatrix");
-    int unifMatrixView = shader->uniformLocation("viewmatrix");
+    int unifMatrixWVP = shader->uniformLocation("worldviewproj");
     int unifLightpos = shader->uniformLocation("lightpositions");
     int unifLightintense = shader->uniformLocation("lightintensity");
     int unifCamera = shader->uniformLocation("camerapositions");
 
     shader->setUniformValue(unifMatrix,this->worldMatrix);
-    shader->setUniformValue(unifMatrixProjection, cam->projMatrix);
-    shader->setUniformValue(unifMatrixView, cam->viewMatrix);
+    shader->setUniformValue(shader->uniformLocation("matrixIT"),this->worldMatrix.inverted().transposed());
+    shader->setUniformValue(unifMatrixWVP, cam->projMatrix * cam->viewMatrix * this->worldMatrix);
     shader->setUniformValueArray(unifLightpos, this->lights->positions,4);
     shader->setUniformValueArray(unifLightintense, this->lights->intensity,4);
     shader->setUniformValue(unifCamera, cam->getPositionFromViewMatrix(cam->viewMatrix));

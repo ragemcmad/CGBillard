@@ -61,6 +61,7 @@ void GameScene::initScene()
     p = path::getPath();
     this->tischBoden = new Tisch();
     this->tischBoden->loadModel(p.append(QString("models/bodenHigh.obj")));
+    this->tischBoden->loadModelLow(p.append(QString("models/bodenLow.obj")));
     this->tischBoden->loadTexture(QString(":/textures/plattehigh.png"));
     this->tischBoden->loadShader();
     this->tischBoden->loadLights(this->lights);
