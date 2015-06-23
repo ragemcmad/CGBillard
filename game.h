@@ -17,7 +17,8 @@ public:
 	bool p1HasFull; // true = p1 full | false = p1 half
     bool hatEingelocht;
     bool hatGegnerEingelocht;
-    bool killMe;
+    bool reset;
+    bool show;
 
 	GameScene* myScene;
 	myCam* cam;
@@ -29,6 +30,8 @@ public:
     Game();
     ~Game();
 	void resetGame();
+    void loadShow();
+    void loadTraining();
 	void cancel();
     void setWinner();
     void moveStuff(float i);

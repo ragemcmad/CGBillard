@@ -80,11 +80,11 @@ void myCam::nextAnimation()
 	}
 }
 
-void myCam::aktivatePlaymode(QVector3D kugelWhite)
+void myCam::aktivatePlaymode(QVector3D kugelWhite, int abstand)
 {
     this->activePlaymode = true;
     this->kugelWhite = kugelWhite;
-    int abstand = 30;
+
     QVector3D position;
     position.setX(kugelWhite.x());
     position.setY(kugelWhite.y());

@@ -46,6 +46,9 @@ public slots:
     void mouseReleaseEvent(QMouseEvent *);
     void wheelEvent(QWheelEvent*);
     void keyPressEvent(QKeyEvent*);
+    void newGame();
+    void newTraining1();
+    void newShow();
 };
 
 #endif // MYGLWIDGET_H

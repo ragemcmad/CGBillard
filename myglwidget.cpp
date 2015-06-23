@@ -14,6 +14,7 @@ MyGLWidget::MyGLWidget(QWidget *parent) : QGLWidget(parent)
     this->isPressed = false;
     this->timer = new QTimer(parent);
     QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(update()));
+    //QObject::connect(parent->parent()->children().at,SIGNAL(actionStandard_Game()),SLOT(newGame()));
     timer->start(25);
 }
 
@@ -51,7 +52,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent *e){
 }
 
 void MyGLWidget::mouseMoveEvent(QMouseEvent *e){
-    if (this->isPressed){
+    if ((this->isPressed) && (this->theGame->show)){
         this->theGame->camRotate(mousepositionOldX-e->x(),mousepositionOldY-e->y());
     }
 
@@ -103,8 +104,20 @@ void MyGLWidget::keyPressEvent(QKeyEvent * event)
 
 }
 
+void MyGLWidget::newGame()
+{
+    this->theGame->resetGame();
+}
 
+void MyGLWidget::newTraining1()
+{
+    this->theGame->loadTraining();
+}
 
+void MyGLWidget::newShow()
+{
+    this->theGame->loadShow();
+}
 void MyGLWidget::paintGL()
 {
     // Clear buffer to set color and alpha
@@ -121,11 +134,6 @@ void MyGLWidget::paintGL()
     //this->sso->render(m, cam, counter);
 
     this->theGame->gameStep();
-    if (this->theGame->killMe)
-    {
-        delete this->theGame;
-        this->theGame = new Game();
-    }
 }
 
 void MyGLWidget::resizeGL(int width, int height)

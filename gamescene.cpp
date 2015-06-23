@@ -18,6 +18,7 @@ GameScene::GameScene()
     this->kugelColor = new std::vector<QVector3D*>();
     this->kugelIndex = new std::vector<int>();
     this->KugelnAlle = new std::vector<Kugel*>();
+
 }
 
 GameScene::~GameScene()
@@ -27,8 +28,6 @@ GameScene::~GameScene()
 void GameScene::initScene()
 {
     this->lights = new LightSources();
-
-    isTrainingScene = false;
     QString p = path::getPath();
 
     GameObject* koe = new GameObject();
@@ -46,7 +45,7 @@ void GameScene::initScene()
     tisch->loadShader();
     tisch->loadLights(this->lights);
     tisch->worldMatrix.scale(0.5,1,0.5);
-    this->primaryObjects->push_back(tisch);   
+    this->primaryObjects->push_back(tisch);
 
     p = path::getPath();
     GameObject* tischbeine = new GameObject();
@@ -95,7 +94,7 @@ void GameScene::initScene()
     float abstandz = -1.75;
     float abstandx = 2.01;
     for(int i = 1; i< 16;i++)
-    {        
+    {
         Kugel* kugel = new Kugel(i);
         kugel->copyBuffer(kugelWhite);
         std::stringstream convert;
@@ -103,19 +102,19 @@ void GameScene::initScene()
         kugel->loadTexture(QString::fromStdString(convert.str()));
         kugel->loadShader();
         kugel->loadLights(this->lights);
-		if (i>8)
-		{
-			this->halbeKugeln->push_back(kugel);
-			kugel->meineAktiven = this->halbeKugeln;
-			kugel->meineEingelochten = this->eingelochteHalbe;
-		}
-		else if (i<8)
-		{
-			this->ganzeKugeln->push_back(kugel);
-			kugel->meineAktiven = this->ganzeKugeln;
-			kugel->meineEingelochten = this->eingelochteGanze;
-		}
-			
+        if (i>8)
+        {
+            this->halbeKugeln->push_back(kugel);
+            kugel->meineAktiven = this->halbeKugeln;
+            kugel->meineEingelochten = this->eingelochteHalbe;
+        }
+        else if (i<8)
+        {
+            this->ganzeKugeln->push_back(kugel);
+            kugel->meineAktiven = this->ganzeKugeln;
+            kugel->meineEingelochten = this->eingelochteGanze;
+        }
+
         switch(i)
         {
             case 11:kugel->worldMatrix.translate(0,0,zpos); kugel->color = new QVector3D(255,127,0) ;break;
@@ -124,11 +123,11 @@ void GameScene::initScene()
             case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz); kugel->color = new QVector3D(51,104,51); break;
             case 8: // schwarze Kugel
                 //kugel->isVisible = false;
-				kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); 
+                kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz);
                 kugel->meineAktiven = NULL;
-				kugel->meineEingelochten = NULL;
+                kugel->meineEingelochten = NULL;
                 kugel->color = new QVector3D(0,0,0);
-				break;
+                break;
             case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz); kugel->color = new QVector3D(255,183,112); break;
             case 7:kugel->worldMatrix.translate(-3*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(159,7,7); break;
             case 15:kugel->worldMatrix.translate(-1*abstandx/2,0,zpos+3*abstandz); kugel->color = new QVector3D(159,7,7); break;
@@ -162,11 +161,97 @@ void GameScene::initScene()
     this->gui->setVector(this->secondaryObjects);
 }
 
+void GameScene::resetScene()
+{
+    float zpos = -18;
+    float abstandz = -1.75;
+    float abstandx = 2.01;
+    //this->KugelnAlle->at(0)->v->setX(5);
+    while (!this->eingelochteGanze->empty())
+        this->eingelochteGanze->pop_back();
+    while (!this->eingelochteHalbe->empty())
+        this->eingelochteHalbe->pop_back();
 
-void GameScene::initTraining1() {
-    initScene();
-    isTrainingScene = true;
+    for (int i=0; i<16; i++)
+    {
+        Kugel* kugel = this->KugelnAlle->at(i);
+        kugel->isVisible = true;
+        kugel->worldMatrix.setToIdentity();
+        switch(i)
+        {
+            case 0:kugel->worldMatrix.translate(0,0,18); break;
+            case 11:kugel->worldMatrix.translate(0,0,zpos); break;
+            case 1:kugel->worldMatrix.translate(-1*abstandx/2 ,0,zpos+1*abstandz);  break;
+            case 3:kugel->worldMatrix.translate(1*abstandx/2,0,zpos+1*abstandz); break;
+            case 14:kugel->worldMatrix.translate(-1*abstandx,0,zpos+2*abstandz);  break;
+            case 8:kugel->worldMatrix.translate(0*abstandx,0,zpos+2*abstandz); break;
+            case 13:kugel->worldMatrix.translate(1*abstandx,0,zpos+2*abstandz);  break;
+            case 7:kugel->worldMatrix.translate(-3*abstandx/2,0,zpos+3*abstandz);  break;
+            case 15:kugel->worldMatrix.translate(-1*abstandx/2,0,zpos+3*abstandz);  break;
+            case 9:kugel->worldMatrix.translate(+1*abstandx/2,0,zpos+3*abstandz); break;
+            case 2:kugel->worldMatrix.translate(3*abstandx/2,0,zpos+3*abstandz);  break;
+            case 12:kugel->worldMatrix.translate(-2*abstandx,0,zpos+4*abstandz);  break;
+            case 4:kugel->worldMatrix.translate(-1*abstandx,0,zpos+4*abstandz); break;
+            case 10:kugel->worldMatrix.translate(0*abstandx,0,zpos+4*abstandz);  break;
+            case 6:kugel->worldMatrix.translate(1*abstandx,0,zpos+4*abstandz);  break;
+            case 5:kugel->worldMatrix.translate(2*abstandx,0,zpos+4*abstandz);  break;
+        }
+        kugel->v->setX(0);
+        kugel->v->setY(0);
+        kugel->v->setZ(0);
+        kugel->updatePosition();
+    }
+}
 
+
+void GameScene::initTraining1()
+{
+        this->lights->initLights();
+
+        for(int i = 0; i< 16;i++)
+        {
+            Kugel* kugel = this->KugelnAlle->at(i);
+            kugel->worldMatrix.setToIdentity();
+            switch(i)
+            {
+                case 0:kugel->worldMatrix.translate(0,0,18); break;
+                case 8:kugel->worldMatrix.translate(0,0,30); break;
+                case 9:kugel->worldMatrix.translate(0,0,24);  break;
+            }
+            kugel->updatePosition();
+            kugel->v->setX(0);
+            kugel->v->setY(0);
+            kugel->v->setZ(0);
+            if (!(i==0) && !(i==8) && !(i==9))
+                kugel->isVisible = false;
+        }
+        this->gui->setTeam(true);
+}
+
+void GameScene::initShow()
+{
+        this->lights->initLights();
+
+        for(int i = 0; i< 16;i++)
+        {
+            Kugel* kugel = this->KugelnAlle->at(i);
+            kugel->worldMatrix.setToIdentity();
+            switch(i)
+            {
+                case 0:kugel->worldMatrix.translate(0,0,0); break;
+                case 1:kugel->worldMatrix.translate(0,0,4); break;
+                case 8:kugel->worldMatrix.translate(0,0,-4); break;
+                case 9:kugel->worldMatrix.translate(4,0,0);  break;
+                case 10:kugel->worldMatrix.translate(-4,0,0);  break;
+            }
+            kugel->updatePosition();
+            kugel->v->setX(0);
+            kugel->v->setY(0);
+            kugel->v->setZ(0);
+            if (!(i==0) && !(i==1) && !(i==8) && !(i==9))
+                kugel->isVisible = false;
+        }
+        this->gui->setTeam(true);
 }
 
 void GameScene::renderPlayerPOV(myCam *cam)

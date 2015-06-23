@@ -142,7 +142,8 @@ void GUI::render(bool turn)
         }
     }
 	this->winSign.render();
-	this->powerBar.render();
+    this->powerBarPos.setX(std::abs(this->powerBarPos.x())* (-1+2*turn));
+    this->powerBar.render();
 }
 
 void GUI::p1Win()
@@ -184,7 +185,3 @@ void GUI::powerStep()
                                     */
 }
 
-void GUI::mirrorPowerBarX()
-{
-    powerBarPos.setX(-(this->powerBarPos.x()));
-}
