@@ -40,7 +40,7 @@ public:
     void camRotate(int x, int y);
     void ballMove(int x, int y);
     void startTurn();
-    void updateKoe(float dist);
+    void updateKoe();
     void animateLights();
     void resetWhiteBall();
 };

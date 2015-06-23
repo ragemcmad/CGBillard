@@ -27,6 +27,7 @@ public:
 	float powerLevel;
     float maxPower;
     float powerChange;
+    float effectivePower;
 	
     QVector3D powerBarPos;
     QVector3D powerBarScale;

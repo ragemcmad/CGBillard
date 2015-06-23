@@ -21,7 +21,7 @@ Game::Game()
     this->watch = false;
     this->hatEingelocht=false;
     this->hatGegnerEingelocht=false;
-    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->updateKoe();
     SoundSys::playIntro();
 }
 
@@ -33,8 +33,8 @@ void Game::cancel()
 {
 	if (this->cam->isMoving)
 	{
-		this->cam->moveTime = this->cam->moveDuration;
-        this->updateKoe(this->myScene->gui->powerBarScale.y());
+        this->cam->moveTime = this->cam->moveDuration;
+        this->updateKoe();
 		return;
 	}
 	if (this->finish)
@@ -49,9 +49,9 @@ void Game::shoot()
     if(this->watch == false)
     {
         float angle = -this->cam->getCamAngle()+180;
-        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
+        this->whiteBall->v->setX(sin(angle*(3.1415926/180)) * (2 * this->myScene->gui->effectivePower));
         this->whiteBall->v->setY(0);
-        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->myScene->gui->powerLevel/this->myScene->gui->maxPower));
+        this->whiteBall->v->setZ(cos(angle*(3.1415926/180)) * (2 * this->myScene->gui->effectivePower));
         this->watch = true;
         this->cam->aktivateWatchmode();
         this->koe->isVisible = false;        
@@ -61,7 +61,7 @@ void Game::shoot()
     if(this->setBall)
     {
         bool collide = false;
-        for (int i=1; i<this->myScene->KugelnAlle->size();i++)
+        for (uint i=1; i<this->myScene->KugelnAlle->size();i++)
         {
             this->whiteBall->updatePosition();
             if (this->whiteBall->pos->distanceToPoint(*(this->myScene->KugelnAlle->at(i)->pos))<2)
@@ -87,7 +87,7 @@ void Game::camMove(int x, int y)
 void Game::camRotate(int x, int y)
 {
     this->cam->camRotate(x,y);
-    updateKoe(this->myScene->gui->powerBarScale.y());
+    this->updateKoe();
 }
 
 void Game::ballMove(int x, int z)
@@ -110,7 +110,7 @@ void Game::startTurn()
     this->myScene->gui->powerBar.isVisible = true;
     this->koe->isVisible = true;
     this->cam->aktivatePlaymode(*this->whiteBall->pos);
-    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->updateKoe();
     this->watch = false;
     for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
     {
@@ -118,7 +118,7 @@ void Game::startTurn()
     }
 }
 
-void Game::updateKoe(float dist)
+void Game::updateKoe()
 {
     float angle = -this->cam->getCamAngle()+180;
     this->koe->worldMatrix.setToIdentity();
@@ -129,7 +129,7 @@ void Game::updateKoe(float dist)
     this->koe->worldMatrix.translate(position);
     this->koe->worldMatrix.rotate(angle,0,1,0);
     this->koe->worldMatrix.rotate(10,1,0,0);
-    this->koe->worldMatrix.translate(0,0,-1-dist);
+    this->koe->worldMatrix.translate(0,0,-1-(this->myScene->gui->effectivePower*4));
 }
 
 void Game::resetGame()
@@ -213,12 +213,14 @@ void Game::moveStuff(float time)
 
     //grow powerbar
     this->myScene->gui->powerStep();
+    this->updateKoe();
+
 }
 
 void Game::renderStuff()
 {
 
-    for(int i = 0; i< 16;i++)
+    for(int i = 0; i< 1;i++)
     {
         this->myScene->secondaryObjects->at(i)->initFBO(128, 128);
         glBindFramebuffer(GL_FRAMEBUFFER, this->myScene->secondaryObjects->at(i)->fbo);
@@ -299,7 +301,7 @@ void Game::gameStep()
         //Rundenende
         this->hatEingelocht = false;
         this->hatGegnerEingelocht = false;
-
+        this->startTurn();
 
     }
     else
