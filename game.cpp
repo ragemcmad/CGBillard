@@ -73,15 +73,7 @@ void Game::shoot()
         }
         if (!collide){
             this->setBall = false;
-            this->koe->isVisible = true;
-            this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe(this->myScene->gui->powerBarScale.y());
-            this->myScene->gui->powerBar.isVisible = true;
-            this->watch = false;
-            for (int i=0;i<this->myScene->KugelnAlle->size();i++)
-            {
-                this->myScene->KugelnAlle->at(i)->resetFirstKollision();
-            }
+            this->startTurn();
         }
     }
 }
@@ -113,6 +105,19 @@ void Game::ballMove(int x, int z)
     }
 }
 
+void Game::startTurn()
+{
+    this->myScene->gui->powerBar.isVisible = true;
+    this->koe->isVisible = true;
+    this->cam->aktivatePlaymode(*this->whiteBall->pos);
+    this->updateKoe(this->myScene->gui->powerBarScale.y());
+    this->watch = false;
+    for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
+    {
+        this->myScene->KugelnAlle->at(i)->resetFirstKollision();
+    }
+}
+
 void Game::updateKoe(float dist)
 {
     float angle = -this->cam->getCamAngle()+180;
@@ -136,6 +141,7 @@ void Game::prepareLogic()
 {
     uint countGanzeEingelocht = this->myScene->eingelochteGanze->size();
     uint countHalbeEingelocht = this->myScene->eingelochteHalbe->size();
+
     this->moveStuff(1);
 
     //generate wave
@@ -261,13 +267,10 @@ void Game::setWinner()
 
 void Game::gameStep()
 {
-
     this->renderStuff();
     this->prepareLogic();
-
     // Gamestate-Changes:
     // keine Änderungen bei Animation, Spielende oder Ballplatzierung
-
     if (this->finish | this->setBall)
         return;
     // test auf spielende
@@ -287,39 +290,32 @@ void Game::gameStep()
         {
             if (!this->whiteBall->isVisible)
             {
-                QVector4D column = this->whiteBall->worldMatrix.column(3);
-                column.setX(0);
-                column.setY(0);
-                column.setZ(18);
-                this->whiteBall->worldMatrix.setColumn(3,column);
-                this->whiteBall->updatePosition();
-                this->whiteBall->isVisible = true;
-                this->setBall = true;
+                this->resetWhiteBall();
             }
             this->turn = !(this->turn);
-            this->myScene->gui->powerBarPos.setX(-(this->myScene->gui->powerBarPos.x()));
+            this->myScene->gui->mirrorPowerBarX();
         }
-
         //Rundenende
         this->hatEingelocht = false;
         this->hatGegnerEingelocht = false;
 
-        if (!this->setBall)
-        {
-            this->myScene->gui->powerBar.isVisible = true;
-            this->koe->isVisible = true;
-            this->cam->aktivatePlaymode(*this->whiteBall->pos);
-            this->updateKoe(this->myScene->gui->powerBarScale.y());
-            this->watch = false;
-            for (uint i=0;i<this->myScene->KugelnAlle->size();i++)
-            {
-                this->myScene->KugelnAlle->at(i)->resetFirstKollision();
-            }
-        }
+
     }
     else
         return;
 
+}
+
+void Game::resetWhiteBall()
+{
+    QVector4D column = this->whiteBall->worldMatrix.column(3);
+    column.setX(0);
+    column.setY(0);
+    column.setZ(18);
+    this->whiteBall->worldMatrix.setColumn(3,column);
+    this->whiteBall->updatePosition();
+    this->whiteBall->isVisible = true;
+    this->setBall = true;
 }
 
 void Game::animateLights() // DiscoMode ON

@@ -39,7 +39,9 @@ public:
     void camMove(int x, int y);
     void camRotate(int x, int y);
     void ballMove(int x, int y);
+    void startTurn();
     void updateKoe(float dist);
     void animateLights();
+    void resetWhiteBall();
 };
 #endif
