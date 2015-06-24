@@ -244,10 +244,10 @@ void GameScene::initShow()
             switch(i)
             {
                 case 0:kugel->worldMatrix.translate(0,0,0); break;
-                case 2:kugel->worldMatrix.translate(0,0,-2); break;
-                case 8:kugel->worldMatrix.translate(0,0,2); break;
-                case 9:kugel->worldMatrix.translate(2,0,0);  break;
-                case 15:kugel->worldMatrix.translate(-4,0,0);  break;
+                case 2:kugel->worldMatrix.translate(0,0,-3); break;
+                case 8:kugel->worldMatrix.translate(0,0,3); break;
+                case 9:kugel->worldMatrix.translate(3,0,0);  break;
+                case 15:kugel->worldMatrix.translate(-3,0,0);  break;
             }
             kugel->updatePosition();
             kugel->v->setX(0);

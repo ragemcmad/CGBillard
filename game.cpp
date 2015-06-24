@@ -152,6 +152,7 @@ void Game::resetGame()
     this->myScene->resetScene();
     this->koe->isVisible = true;
     this->cam->aktivatePlaymode(*(this->whiteBall->pos));
+    this->myScene->gui->resetWin();
 }
 
 void Game::loadShow()
@@ -168,6 +169,7 @@ void Game::loadShow()
     this->koe->isVisible = false;
     this->myScene->initShow();
     this->cam->aktivatePlaymode(*(this->whiteBall->pos), 6);
+    this->myScene->gui->resetWin();
 }
 
 void Game::loadTraining()
@@ -186,6 +188,7 @@ void Game::loadTraining()
     reset = true;
     this->myScene->initTraining1();
     this->cam->aktivatePlaymode(*(this->whiteBall->pos));
+    this->myScene->gui->resetWin();
 }
 
 void Game::prepareLogic()

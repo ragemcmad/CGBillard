@@ -38,6 +38,7 @@ public:
     void setVector(std::vector<Kugel*>* vec);
 	void p1Win();
 	void p2Win();
+    void resetWin();
     void powerStep();
 
 };

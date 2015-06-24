@@ -161,6 +161,11 @@ void GUI::p2Win()
 	this->winSign.isVisible = true;
     this->powerBar.isVisible = false;
 }
+void GUI::resetWin()
+{
+    this->winSign.isVisible = false;
+    this->powerBar.isVisible = true;
+}
 
 void GUI::powerStep()
 {
