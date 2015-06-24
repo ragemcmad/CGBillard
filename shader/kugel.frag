@@ -26,7 +26,7 @@ void main()
     {
         float anglespec = 0;
 
-        vec3 vert = -normalize(vertex.xyz-lightpositions[i]);//-lightpositions[i]);
+        vec3 vert = -normalize(vertex.xyz-lightpositions[i]);
         vec3 normal = normalize(normalvector.xyz);
         float angle = dot(vert, normal);
 
@@ -35,16 +35,15 @@ void main()
         vec3 rayB = normalize(cPos+vert);
         anglespec = pow(dot(rayA,rayB),32);
 
-
+        //defuse
         angle = max(angle, 0);
         vec4 color =  texture(colortex, vec2(texC.x, texC.y));
         color.r = color.r * angle *lightintensity[i].r*(1.0/distance(vertex.xyz,lightpositions[i]));
         color.g = color.g * angle *lightintensity[i].g*(1.0/distance(vertex.xyz,lightpositions[i]));
         color.b = color.b * angle *lightintensity[i].b*(1.0/distance(vertex.xyz,lightpositions[i]));
 
-
-        //anglespec = clamp(anglespec, 0, 3.1415926/4);
-        //anglespec = max(0,anglespec);
+        //Phong spec
+        anglespec = max(0,anglespec);
 
         vec4 colorspec = texture(colortex, vec2(texC.x, texC.y));
         colorspec.r = max(colorspec.r * anglespec,0);
@@ -59,8 +58,7 @@ void main()
     //fragColor.a = alpha;
 
     fragColor.a= 1;
-    max(fragColor.a,0.4);
 
     fragColor.rgb = mix(fragColor.rgb, colorSpecAll.rgb, 0.5);
-    //fragColor.rgb += colorSpecAll.rgb;
+     //fragColor.rgb += colorSpecAll.rgb;
 }

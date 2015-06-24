@@ -16,9 +16,4 @@ void main()
     {
         fragColor.a = 0;
     }
-
-
-
-//    fragColor.rgba = texture(debugTex, vec3(gl_FragCoord.xy *  vec2(1.0/1231.0, 1.0/801.0), 0).rgb,1).rgba;
-
 }
