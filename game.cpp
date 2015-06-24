@@ -326,8 +326,7 @@ void Game::gameStep()
     this->renderStuff();
     this->prepareLogic();
     // Gamestate-Changes:
-    // keine Änderungen bei Animation, Spielende oder Ballplatzierung
-    if (this->finish | this->setBall)
+    if (this->finish | this->setBall) // keine Änderungen bei Animation, Spielende oder Ballplatzierung
         return;
     // test auf spielende
     else if (this->show)
@@ -359,11 +358,7 @@ void Game::gameStep()
         this->hatEingelocht = false;
         this->hatGegnerEingelocht = false;
         this->startTurn();
-
     }
-    else
-        return;
-
 }
 
 

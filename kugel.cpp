@@ -434,20 +434,19 @@ void Kugel::collisionKugel(Kugel *kugel)
     float v1y = this->v->y();
     float v1z = this->v->z();
     float m1 = this->masse;
-
     float v2x = kugel->v->x();
     float v2y = kugel->v->y();
     float v2z = kugel->v->z();
     float m2 = kugel->masse;
-
     float deltaX = kugel->pos->x()-this->pos->x();
     float deltaY = kugel->pos->y()-this->pos->y();
     float deltaZ = kugel->pos->z()-this->pos->z();
-
     float d2 = pow(deltaX,2)+pow(deltaY,2)+pow(deltaZ,2);
 
-    float e =     (m1*(v1x*deltaX + v1y*deltaY + v1z*deltaZ) + 2 * m2*(v2x*deltaX + v2y*deltaY + v2z*deltaZ) - (v1x*deltaX + v1y*deltaY + v1z*deltaZ)*m2) / (d2*(m2 + m1));
-    float f = (2 * m1*(v1x*deltaX + v1y*deltaY + v1z*deltaZ) +     m2*(v2x*deltaX + v2y*deltaY + v2z*deltaZ) - (v2x*deltaX + v2y*deltaY + v2z*deltaZ)*m1) / (d2*(m2 + m1));
+    float e =     (m1*(v1x*deltaX + v1y*deltaY + v1z*deltaZ) +
+                   2 * m2*(v2x*deltaX + v2y*deltaY + v2z*deltaZ) - (v1x*deltaX + v1y*deltaY + v1z*deltaZ)*m2) / (d2*(m2 + m1));
+    float f = (2 * m1*(v1x*deltaX + v1y*deltaY + v1z*deltaZ) +
+                   m2*(v2x*deltaX + v2y*deltaY + v2z*deltaZ) - (v2x*deltaX + v2y*deltaY + v2z*deltaZ)*m1) / (d2*(m2 + m1));
 
     float v1xOut = e*deltaX - ((v1z*deltaX - v1x*deltaZ)*deltaZ - (v1x*deltaY - v1y*deltaX)*deltaY) / d2;
     float v1yOut = e*deltaY - ((v1x*deltaY - v1y*deltaX)*deltaX - (v1y*deltaZ - v1z*deltaY)*deltaZ) / d2;
@@ -460,11 +459,9 @@ void Kugel::collisionKugel(Kugel *kugel)
     kugel->v->setX(v2xOut);
     kugel->v->setY(v2yOut);
     kugel->v->setZ(v2zOut);
-
     this->v->setX(v1xOut);
     this->v->setY(v1yOut);
     this->v->setZ(v1zOut);
-
 }
 
 void Kugel::gameProgress(float ms)

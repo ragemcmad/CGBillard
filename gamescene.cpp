@@ -244,7 +244,7 @@ void GameScene::initShow()
             switch(i)
             {
                 case 0:kugel->worldMatrix.translate(0,0,0); break;
-                case 1:kugel->worldMatrix.translate(0,0,4); break;
+                case 2:kugel->worldMatrix.translate(0,0,4); break;
                 case 8:kugel->worldMatrix.translate(0,0,-4); break;
                 case 9:kugel->worldMatrix.translate(4,0,0);  break;
                 case 10:kugel->worldMatrix.translate(-4,0,0);  break;
@@ -253,7 +253,7 @@ void GameScene::initShow()
             kugel->v->setX(0);
             kugel->v->setY(0);
             kugel->v->setZ(0);
-            if (!(i==0) && !(i==1) && !(i==8) && !(i==9))
+            if (!(i==0) && !(i==2) && !(i==8) && !(i==9) && !(i==10))
                 kugel->isVisible = false;
         }
         this->gui->setTeam(true);

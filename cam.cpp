@@ -83,6 +83,7 @@ void myCam::nextAnimation()
 void myCam::aktivatePlaymode(QVector3D kugelWhite, int abstand)
 {
     this->activePlaymode = true;
+    this->distanz = abstand;
     this->kugelWhite = kugelWhite;
 
     QVector3D position;
