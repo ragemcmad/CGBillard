@@ -33,7 +33,7 @@ void main()
         vec3 cPos = normalize(cameraposition);
         vec3 rayA = normalize(reflect(-vert,normal));
         vec3 rayB = normalize(cPos+vert);
-        anglespec = pow(dot(rayA,rayB),8);
+        anglespec = pow(dot(rayA,rayB),32);
 
 
         angle = max(angle, 0);
@@ -43,7 +43,8 @@ void main()
         color.b = color.b * angle *lightintensity[i].b*(1.0/distance(vertex.xyz,lightpositions[i]));
 
 
-        anglespec = clamp(anglespec, 0, 3.1415926/4);
+        //anglespec = clamp(anglespec, 0, 3.1415926/4);
+        //anglespec = max(0,anglespec);
 
         vec4 colorspec = texture(colortex, vec2(texC.x, texC.y));
         colorspec.r = max(colorspec.r * anglespec,0);
