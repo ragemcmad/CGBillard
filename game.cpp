@@ -99,6 +99,8 @@ void Game::ballMove(int x, int z)
         column.setZ(column.z()+z);
         this->whiteBall->worldMatrix.setColumn(3,column);
         this->whiteBall->updatePosition();
+        this->hatEingelocht = false;
+        this->hatGegnerEingelocht = false;
         //this->whiteBall->updatePosition();
         //this->whiteBall->pos->setX(this->whiteBall->pos->x()+x);
         //this->whiteBall->pos->setZ(this->whiteBall->pos->z()+z);
@@ -351,15 +353,17 @@ void Game::gameStep()
             {
                 this->resetWhiteBall();
             }
+            else
+            {
+                //Rundenende
+                this->startTurn();
+            }
             if (!reset)
                 this->turn = !(this->turn);
             else
                 reset = false;
         }
-        //Rundenende
-        this->hatEingelocht = false;
-        this->hatGegnerEingelocht = false;
-        this->startTurn();
+
     }
 }
 
