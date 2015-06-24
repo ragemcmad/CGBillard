@@ -26,11 +26,14 @@ void main()
 
   for (int i = 0; i < 6; ++i)
   {
+    // cubemap layer
     gl_Layer = i;
 
 
+    // dreieck
     for (int k = 0; k < 3; ++k)
     {
+      // normalerweise im vertexshader
       gl_Position = cubeProj * (cubeViews[i] * vertex[k]);
 
       fragTexC = texC[k];

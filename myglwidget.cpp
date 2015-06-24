@@ -52,7 +52,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent *e){
 }
 
 void MyGLWidget::mouseMoveEvent(QMouseEvent *e){
-    if ((this->isPressed) && (this->theGame->show)){
+    if ((this->isPressed)){// && (this->theGame->show)){
         this->theGame->camRotate(mousepositionOldX-e->x(),mousepositionOldY-e->y());
     }
 

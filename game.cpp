@@ -173,6 +173,7 @@ void Game::loadTraining()
     teamsAreSet = false;
     hatEingelocht = false;
     hatGegnerEingelocht = false;
+    this->koe->isVisible = true;
     this->teamsAreSet = true;
     this->p1HasFull = true;
     reset = true;

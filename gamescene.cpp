@@ -311,7 +311,7 @@ void GameScene::renderObjectPOV(myCam *cam, int id)
 void GameScene::render(myCam* cam, int kugel)
 {
     this->tischBoden->render(cam, kugel);
-    for(uint i = 0; i< this->primaryObjects->size();i++)
+    for(uint i = 0; i< this->primaryObjects->size()-1;i++)
     {
         this->primaryObjects->at(i)->render(cam,kugel);
     }

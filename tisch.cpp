@@ -113,7 +113,7 @@ void Tisch::render(myCam* cam,int kugel)
     {
         if(this->waveIsActive[i] == 1)
         {
-            this->waveTimeLeft[i]+= 1.0;
+            this->waveTimeLeft[i]+= 0.1;
             if(this->waveDuration[i] < this->waveTimeLeft[i])
             {
                 this->waveIsActive[i] = 0;

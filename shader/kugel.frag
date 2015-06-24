@@ -44,6 +44,7 @@ void main()
 
 
         anglespec = clamp(anglespec, 0, 3.1415926/4);
+
         vec4 colorspec = texture(colortex, vec2(texC.x, texC.y));
         colorspec.r = max(colorspec.r * anglespec,0);
         colorspec.g = max(colorspec.g * anglespec,0);
@@ -59,8 +60,6 @@ void main()
     fragColor.a= 1;
     max(fragColor.a,0.4);
 
-    fragColor.rgb += colorSpecAll.rgb;
-
-
-
+    fragColor.rgb = mix(fragColor.rgb, colorSpecAll.rgb, 0.5);
+    //fragColor.rgb += colorSpecAll.rgb;
 }

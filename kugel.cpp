@@ -508,7 +508,10 @@ void Kugel::gameProgress(float ms)
             this->rotation = rot*this->rotation;
 
             this->worldMatrix.setToIdentity();
-            this->worldMatrix.translate(this->v->x()*0.1+this->pos->x(),this->v->y()*0.1+this->pos->y(),this->v->z()*0.1+this->pos->z());
+            this->worldMatrix.translate(this->v->x()*0.1+this->pos->x(),
+                                        this->v->y()*0.1+this->pos->y(),
+                                        this->v->z()*0.1+this->pos->z());
+
             this->updatePosition();
 
             //check ob diese kugel sich mit einer anderen überlagert
