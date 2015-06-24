@@ -145,6 +145,7 @@ void Game::resetGame()
     hatGegnerEingelocht = false;
     reset = true;
     this->myScene->resetScene();
+    this->cam->aktivatePlaymode(*(this->whiteBall->pos));
 }
 
 void Game::loadShow()
@@ -160,7 +161,7 @@ void Game::loadShow()
     reset = true;
     this->koe->isVisible = false;
     this->myScene->initShow();
-    this->cam->aktivatePlaymode(*(this->whiteBall->pos), 10);
+    this->cam->aktivatePlaymode(*(this->whiteBall->pos), 6);
 }
 
 void Game::loadTraining()
@@ -178,6 +179,7 @@ void Game::loadTraining()
     this->p1HasFull = true;
     reset = true;
     this->myScene->initTraining1();
+    this->cam->aktivatePlaymode(*(this->whiteBall->pos));
 }
 
 void Game::prepareLogic()
