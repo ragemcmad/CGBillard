@@ -78,6 +78,8 @@ void myCam::nextAnimation()
 		matrixcopy = matrixcopy * this->viewMatrix;
 		this->moveLookatStart = this->getPositionFromViewMatrix(matrixcopy);
 	}
+    else
+        this->isMoving = false;
 }
 
 void myCam::aktivatePlaymode(QVector3D kugelWhite, int abstand)

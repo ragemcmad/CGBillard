@@ -80,14 +80,17 @@ void Game::shoot()
 
 void Game::camMove(int x, int y)
 {
-    if (!this->setBall && !this->show)
+    if (!this->setBall && !this->show && !this->cam->isMoving)
         this->cam->camMove(x,y);
 }
 
 void Game::camRotate(int x, int y)
 {
-    this->cam->camRotate(x,y);
-    if (!show) this->updateKoe();
+    if (this->cam->isMoving == false)
+    {
+        this->cam->camRotate(x,y);
+        if (!show) this->updateKoe();
+    }
 }
 
 void Game::ballMove(int x, int z)
@@ -147,6 +150,7 @@ void Game::resetGame()
     hatGegnerEingelocht = false;
     reset = true;
     this->myScene->resetScene();
+    this->koe->isVisible = true;
     this->cam->aktivatePlaymode(*(this->whiteBall->pos));
 }
 
@@ -384,7 +388,7 @@ void Game::resetWhiteBall()
 void Game::animateLights() // DiscoMode ON
 {
 
-    int dur = 800;
+    int dur = 300;
 
     this->myScene->lights->intensity[0] = QVector3D(100,0,0);//(70,0,0);
     this->myScene->lights->intensity[1] = QVector3D(0,100,0);//(0,70,0);
